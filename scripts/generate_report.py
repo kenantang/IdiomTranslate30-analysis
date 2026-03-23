@@ -357,15 +357,17 @@ Missingness is negligible (<0.003% of rows) and only affects span annotation col
 {fig_section}
 """
 
-# Preserve any manually-maintained sections (## TODO and beyond) from the
-# existing README so they survive regeneration.
+# Preserve any manually-maintained sections from the existing README.
+# Everything from the first occurrence of "## Analysis Results" or "## TODO"
+# (whichever comes first) is kept verbatim across regenerations.
 preserved = ""
 if REPORT_PATH.exists():
     existing = REPORT_PATH.read_text(encoding="utf-8")
-    marker = "\n## TODO"
-    idx = existing.find(marker)
-    if idx != -1:
-        preserved = "\n" + existing[idx:].lstrip("\n")
+    markers = ["## Analysis Results", "## TODO"]
+    positions = [existing.find(f"\n{m}") for m in markers]
+    valid = [p for p in positions if p != -1]
+    if valid:
+        preserved = "\n" + existing[min(valid):].lstrip("\n")
 
 REPORT_PATH.write_text(textwrap.dedent(report).strip() + "\n" + preserved)
 print(f"  Saved {REPORT_PATH}")
