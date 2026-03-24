@@ -1,4 +1,4 @@
-"""TODO 1 — Analyse complementary idiom-type datasets: sokdam, kotowaza, xiehouyu."""
+"""Analyse complementary idiom-type datasets: sokdam, kotowaza, xiehouyu."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -159,9 +159,9 @@ axes[1].legend()
 
 fig.suptitle("IdiomTranslate30 vs Complementary Idiom-Type Datasets", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "todo1_complementary_datasets.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "complementary_datasets.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("\nSaved → figures/todo1_complementary_datasets.png")
+print("\nSaved → figures/complementary_datasets.png")
 
 print("\n=== Summary ===")
 for name, v in all_results.items():

@@ -224,6 +224,39 @@ n_pairs = df.groupby(["source_language", "target_language"]).ngroups
 n_idioms = df["idiom"].nunique()
 total_missing = df[SPAN_COLS].isnull().sum().sum()
 
+# ── Edge case: idioms with 20 sentences per target language ────────────────
+grp_sizes = df.groupby(["source_language", "idiom", "target_language"]).size()
+doubled_idioms = sorted(
+    grp_sizes[grp_sizes == 20].reset_index()["idiom"].unique().tolist()
+)
+doubled_table = "\n".join(
+    f"| {idiom} | Chinese | 20 |"
+    for idiom in doubled_idioms
+)
+
+# ── Pre-processing: extremely long translations ────────────────────────────
+LONG_THRESH = 500
+long_error_rows = []
+for col, label in zip(TRANS_COLS, TRANS_LABELS):
+    mask = df[col].str.len() > LONG_THRESH
+    for _, r in df[mask].iterrows():
+        long_error_rows.append({
+            "Strategy": label,
+            "Idiom": r["idiom"],
+            "Source": r["source_language"],
+            "Target": r["target_language"],
+            "Length": len(str(r[col])),
+        })
+long_errors_df = pd.DataFrame(long_error_rows)
+n_long_c = (df["translate_creatively"].str.len() > LONG_THRESH).sum()
+n_long_a = (df["translate_analogy"].str.len()    > LONG_THRESH).sum()
+n_long_u = (df["translate_author"].str.len()      > LONG_THRESH).sum()
+
+long_table = "\n".join(
+    f"| {r['Strategy']} | {r['Idiom']} | {r['Source']} | {r['Target']} | {r['Length']:,} |"
+    for _, r in long_errors_df.iterrows()
+)
+
 # Per-strategy length stats
 len_stats = {}
 for col, label in zip(TRANS_COLS, TRANS_LABELS):
@@ -305,8 +338,8 @@ idiom inventory size (Chinese: 43,100 / pair; Japanese: 24,400 / pair; Korean: 2
 {idiom_table}
 | **Total** | **{n_idioms:,}** |
 
-Each idiom appears **200 times** in the dataset (10 target languages × ~20 context sentences),
-ensuring balanced coverage across translation directions.
+Most idioms appear **100 times** in the dataset (10 target languages × 10 context sentences).
+Four Chinese idioms appear 200 times (see [Data Edge Cases](#data-edge-cases)).
 
 ---
 
@@ -352,18 +385,82 @@ Missingness is negligible (<0.003% of rows) and only affects span annotation col
 
 ---
 
+## Data Edge Cases
+
+### Idioms with 20 Sentences per Target Language
+
+The dataset is nominally structured as 10 context sentences per (idiom, target language). However,
+{len(doubled_idioms)} Chinese idioms appear with **20 sentences** per target language (200 rows per
+idiom instead of the standard 100):
+
+| Idiom | Language | Sentences per target |
+|---|---|---|
+{doubled_table}
+
+These idioms contain mostly unique sentences — within-group sentence-level duplicates exist for
+固执己见 (1 dup) and 触景生情 (3 dups) across some target languages.
+All analysis scripts handle variable group sizes correctly by taking means across all available
+sentences before aggregation.
+
+---
+
+## Pre-processing
+
+### Extremely Long Translations
+
+A small number of translations are pathologically long, caused by model generation failures.
+The threshold for exclusion is **{LONG_THRESH} characters**, which lies far above the p99.99
+of each strategy (Creatively: 263 chars, Analogy: 302 chars, Author: 348 chars).
+
+**Rows removed:** {n_long_c} Creatively, {n_long_a} Analogy, {n_long_u} Author
+(total {n_long_c + n_long_a + n_long_u} (row, strategy) pairs out of {n_rows:,} rows; < 0.001%)
+
+| Strategy | Idiom | Source | Target | Length |
+|---|---|---|---|---|
+{long_table}
+
+**Failure patterns identified:**
+
+1. **Token repetition loop** — the model begins a normal sentence and then degenerates into
+   repeating a single token thousands of times before (sometimes) recovering at the very end.
+   - *이율배반* (KO→Arabic, Creatively, 9,472 chars): the Korean word 불신 (distrust) repeated
+     ~2,613 times mid-sentence after a normal Arabic opening.
+   - *風前之灯* (JA→Swahili, Analogy, 11,821 chars): the letter "k" repeated ~5,852 times
+     immediately after the first clause; the sentence resumes at the very end.
+
+2. **Meta-response leak** — the model includes its own instruction-following framing in the output
+   instead of just the translation.
+   - *不求甚解* (ZH→Swahili, Author, 1,109 chars): output begins with a biography of the Swahili
+     author Shaaban Robert, followed by "Hapa kuna tafsiri ya sentensi yako…" ("Here is a
+     translation of your sentence…") and ends with "Je, ungependa nijaribu kutafsiri sentensi
+     nyingine yoyote?" ("Would you like me to try translating any other sentence?").
+
+3. **Runaway generation** — the model's output is semantically coherent but never converges,
+   piling on additional content.
+   - *向隅而泣* (ZH→Bengali, Author, 572 chars): the protagonist's name changes five times
+     within a single sentence (হিমু → লিটন → শামীম → শফিক → টোকন → খোকন), suggesting the
+     model could not commit and kept revising in-place.
+   - *癞蛤蟆想吃天鹅肉* (ZH→Hindi, Author, 3,034 chars): the translation chains together an
+     ever-growing list of Hindi proverbs (अंधा क्या चाहे, लात के देवता, धोबी का कुत्ता…)
+     without settling on a single rendering.
+
+These 5 (row, strategy) pairs represent < 0.001% of the data; their removal does not
+materially affect any reported statistic. They are excluded from any translation-length
+visualisations that cap the axis range.
+
+---
+
 ## Figures
 
 {fig_section}
 """
 
 # Preserve any manually-maintained sections from the existing README.
-# Everything from the first occurrence of "## Analysis Results" or "## TODO"
-# (whichever comes first) is kept verbatim across regenerations.
+# Everything from "## Analysis Results" onward is kept verbatim across regenerations.
 preserved = ""
 if REPORT_PATH.exists():
     existing = REPORT_PATH.read_text(encoding="utf-8")
-    markers = ["## Analysis Results", "## TODO"]
+    markers = ["## Analysis Results"]
     positions = [existing.find(f"\n{m}") for m in markers]
     valid = [p for p in positions if p != -1]
     if valid:

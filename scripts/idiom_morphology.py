@@ -1,4 +1,4 @@
-"""Module 5 — Idiom Morphology & Structural Analysis."""
+"""Idiom Morphology & Structural Analysis."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -44,9 +44,9 @@ for ax, (lang, grp), color in zip(axes, df.groupby("source_language"), COLORS):
     ax.legend(fontsize=8)
 fig.suptitle("Idiom Character Length Distribution by Source Language", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module5_idiom_length_distribution.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "idiom_length_distribution.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module5_idiom_length_distribution.png")
+print("Saved → figures/idiom_length_distribution.png")
 
 for lang, grp in df.groupby("source_language"):
     pct4 = (grp.drop_duplicates("idiom")["idiom_len"] == 4).mean() * 100
@@ -110,6 +110,6 @@ sns.heatmap(sp_pivot, annot=True, fmt=".3f", cmap="coolwarm", center=0,
 axes[1].set_title("Spearman ρ: Sentence Length\nvs Translation Length", fontweight="bold")
 axes[1].set_ylabel("")
 fig.tight_layout()
-fig.savefig(FIG / "module5_quintile_analysis.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "quintile_analysis.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module5_quintile_analysis.png")
+print("Saved → figures/quintile_analysis.png")

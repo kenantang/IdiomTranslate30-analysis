@@ -1,4 +1,4 @@
-"""Module 1 — Translation Length & Expansion Ratio."""
+"""Translation Length & Expansion Ratio."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -73,9 +73,9 @@ axes[1].set_title("Median Translation Length\nby Target Language & Strategy", fo
 axes[1].set_ylabel("Median character count")
 axes[1].legend(title="Strategy")
 fig.tight_layout()
-fig.savefig(FIG / "module1_expansion_ratio.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "expansion_ratio.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module1_expansion_ratio.png")
+print("Saved → figures/expansion_ratio.png")
 
 # ── Wilcoxon tests between strategy pairs per target language ─────────────────
 print("\nWilcoxon tests (Creatively vs Analogy, Creatively vs Author) per target language:")
@@ -108,6 +108,6 @@ for ax, col, title in [
     ax.set_ylabel("")
 fig.suptitle("Wilcoxon Effect Sizes — Translation Length\n(all p < 0.001)", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module1_wilcoxon_effects.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "wilcoxon_effects.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module1_wilcoxon_effects.png")
+print("Saved → figures/wilcoxon_effects.png")

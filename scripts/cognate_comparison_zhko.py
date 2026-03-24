@@ -1,5 +1,5 @@
 """
-Module 9 — Quantitative comparison of sentences and translations for cognate idiom pairs.
+Quantitative comparison of sentences and translations for cognate idiom pairs.
 
 For each cognate pair (ZH idiom ↔ KO idiom sharing the same Hanja origin), rows are
 joined by target_language, then compared on:
@@ -123,9 +123,9 @@ for lbl in LABELS:
           f"diff={valid[zh_col].mean()-valid[ko_col].mean():+.1f}  p={p:.2e}")
 
 # ── 4. Cross-source translation divergence (n-gram + edit distance) ───────────
-# Sample sentences: for each (zh_idiom, ko_idiom, target_lang), take one sentence
-# each and compute divergence between ZH translation and KO translation.
-print("\n=== Cross-source translation divergence (sample) ===")
+# For each (zh_idiom, ko_idiom, target_lang): average over all 10×10 sentence
+# pairs so every sentence contributes equally to the divergence estimate.
+print("\n=== Cross-source translation divergence ===")
 sample_records = []
 for (zh_id, ko_id, mt), grp_cog in cog.groupby(["zh_idiom","ko_idiom","match_type"]):
     zh_rows = zh_df[zh_df["idiom"]==zh_id]
@@ -135,19 +135,21 @@ for (zh_id, ko_id, mt), grp_cog in cog.groupby(["zh_idiom","ko_idiom","match_typ
         ko_sub = ko_rows[ko_rows["target_language"]==tgt]
         if zh_sub.empty or ko_sub.empty:
             continue
-        # one representative row each
-        zh_r = zh_sub.iloc[0]
-        ko_r = ko_sub.iloc[0]
         rec = {"match_type": mt, "target_language": tgt,
                "resource": "high" if tgt in HIGH_RES else "low"}
         for tc, lbl in zip(TCOLS, LABELS):
-            a, b = str(zh_r[tc]), str(ko_r[tc])
-            max_len = max(len(a), len(b))
-            rec[f"edit_{lbl}"] = Levenshtein.distance(a, b)/max_len if max_len else 0.0
-            a_words = set(a.lower().split())
-            b_words = set(b.lower().split())
-            rec[f"jaccard_{lbl}"] = (len(a_words & b_words)/len(a_words | b_words)
-                                     if a_words | b_words else 0.0)
+            edits, jaccards = [], []
+            for _, zh_r in zh_sub.iterrows():
+                for _, ko_r in ko_sub.iterrows():
+                    a, b = str(zh_r[tc]), str(ko_r[tc])
+                    max_len = max(len(a), len(b))
+                    edits.append(Levenshtein.distance(a, b)/max_len if max_len else 0.0)
+                    a_words = set(a.lower().split())
+                    b_words = set(b.lower().split())
+                    jaccards.append(len(a_words & b_words)/len(a_words | b_words)
+                                    if a_words | b_words else 0.0)
+            rec[f"edit_{lbl}"]    = float(np.mean(edits))
+            rec[f"jaccard_{lbl}"] = float(np.mean(jaccards))
         sample_records.append(rec)
 
 div_df = pd.DataFrame(sample_records)
@@ -269,9 +271,9 @@ ax.legend(fontsize=8)
 fig.suptitle("Cognate Pair Comparison: Chinese vs Korean Source Idioms",
              fontsize=13, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module9_cognate_comparison.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "cognate_comparison_zhko.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("\nSaved → figures/module9_cognate_comparison.png")
+print("\nSaved → figures/cognate_comparison_zhko.png")
 
 # ── Fig 2: Jaccard similarity heatmap by target language × strategy ───────────
 fig, ax = plt.subplots(figsize=(9, 5))
@@ -286,9 +288,9 @@ ax.set_title("ZH–KO Translation Word Overlap (Jaccard)\nby Target Language & S
              fontweight="bold")
 ax.set_ylabel("")
 fig.tight_layout()
-fig.savefig(FIG / "module9_jaccard_heatmap.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "jaccard_heatmap_zhko.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module9_jaccard_heatmap.png")
+print("Saved → figures/jaccard_heatmap_zhko.png")
 
 # ── Save table ────────────────────────────────────────────────────────────────
 summary = pd.DataFrame({

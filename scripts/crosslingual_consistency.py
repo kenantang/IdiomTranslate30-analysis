@@ -1,4 +1,4 @@
-"""Module 4 — Cross-Lingual Consistency Analysis."""
+"""Cross-Lingual Consistency Analysis."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -29,13 +29,16 @@ for col, lbl in zip(TRANS, LABELS):
     df[f"tlen_{lbl}"] = df[col].str.len()
 
 # ── CV of translation length across 10 target languages per (src, idiom, strat) ──
+# Aggregate to per-language means first, then compute CV across the 10 languages.
+# (Computing CV on raw rows would conflate within-language sentence variance
+#  with the between-language variance we actually want to measure.)
 print("Computing CV across target languages…")
 cv_records = []
 for (src, idiom), grp in df.groupby(["source_language", "idiom"]):
     row = {"source_language": src, "idiom": idiom}
     for lbl in LABELS:
-        vals = grp[f"tlen_{lbl}"].dropna()
-        row[f"cv_{lbl}"] = vals.std() / vals.mean() if vals.mean() > 0 else np.nan
+        lang_means = grp.groupby("target_language")[f"tlen_{lbl}"].mean()
+        row[f"cv_{lbl}"] = lang_means.std() / lang_means.mean() if lang_means.mean() > 0 else np.nan
     cv_records.append(row)
 cv_df = pd.DataFrame(cv_records)
 
@@ -87,9 +90,9 @@ axes[1].set_ylabel("Character count")
 axes[1].set_ylim(0, 400)
 axes[1].legend(title="Resource level")
 fig.tight_layout()
-fig.savefig(FIG / "module4_cv_by_resource_level.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "cv_by_resource_level.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module4_cv_by_resource_level.png")
+print("Saved → figures/cv_by_resource_level.png")
 
 # ── Fig 4c: heatmap — median span length per (src × tgt) ─────────────────────
 span_cols = ["source_language","target_language","span_creatively","span_analogy","span_author"]
@@ -107,6 +110,6 @@ for ax, sc, lbl in zip(axes, ["span_creatively","span_analogy","span_author"], L
     ax.set_ylabel("" if ax != axes[0] else "Source language")
 fig.suptitle("Median Span Length (chars) per Language Pair", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module4_span_heatmap.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "span_heatmap.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module4_span_heatmap.png")
+print("Saved → figures/span_heatmap.png")

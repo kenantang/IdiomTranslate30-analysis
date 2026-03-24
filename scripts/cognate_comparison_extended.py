@@ -1,18 +1,18 @@
 """
-Module 10 — Extended CJK cognate analysis: ZH-JA and KO-JA pairs.
+Extended CJK cognate analysis: ZH-JA and KO-JA pairs.
 
 Matching pipelines
   ZH–JA  Both use CJK characters. Normalise with OpenCC s2t (simplified/shinjitai →
          traditional) then exact and near-3 string comparison.
   KO–JA  Japanese kanji → predicted Korean Hangul via Unihan kHangul (+ s2t fallback),
          then exact and near-3 match against Korean saseong-eoro.
-         Mirrors the ZH–KO pipeline in module todo2.
+         Mirrors the ZH–KO pipeline in cjk_cognates.py.
 
 Quantitative comparison
   For every matched pair × target language: sentence length, translation length,
   expansion ratio, span length, cross-source edit distance and Jaccard similarity.
   Results compared across all three language-pair directions:
-    ZH–KO (from module9), ZH–JA, KO–JA.
+    ZH–KO (from cognate_comparison_zhko.py), ZH–JA, KO–JA.
 """
 import matplotlib
 matplotlib.use("Agg")
@@ -240,13 +240,18 @@ def build_pair_table(cog_df, langA, colA, langB, colB):
                 rec[f"tlen_diff_{lbl}"] = ta - tb
                 rec[f"slen_A_{lbl}"] = sA[sc].str.len().mean()
                 rec[f"slen_B_{lbl}"] = sB[sc].str.len().mean()
-                # One-sentence divergence
-                r_A, r_B = sA.iloc[0][tc], sB.iloc[0][tc]
-                ml = max(len(str(r_A)), len(str(r_B)))
-                rec[f"edit_{lbl}"] = Levenshtein.distance(str(r_A), str(r_B))/ml if ml else 0
-                wA = set(str(r_A).lower().split())
-                wB = set(str(r_B).lower().split())
-                rec[f"jaccard_{lbl}"] = len(wA&wB)/len(wA|wB) if wA|wB else 0
+                # Average divergence over all 10×10 sentence pairs
+                edits, jaccards = [], []
+                for _, rA in sA.iterrows():
+                    for _, rB in sB.iterrows():
+                        a, b = str(rA[tc]), str(rB[tc])
+                        ml = max(len(a), len(b))
+                        edits.append(Levenshtein.distance(a, b)/ml if ml else 0.0)
+                        wA = set(a.lower().split())
+                        wB = set(b.lower().split())
+                        jaccards.append(len(wA&wB)/len(wA|wB) if wA|wB else 0.0)
+                rec[f"edit_{lbl}"]    = float(np.mean(edits))
+                rec[f"jaccard_{lbl}"] = float(np.mean(jaccards))
             records.append(rec)
     return pd.DataFrame(records)
 
@@ -258,7 +263,7 @@ print("Building KO–JA pair table…")
 koja_pairs = build_pair_table(koja_all, "Korean","ko_idiom","Japanese","ja_idiom")
 print(f"  {len(koja_pairs):,} aligned rows")
 
-# Load ZH–KO from module 9 summary for cross-pair comparison
+# Load ZH–KO summary for cross-pair comparison
 zhko_summary = pd.read_csv(PROC / "cognate_comparison_summary.csv")
 
 def summarise_pairs(pairs, labelA, labelB):
@@ -283,7 +288,7 @@ for s in [zhja_sum, koja_sum]:
           f"{s['edit_Creatively']:>10.3f}  {s['jaccard_Creatively']:>8.3f}")
 
 # Print ZH–KO from saved summary for reference
-print("\nZH–KO reference (from module 9):")
+print("\nZH–KO reference (from cognate_comparison_zhko):")
 for _, row in zhko_summary.iterrows():
     print(f"  {row['Strategy']:<14}  tlen_diff={row['tlen_diff_mean']:+.1f}  "
           f"edit={row['edit_dist_mean']:.3f}  jaccard={row['jaccard_mean']:.3f}")
@@ -387,7 +392,7 @@ ax.set_ylabel("")
 ax = axes[1, 1]
 jacc_data = []
 zhko_cog = pd.read_csv(PROC/"cjk_cognate_pairs.csv")
-# Recompute ZH-KO Jaccard quickly from module9 summary
+# Recompute ZH-KO Jaccard quickly from ZH-KO summary
 jacc_ko = zhko_summary.set_index("Strategy")["jaccard_mean"].to_dict()
 for lbl in LABELS:
     jacc_data += [
@@ -420,9 +425,9 @@ ax.legend(fontsize=9)
 fig.suptitle("Extended CJK Cognate Analysis: ZH–JA and KO–JA Pairs",
              fontsize=13, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG/"module10_cognate_cjk_extended.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG/"cognate_comparison_extended.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("\nSaved → figures/module10_cognate_cjk_extended.png")
+print("\nSaved → figures/cognate_comparison_extended.png")
 
 # Per-strategy full comparison table
 full_table = pd.DataFrame([

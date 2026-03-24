@@ -1,4 +1,4 @@
-"""Module 8 — Overlap with External Idiom Sources."""
+"""Overlap with External Idiom Sources."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -242,9 +242,9 @@ ax.set_ylabel("Count of unique idioms")
 ax.tick_params(axis="x", rotation=0)
 
 fig.tight_layout()
-fig.savefig(FIG / "module8_overlap_chinese_xinhua.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "overlap_chinese_xinhua.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module8_overlap_chinese_xinhua.png")
+print("Saved → figures/overlap_chinese_xinhua.png")
 
 # ── Fig: frequency quintile detail ───────────────────────────────────────────
 fig, ax = plt.subplots(figsize=(9, 4))
@@ -258,9 +258,9 @@ ax.set_title("Mean Expansion Ratio by THUOCL Frequency Quintile", fontweight="bo
 ax.set_ylabel("Mean expansion ratio")
 ax.legend(title="Strategy")
 fig.tight_layout()
-fig.savefig(FIG / "module8_frequency_quintiles.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "frequency_quintiles.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module8_frequency_quintiles.png")
+print("Saved → figures/frequency_quintiles.png")
 
 # ── Fig: definition length correlation ───────────────────────────────────────
 s2 = matched_def.sample(min(20_000, len(matched_def)), random_state=8)
@@ -274,6 +274,6 @@ for ax, lbl, color in zip(axes, LABELS, COLORS):
     ax.set_xlim(0, 300); ax.set_ylim(0, 600)
 fig.suptitle("Xinhua Definition Length vs Translation Length", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module8_definition_length_corr.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "definition_length_corr.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module8_definition_length_corr.png")
+print("Saved → figures/definition_length_corr.png")

@@ -1,4 +1,4 @@
-"""Module 7 — Lexical Diversity Analysis."""
+"""Lexical Diversity Analysis."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -81,9 +81,9 @@ axes[1].set_title("Mean TTR by Target Language & Strategy", fontweight="bold")
 axes[1].set_ylabel("Type-token ratio")
 axes[1].legend(title="Strategy")
 fig.tight_layout()
-fig.savefig(FIG / "module7_unique_unigrams.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "unique_unigrams.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module7_unique_unigrams.png")
+print("Saved → figures/unique_unigrams.png")
 
 # ── Fig 7c: Span TTR vs full translation TTR scatter ────────────────────────
 def span_ttr(text):
@@ -103,10 +103,10 @@ for ax, (tc, sc), lbl, color in zip(axes, zip(TRANS_COLS, SPAN_COLS), LABELS, CO
     ax.set_ylabel("Span TTR" if ax is axes[0] else "")
 fig.suptitle("Span TTR vs Full Translation TTR", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module7_ttr_by_language.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "ttr_by_language.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module7_ttr_by_language.png")
+print("Saved → figures/ttr_by_language.png")
 
-# Save unique-unigrams per idiom for use in Module 8
+# Save unique-unigrams per idiom for use by the difficulty script
 uniq_df.to_parquet(ROOT / "data" / "processed" / "lexdiv_per_idiom.parquet", index=False)
 print("Saved → data/processed/lexdiv_per_idiom.parquet")

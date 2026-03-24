@@ -1,5 +1,5 @@
 """
-TODO 2 — Chinese–Korean saseong-eoro cognate identification (improved).
+Chinese–Korean saseong-eoro cognate identification.
 
 Three-layer transliteration pipeline:
   Layer 1  Unihan kHangul — authoritative Unicode per-codepoint Hangul readings,
@@ -312,9 +312,9 @@ if len(near3_df) > 0:
 fig.suptitle("Chinese–Korean Cognate Analysis (Improved 3-Layer Method)",
              fontsize=13, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "todo2_cjk_cognates.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "cjk_cognates.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("\nSaved → figures/todo2_cjk_cognates.png")
+print("\nSaved → figures/cjk_cognates.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 11. Save results

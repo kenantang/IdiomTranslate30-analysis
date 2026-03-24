@@ -1,4 +1,4 @@
-"""TODO 3 — Characterise the 189 Chinese idioms not in chinese-xinhua."""
+"""Characterise the 189 Chinese idioms not in chinese-xinhua."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -122,9 +122,9 @@ axes[1].set_ylabel("Character count")
 axes[1].set_ylim(0, 400)
 axes[1].legend(title="xinhua coverage")
 fig.tight_layout()
-fig.savefig(FIG / "todo3_unmatched_chinese.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "unmatched_chinese.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/todo3_unmatched_chinese.png")
+print("Saved → figures/unmatched_chinese.png")
 
 # Save unmatched list
 unmatched_df.to_csv(ROOT / "data/audit/unmatched_chinese_idioms.csv", index=False)

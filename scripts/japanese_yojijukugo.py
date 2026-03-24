@@ -1,4 +1,4 @@
-"""TODO 5 — Build Japanese yojijukugo reference list from Wiktionary."""
+"""Build Japanese yojijukugo reference list from Wiktionary."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -137,9 +137,9 @@ pd.Series(source_data).plot(kind="barh", ax=axes[1], color="#4C72B0")
 axes[1].set_title("Source Sizes", fontweight="bold")
 axes[1].set_xlabel("Count")
 fig.tight_layout()
-fig.savefig(FIG / "todo5_japanese_yoji_coverage.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "japanese_yoji_coverage.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/todo5_japanese_yoji_coverage.png")
+print("Saved → figures/japanese_yoji_coverage.png")
 
 # Save reference list
 ref_df = pd.DataFrame({"word": sorted(all_yoji)})

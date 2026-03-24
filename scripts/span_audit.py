@@ -1,4 +1,4 @@
-"""Module 6 — Data Quality Audit."""
+"""Data Quality Audit."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -123,6 +123,6 @@ axes[1].tick_params(axis="x", rotation=0)
 axes[1].legend(title="Strategy")
 
 fig.tight_layout()
-fig.savefig(FIG_DIR / "module6_flag_rates.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG_DIR / "flag_rates.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module6_flag_rates.png")
+print("Saved → figures/flag_rates.png")

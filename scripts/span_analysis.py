@@ -1,4 +1,4 @@
-"""Module 2 — Span Length & Idiom Footprint Analysis."""
+"""Span Length & Idiom Footprint Analysis."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -63,9 +63,9 @@ axes[1].set_xlabel("Span character count")
 axes[1].set_ylabel("")
 axes[1].set_xlim(0, 250)
 fig.tight_layout()
-fig.savefig(FIG / "module2_span_ratio.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "span_ratio.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module2_span_ratio.png")
+print("Saved → figures/span_ratio.png")
 
 # ── Fig 2b: idiom length vs span length scatter (sampled) ────────────────────
 s = df.sample(10_000, random_state=2)[["idiom", "span_len_Creatively",
@@ -87,9 +87,9 @@ for ax, lbl, color in zip(axes, LABELS, COLORS):
     ax.set_ylim(0, 400)
 fig.suptitle("Source Idiom Length vs Span Length in Translation", fontsize=12, fontweight="bold")
 fig.tight_layout()
-fig.savefig(FIG / "module2_span_vs_idiom_length.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "span_vs_idiom_length.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module2_span_vs_idiom_length.png")
+print("Saved → figures/span_vs_idiom_length.png")
 
 # ── Fig 2c: 3×3 cross-strategy span correlation heatmap ──────────────────────
 # Per target language
@@ -108,9 +108,9 @@ sns.heatmap(corr_df, annot=True, fmt=".3f", cmap="YlGnBu",
 ax.set_title("Cross-Strategy Span Length Correlation\nby Target Language", fontweight="bold")
 ax.set_xlabel("Strategy pair")
 fig.tight_layout()
-fig.savefig(FIG / "module2_span_correlation.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "span_correlation.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module2_span_correlation.png")
+print("Saved → figures/span_correlation.png")
 
 # Print summary stats
 print("\nSpan-to-translation ratio medians:")

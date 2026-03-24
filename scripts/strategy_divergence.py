@@ -1,4 +1,4 @@
-"""Module 3 — Strategy Divergence via N-gram & Edit Distance Analysis."""
+"""Strategy Divergence via N-gram & Edit Distance Analysis."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -100,9 +100,9 @@ for i, (pair, col) in enumerate([("C↔A","edit_CA"),("C↔Au","edit_CAu"),("A�
     med = sample[col].median()
     axes[1].text(i, med+0.01, f"med={med:.2f}", ha="center", fontsize=9)
 fig.tight_layout()
-fig.savefig(FIG / "module3_ngram_divergence_heatmap.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "ngram_divergence_heatmap.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module3_ngram_divergence_heatmap.png")
+print("Saved → figures/ngram_divergence_heatmap.png")
 
 # ── Fig 3c: edit distance distribution figure ────────────────────────────────
 fig, ax = plt.subplots(figsize=(8, 4))
@@ -113,9 +113,9 @@ sns.boxplot(data=edit_melt2, x="Pair", y="Norm. edit distance",
 ax.set_title("Normalised Edit Distance between Translation Strategies", fontweight="bold")
 ax.set_ylabel("Normalised Levenshtein distance")
 fig.tight_layout()
-fig.savefig(FIG / "module3_edit_distance_distribution.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "edit_distance_distribution.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/module3_edit_distance_distribution.png")
+print("Saved → figures/edit_distance_distribution.png")
 
 # ── Top/bottom idioms by divergence ──────────────────────────────────────────
 idiom_div = sample.groupby("idiom")["div_CA_ng1"].mean().dropna()
@@ -124,7 +124,7 @@ print(idiom_div.nlargest(10).to_string())
 print("\nTop 10 least divergent idioms (C vs A):")
 print(idiom_div.nsmallest(10).to_string())
 
-# Save per-row divergence scores for use in Module 8
+# Save per-row divergence scores for use by the difficulty script
 sample[["idiom","source_language","target_language",
         "div_CA_ng1","div_CAu_ng1","div_AAu_ng1","edit_CA","edit_CAu","edit_AAu"]]\
     .to_parquet(PROC / "divergence_scores.parquet", index=False)

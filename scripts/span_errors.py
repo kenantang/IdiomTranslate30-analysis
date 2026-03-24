@@ -1,4 +1,4 @@
-"""TODO 4 — Classify span-not-in-translation errors."""
+"""Classify span-not-in-translation errors."""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -79,9 +79,9 @@ ax.set_xlabel("")
 ax.tick_params(axis="x", rotation=30)
 ax.legend(title="Strategy")
 fig.tight_layout()
-fig.savefig(FIG / "todo4_span_error_types.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "span_error_types.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
-print("Saved → figures/todo4_span_error_types.png")
+print("Saved → figures/span_error_types.png")
 
 # Save to CSV for inspection
 err_df.to_csv(ROOT / "data/audit/span_error_classification.csv", index=False)
