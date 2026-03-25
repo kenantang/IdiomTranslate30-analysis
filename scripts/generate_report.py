@@ -455,17 +455,34 @@ visualisations that cap the axis range.
 {fig_section}
 """
 
-# Preserve any manually-maintained sections from the existing README.
-# Everything from "## Analysis Results" onward is kept verbatim across regenerations.
-preserved = ""
+# ── Update README ──────────────────────────────────────────────────────────────
+# Only the "## Figures" section (fig1–fig7) is regenerated.
+# Everything else — the Overview, Analysis Results, and all manually edited
+# sections — is preserved verbatim so that manual edits and example text are
+# never lost.  If the README does not yet exist a full skeleton is written.
+print("\nUpdating README.md ...")
+
+FIG_SECTION = f"\n## Figures\n\n{fig_section}\n"
+
 if REPORT_PATH.exists():
     existing = REPORT_PATH.read_text(encoding="utf-8")
-    markers = ["## Analysis Results"]
-    positions = [existing.find(f"\n{m}") for m in markers]
-    valid = [p for p in positions if p != -1]
-    if valid:
-        preserved = "\n" + existing[min(valid):].lstrip("\n")
+    fig_start = existing.find("\n## Figures\n")
+    fig_end   = existing.find("\n## Analysis Results\n")
+    if fig_start != -1 and fig_end != -1:
+        # Replace the Figures section in-place, leave everything else untouched.
+        new_content = existing[:fig_start] + FIG_SECTION + existing[fig_end:]
+    elif fig_start != -1:
+        # No Analysis Results section yet — replace Figures to end of file.
+        new_content = existing[:fig_start] + FIG_SECTION
+    else:
+        # No Figures section found — append it.
+        new_content = existing.rstrip() + "\n" + FIG_SECTION
+    REPORT_PATH.write_text(new_content, encoding="utf-8")
+else:
+    # Fresh clone: write a minimal skeleton.  The full analysis sections should
+    # be populated by running the individual analysis scripts and extract_examples.py.
+    skeleton = textwrap.dedent(report).strip() + "\n" + FIG_SECTION
+    REPORT_PATH.write_text(skeleton, encoding="utf-8")
 
-REPORT_PATH.write_text(textwrap.dedent(report).strip() + "\n" + preserved)
 print(f"  Saved {REPORT_PATH}")
 print("\nDone.")
