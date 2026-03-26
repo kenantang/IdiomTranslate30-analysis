@@ -1,0 +1,1504 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Analysis of the IdiomTranslate30 massively multilingual idiom translation dataset">
+      
+      
+        <meta name="author" content="Kenan Tang">
+      
+      
+      
+        <link rel="prev" href="../part2_idiom_coverage/">
+      
+      
+        <link rel="next" href="../part4_cross_lingual/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Part 3: Translation Behaviour - IdiomTranslate30 Analysis</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#part-3-translation-behaviour" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-header__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IdiomTranslate30 Analysis
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Part 3: Translation Behaviour
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dataset/overview/" class="md-tabs__link">
+          
+  
+  
+  Dataset
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../part1_data_quality/" class="md-tabs__link">
+          
+  
+  
+  Analysis
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-nav__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IdiomTranslate30 Analysis
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Dataset
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/edge_cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Edge Cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part1_data_quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1: Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2_idiom_coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2: Idiom Coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3: Translation Behaviour
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3: Translation Behaviour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#translation-length-expansion-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translation Length &amp; Expansion Ratio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#span-length-idiom-footprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Span Length &amp; Idiom Footprint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#span-position-within-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Span Position Within Translation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strategy-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategy Divergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lexical-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexical Diversity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#context-sensitivity-span-reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context Sensitivity &amp; Span Reuse
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part4_cross_lingual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 4: Cross-Lingual Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part5_cognate_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 5: Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part6_synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6: Synthesis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part7_language_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 7: Language Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part8_reverse_span/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 8: Reverse Span Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part9_analogy_slop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 9: Analogy Slop Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part10_additional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 10: Additional Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part11_heuristics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 11: Heuristics & LLM-as-a-Judge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#translation-length-expansion-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translation Length &amp; Expansion Ratio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#span-length-idiom-footprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Span Length &amp; Idiom Footprint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#span-position-within-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Span Position Within Translation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strategy-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategy Divergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lexical-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexical Diversity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#context-sensitivity-span-reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context Sensitivity &amp; Span Reuse
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="part-3-translation-behaviour">Part 3: Translation Behaviour<a class="headerlink" href="#part-3-translation-behaviour" title="Permanent link">&para;</a></h1>
+<p>With the idiom inventory characterised, we now examine how Gemini 3.0 translates it. The
+analyses below ask: how long are translations, what fraction of them carries the idiom
+rendering, where in the sentence does the rendering appear, how different are the three
+strategies from each other, how lexically varied is the output, and does context actually
+change translations or are they largely templated?</p>
+<h2 id="translation-length-expansion-ratio">Translation Length &amp; Expansion Ratio<a class="headerlink" href="#translation-length-expansion-ratio" title="Permanent link">&para;</a></h2>
+<p>Translations are substantially longer than their source sentences across all strategies:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Median expansion ratio</th>
+<th>Mean</th>
+<th>Macro-mean (over idioms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively</td>
+<td>3.59×</td>
+<td>3.68×</td>
+<td>3.68×</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>4.46×</td>
+<td>4.60×</td>
+<td>4.60×</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>4.36×</td>
+<td>4.55×</td>
+<td>4.55×</td>
+</tr>
+</tbody>
+</table>
+<p>Wilcoxon signed-rank tests (one-sided, Creatively &lt; Analogy/Author) are significant at p &lt; 10⁻³⁰⁰
+for every target language. Effect sizes (rank-biserial correlation r = 1 − 2T / (n(n+1)/2))
+range 0.55–0.97, largest for Spanish and Russian in the Author strategy. The large expansion
+ratios reflect the fundamental challenge of idiom translation: the target must convey figurative
+meaning that the source sentence implies rather than states, requiring elaboration.</p>
+<p>The contrast is sharpest when comparing idioms that map directly onto an English phrase versus
+those that encode a culturally specific concept with no ready equivalent. The Chinese 一言以蔽之
+("to cover it with one word") expands only 2.6× because Creatively can collapse the entire idiom
+into "In a word" or "All things considered" — the English phrase <em>is</em> the idiom. By contrast,
+偃武修文 ("lay down arms, cultivate letters") expands 6.3× because no English shorthand exists:
+the model must construct a phrase like "laid down its swords to cultivate the arts of peace."
+The same pattern holds across source languages. Japanese 金科玉条 ("golden rules worth cherishing")
+yields a compact rendering — "the gospel for our team" (Creatively), "a most sacred canon"
+(Author) — while the filial gratitude idiom 寸草春暉 ("a blade of grass cannot repay spring's
+warmth") requires a full simile in every strategy: "a debt as vast as the sky is to a blade of
+grass." Korean 회자인구 ("on everyone's lips") collapses to "the talk of the town," whereas
+남귤북지 ("citrus becomes trifoliate north of the Huai River," i.e. context shapes character)
+must be unpacked as "how a change in setting can turn a common shrub into a bearer of golden
+fruit" — a full explanatory clause.</p>
+<p><img alt="expansion_ratio" src="../../figures/expansion_ratio.png" />
+<img alt="wilcoxon_effects" src="../../figures/wilcoxon_effects.png" /></p>
+<h2 id="span-length-idiom-footprint">Span Length &amp; Idiom Footprint<a class="headerlink" href="#span-length-idiom-footprint" title="Permanent link">&para;</a></h2>
+<p>These long translations are not uniformly padded. The idiom span — the model's rendering of
+the idiom itself — occupies only a modest fraction of each translation:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Median span/translation ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively</td>
+<td>0.274</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>0.271</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>0.362</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy produces substantially longer spans relative to the translation (0.36 vs 0.27),
+consistent with its design as an analogy-based strategy that elaborates the idiomatic
+substitution. Cross-strategy span length correlations are <strong>low</strong> (Pearson r ≈ 0.22–0.29),
+indicating that the three strategies render the idiom in very different surface forms even
+when overall translation lengths are similar.</p>
+<p><img alt="span_ratio" src="../../figures/span_ratio.png" />
+<img alt="span_vs_idiom_length" src="../../figures/span_vs_idiom_length.png" />
+<img alt="span_correlation" src="../../figures/span_correlation.png" /></p>
+<h2 id="span-position-within-translation">Span Position Within Translation<a class="headerlink" href="#span-position-within-translation" title="Permanent link">&para;</a></h2>
+<p>Beyond size, the <em>position</em> of the span within the translation reveals how sentences are
+structured around the idiom rendering. Relative start position is computed as
+<code>start_offset / (translation_len − span_len)</code>, where 0 = span at the very start, 1 = at the
+very end. Rows where the span is not found as a substring (~2% per strategy) are excluded.</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Beginning (0–⅓)</th>
+<th>Middle (⅓–⅔)</th>
+<th>End (⅔–1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively</td>
+<td>29.9%</td>
+<td>29.1%</td>
+<td>41.0%</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>29.6%</td>
+<td>26.0%</td>
+<td>44.5%</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>30.2%</td>
+<td>29.6%</td>
+<td>40.3%</td>
+</tr>
+</tbody>
+</table>
+<p>Across all strategies the idiom span <strong>skews toward the end</strong> (~40–45% vs ~30% each for
+beginning and middle). This suggests the model tends to introduce context and build up to
+the idiomatic expression rather than leading with it — a rhetorical pattern consistent with
+how idiomatic expressions function as conclusions or punchlines in natural discourse.</p>
+<p>South Asian languages (Bengali 0.478, Hindi 0.488) place the span earliest; Romance and Bantu
+languages place it latest (Italian 0.609, Swahili 0.612), reflecting word-order differences
+across target languages. Chinese and Korean sources produce later-positioned spans (~0.59)
+than Japanese (~0.54).</p>
+<p>In English, the difference is particularly stark with grammatical-particle idioms versus
+narrative-conclusion idioms. The Chinese 总而言之 ("in summary") and Japanese 如是我聞
+("thus have I heard," a Buddhist formula for reported speech) and Korean 십상팔구
+("eight or nine out of ten") all function as sentence-initial adverbials, so the span
+<em>must</em> appear first: "When all is said and done, this plan stands as our premier path
+forward" / "Thus have I heard: the Master shall venture across the seas" / "Nine times
+out of ten, I have no one to blame but myself." By contrast, idioms used as final
+appraisals — Chinese 亡羊得牛 ("lose a sheep, gain an ox"), Japanese 塗炭之苦
+("suffering in mud and charcoal"), Korean 함흥차사 ("a messenger sent to Hamhung who
+never returns") — consistently appear at or near the sentence end: "losing a sheep
+ultimately gained him an ox" / "cast into a living hell of misery and despair" /
+"talk about a total swing and a miss." The span-position signal therefore partly reflects
+syntactic function rather than a free stylistic choice by the model.</p>
+<p><img alt="span_position" src="../../figures/span_position.png" /></p>
+<h2 id="strategy-divergence">Strategy Divergence<a class="headerlink" href="#strategy-divergence" title="Permanent link">&para;</a></h2>
+<p>The three strategies not only produce different span sizes and positions — their full
+translations are substantially different from each other:</p>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>Mean unigram divergence</th>
+<th>Mean normalised edit distance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively → Analogy</td>
+<td>0.604</td>
+<td>0.574</td>
+</tr>
+<tr>
+<td>Creatively → Author</td>
+<td>0.673</td>
+<td>0.607</td>
+</tr>
+<tr>
+<td>Analogy → Author</td>
+<td>0.758</td>
+<td>0.653</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy and Author diverge from each other <em>more</em> than either diverges from Creatively,
+suggesting Creatively occupies a middle ground. Divergence is highest for culturally specific
+idioms with no clear English equivalent and lowest for idioms with a ready conventional
+rendering — the model's three strategies converge when the answer is obvious and diverge
+when interpretation is required.</p>
+<p>The clearest illustrations come from the low-divergence end. Chinese 非驴非马 ("neither
+donkey nor horse," i.e. nondescript hybrid) maps immediately onto the English "neither X
+nor Y" template, so all three strategies stay within that frame: "neither fish nor fowl" /
+"neither fish nor feather" / "neither ass nor horse." Japanese 広大無辺 ("vast and
+boundless beyond measure") is similarly transparent, and every strategy renders it with
+near-identical wording: "vast and boundless" / "so boundless" / "vast and boundless
+reach." At the high-divergence end, the Japanese 口耳四寸 ("the distance between ear and
+mouth," meaning superficial learning retained only briefly) produces three radically
+different metaphors: "flew from lip to ear before the breath could even cool" (Creatively),
+"within the span of a single heartbeat's echo" (Analogy), "hath o'erleapt the space
+'twixt mouth and ear" (Author) — each strategy reaches for a different image because no
+English phrase captures the spatial metaphor of the original. Korean 회계지치 ("returning
+home exhausted") similarly fragments: "completely bone-tired" (Creatively, 2 words), "as
+though my internal battery had been replaced with a handful of cold, wet sand" (Analogy,
+a sprawling 20-word metaphor), "a most profound weariness of the spirit" (Author) —
+the strategies agree on the meaning but disagree on everything else.</p>
+<p><img alt="ngram_divergence_heatmap" src="../../figures/ngram_divergence_heatmap.png" />
+<img alt="edit_distance_distribution" src="../../figures/edit_distance_distribution.png" /></p>
+<h2 id="lexical-diversity">Lexical Diversity<a class="headerlink" href="#lexical-diversity" title="Permanent link">&para;</a></h2>
+<p>Strategy divergence is also reflected at the vocabulary level. <strong>Type-token ratios</strong> of
+individual translations are very high (median ≈ 1.00 for Creatively, 0.957 for Analogy and
+Author), meaning individual translations are short enough that almost every word is unique.
+More informative is the span-level lexical breadth across all 10 target languages per idiom:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Mean unique unigrams in spans per idiom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively</td>
+<td>280.5</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>346.8</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>512.9</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy produces nearly twice as many distinct span renderings as Creatively, confirming
+it is the most lexically inventive strategy. This is consistent with the strategy divergence
+results above: Analogy diverges most from the other strategies and also generates the widest
+span vocabulary. Span TTR correlates weakly but positively with full-translation TTR (ρ ≈ 0.15–0.25).</p>
+<p><img alt="unique_unigrams" src="../../figures/unique_unigrams.png" />
+<img alt="ttr_by_language" src="../../figures/ttr_by_language.png" /></p>
+<h2 id="context-sensitivity-span-reuse">Context Sensitivity &amp; Span Reuse<a class="headerlink" href="#context-sensitivity-span-reuse" title="Permanent link">&para;</a></h2>
+<p>The analysis so far treats each row independently. But each (idiom, target language) cell
+contains 10 sentences — how much do translations <em>within</em> that cell vary? High within-cell
+variation means the model genuinely reads and uses context; low variation means it effectively
+ignores it and applies a fixed rendering.</p>
+<p><strong>Translation length variation (CV across 10 sentences):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Mean CV</th>
+<th>Median CV</th>
+<th>CV &gt; 0.10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively</td>
+<td>0.206</td>
+<td>0.201</td>
+<td>98.7%</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>0.195</td>
+<td>0.190</td>
+<td>98.3%</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>0.219</td>
+<td>0.213</td>
+<td>99.0%</td>
+</tr>
+</tbody>
+</table>
+<p>98–99% of cells show non-trivial length variation — <strong>the model is consistently context-sensitive</strong>.
+Author is most sensitive (CV 0.219) and Analogy least (0.195), which mirrors their between-strategy
+divergence ordering. Word-level diversity within cells confirms the same picture: mean pairwise
+Jaccard between the 10 translations within a cell is ~0.08 — any two translations share about
+8% of their combined vocabulary, confirming genuine lexical variation across sentences.</p>
+<p><strong>Span reuse across the 10 sentences:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>All-different spans (10 unique)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively</td>
+<td>62.3%</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>92.1%</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>76.4%</td>
+</tr>
+</tbody>
+</table>
+<p>Spans are overwhelmingly <strong>sentence-driven, not idiom-driven</strong>: in 62–92% of cells, every
+sentence produces a distinct span. Analogy's 92% fully-unique rate is the flip side of its
+high lexical diversity (see Lexical Diversity above) — it not only produces different vocabulary
+across target languages but also across sentences for the same target language. No cell achieves full
+convergence to a single fixed span, ruling out simple template-based annotation.</p>
+<p>The span-reuse examples make this concrete. Analogy spans for Chinese 知过必改 ("know a
+fault, correct it") across 10 English sentences span a wide range of distinct metaphors:
+"treat his flaws like cracks in a dam," "prune his past actions like a gardener," "treat
+their mistakes like software bugs to be patched on sight" — every sentence prompts a fresh
+analogy. The same pattern holds for Japanese 南船北馬 ("south by boat, north by horse,"
+i.e. constant travel): "dandelion seed chasing the four winds," "the restless wind and the
+tireless tide," "weaving his career across the map like a migratory needle stitching
+horizons together" — ten sentences, ten metaphors, none repeated. Korean 옥하가옥 ("jade
+below jade," i.e. excellence upon excellence) produces equally inventive variation:
+"sapphire eye watching over a kingdom of emeralds," "a lighthouse built atop a sun,"
+"gilding a dragonfly's wings." By contrast, idioms that already have a fixed conventional
+English rendering lock in: Chinese 瓮中捉鳖 ("catching a turtle in a jar") produces
+"shooting fish in a barrel" for all 10 sentences without variation; Japanese 試行錯誤
+yields "trial and error" nine times out of ten; Korean 죽림칠현 (the "Seven Sages of the
+Bamboo Grove") always renders as that exact proper noun. The distinction is between idioms
+that carry a vivid concrete image (inviting fresh analogies) and those that map directly to
+an established English phrase (forcing convergence regardless of context).</p>
+<p>Context sensitivity varies across idioms in related ways. Chinese 千篇一律 ("a thousand
+pieces of identical prose," i.e. monotonous uniformity) produces three nearly identical
+English Creatively translations: "stuck in a rut," "cut from the same cloth," "cut from
+the exact same cloth" — the idiom's meaning is so directly expressed by a fixed English
+idiom that context barely matters. Chinese 罪魁祸首 ("chief culprit"), by contrast, ranges
+from a terse "He is the rotten heart of this corruption case" (3 words for the idiom
+itself) to "Everyone knows exactly whose hands are dirty in today's chaos" (no explicit
+idiom phrase at all) to a full clause about scapegoating in a financial crisis — the word
+"culprit" can take on very different emphases depending on domain and subject matter.
+Similarly, Japanese 問答無用 ("no questions permitted") ranges from "My word is final"
+(sentence-initial imperative context) to "They were forced into blind obedience, expected
+to follow the rules without question or recourse" (narrative third-person context) — the
+same idiom serves as either a blunt command or an elaborate explanation of authority. The
+Korean 경성지미, an obscure idiom, shows the highest context sensitivity of all, but for
+a different reason: lacking a stable meaning, the model latches onto different
+interpretations across sentences — "refined elegance," "the flavors of Gyeongseong,"
+"the grit to grind a mirror from a stone" — illustrating how ambiguous or rare idioms
+induce not genuine context-sensitivity but semantic instability.</p>
+<p><img alt="context_sensitivity" src="../../figures/context_sensitivity.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

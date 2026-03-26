@@ -1,0 +1,2665 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Analysis of the IdiomTranslate30 massively multilingual idiom translation dataset">
+      
+      
+        <meta name="author" content="Kenan Tang">
+      
+      
+      
+        <link rel="prev" href="../part10_additional/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Part 11: Heuristics & LLM-as-a-Judge - IdiomTranslate30 Analysis</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#part-11-heuristic-string-matching-catalogue-limitations-and-llm-as-a-judge-upgrades" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-header__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IdiomTranslate30 Analysis
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Part 11: Heuristics & LLM-as-a-Judge
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dataset/overview/" class="md-tabs__link">
+          
+  
+  
+  Dataset
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../part1_data_quality/" class="md-tabs__link">
+          
+  
+  
+  Analysis
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-nav__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IdiomTranslate30 Analysis
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Dataset
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/edge_cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Edge Cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part1_data_quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1: Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2_idiom_coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2: Idiom Coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part3_translation_behaviour/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3: Translation Behaviour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part4_cross_lingual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 4: Cross-Lingual Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part5_cognate_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 5: Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part6_synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6: Synthesis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part7_language_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 7: Language Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part8_reverse_span/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 8: Reverse Span Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part9_analogy_slop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 9: Analogy Slop Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part10_additional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 10: Additional Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 11: Heuristics & LLM-as-a-Judge
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 11: Heuristics & LLM-as-a-Judge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#111-span-containment-and-localisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Span Containment and Localisation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.1 Span Containment and Localisation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h1-exact-substring-match-span-in-trans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H1 — Exact substring match (span in trans)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h2-whitespace-stripped-match-spanstrip-in-trans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H2 — Whitespace-stripped match (span.strip() in trans)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h3-case-insensitive-match-spanlower-in-translower" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H3 — Case-insensitive match (span.lower() in trans.lower())
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h4-punctuation-stripped-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H4 — Punctuation-stripped match
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h5-off-by-one-boundary-match-span1-in-trans-or-span-1-in-trans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H5 — Off-by-one boundary match (span[1:] in trans or span[:-1] in trans)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h6-word-overlap-check-word-set-intersection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H6 — Word-overlap check (word-set intersection)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h7-span-position-zone-binning-pdcut-into-beginning-middle-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H7 — Span position zone binning (pd.cut into beginning / middle / end)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#112-text-normalisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Text Normalisation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.2 Text Normalisation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h8-nfc-normalisation-punctuation-stripping-for-span-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H8 — NFC normalisation + punctuation stripping for span deduplication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h9-opencc-simplified-to-traditional-conversion-for-cognate-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H9 — OpenCC simplified-to-traditional conversion for cognate matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h10-khangul-unihan-lookup-with-hanja-library-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H10 — kHangul Unihan lookup with hanja library fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#113-script-and-character-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Script and Character Classification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.3 Script and Character Classification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h11-cjk-character-detection-by-unicode-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H11 — CJK character detection by Unicode range
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h12-4-character-idiom-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H12 — 4-character idiom filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h13-hangul-syllable-range-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H13 — Hangul syllable range detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h14-japanese-column-auto-detection-by-column-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H14 — Japanese column auto-detection by column name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h15-yojijukugo-tag-detection-by-substring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H15 — Yojijukugo tag detection by substring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#114-analogy-template-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Analogy Template Classification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.4 Analogy Template Classification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h16-regex-template-matching-for-8-named-slop-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H16 — Regex template matching for 8 named slop patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#115-similarity-and-distance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Similarity and Distance Metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.5 Similarity and Distance Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h17-word-set-jaccard-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H17 — Word-set Jaccard similarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h18-normalised-levenshtein-edit-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H18 — Normalised Levenshtein edit distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h19-codepoint-array-near-3-cognate-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H19 — Codepoint-array near-3 cognate matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#116-numeric-thresholds-and-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Numeric Thresholds and Filters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.6 Numeric Thresholds and Filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h20-pathologically-long-translation-filter-500-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H20 — Pathologically long translation filter (&gt; 500 characters)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h21-short-translation-filter-5-or-10-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H21 — Short translation filter (&lt; 5 or &lt; 10 characters)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h22-expansion-ratio-outlier-filter-99th-percentile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H22 — Expansion ratio outlier filter (99th percentile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h23-span-to-translation-ratio-validity-filter-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H23 — Span-to-translation ratio validity filter (≤ 1.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h24-context-sensitivity-low-cv-threshold-008" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H24 — Context sensitivity low-CV threshold (&lt; 0.08)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h25-doubled-idiom-detection-count-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H25 — Doubled idiom detection (count = 20)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#117-aggregation-and-scoring-design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 Aggregation and Scoring Design Choices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.7 Aggregation and Scoring Design Choices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h26-equal-weight-composite-difficulty-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H26 — Equal-weight composite difficulty score
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h27-highlow-resource-language-binary-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H27 — High/low resource language binary classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h28-language-family-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H28 — Language family classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h29-idiom-length-bucketing-3-4-5-6-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H29 — Idiom length bucketing (3, 4, 5, 6, 7+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#118-summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.8 Summary Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#111-span-containment-and-localisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Span Containment and Localisation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.1 Span Containment and Localisation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h1-exact-substring-match-span-in-trans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H1 — Exact substring match (span in trans)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h2-whitespace-stripped-match-spanstrip-in-trans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H2 — Whitespace-stripped match (span.strip() in trans)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h3-case-insensitive-match-spanlower-in-translower" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H3 — Case-insensitive match (span.lower() in trans.lower())
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h4-punctuation-stripped-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H4 — Punctuation-stripped match
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h5-off-by-one-boundary-match-span1-in-trans-or-span-1-in-trans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H5 — Off-by-one boundary match (span[1:] in trans or span[:-1] in trans)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h6-word-overlap-check-word-set-intersection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H6 — Word-overlap check (word-set intersection)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h7-span-position-zone-binning-pdcut-into-beginning-middle-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H7 — Span position zone binning (pd.cut into beginning / middle / end)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#112-text-normalisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Text Normalisation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.2 Text Normalisation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h8-nfc-normalisation-punctuation-stripping-for-span-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H8 — NFC normalisation + punctuation stripping for span deduplication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h9-opencc-simplified-to-traditional-conversion-for-cognate-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H9 — OpenCC simplified-to-traditional conversion for cognate matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h10-khangul-unihan-lookup-with-hanja-library-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H10 — kHangul Unihan lookup with hanja library fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#113-script-and-character-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Script and Character Classification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.3 Script and Character Classification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h11-cjk-character-detection-by-unicode-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H11 — CJK character detection by Unicode range
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h12-4-character-idiom-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H12 — 4-character idiom filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h13-hangul-syllable-range-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H13 — Hangul syllable range detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h14-japanese-column-auto-detection-by-column-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H14 — Japanese column auto-detection by column name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h15-yojijukugo-tag-detection-by-substring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H15 — Yojijukugo tag detection by substring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#114-analogy-template-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Analogy Template Classification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.4 Analogy Template Classification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h16-regex-template-matching-for-8-named-slop-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H16 — Regex template matching for 8 named slop patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#115-similarity-and-distance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Similarity and Distance Metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.5 Similarity and Distance Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h17-word-set-jaccard-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H17 — Word-set Jaccard similarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h18-normalised-levenshtein-edit-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H18 — Normalised Levenshtein edit distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h19-codepoint-array-near-3-cognate-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H19 — Codepoint-array near-3 cognate matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#116-numeric-thresholds-and-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Numeric Thresholds and Filters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.6 Numeric Thresholds and Filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h20-pathologically-long-translation-filter-500-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H20 — Pathologically long translation filter (&gt; 500 characters)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h21-short-translation-filter-5-or-10-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H21 — Short translation filter (&lt; 5 or &lt; 10 characters)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h22-expansion-ratio-outlier-filter-99th-percentile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H22 — Expansion ratio outlier filter (99th percentile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h23-span-to-translation-ratio-validity-filter-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H23 — Span-to-translation ratio validity filter (≤ 1.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h24-context-sensitivity-low-cv-threshold-008" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H24 — Context sensitivity low-CV threshold (&lt; 0.08)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h25-doubled-idiom-detection-count-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H25 — Doubled idiom detection (count = 20)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#117-aggregation-and-scoring-design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 Aggregation and Scoring Design Choices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.7 Aggregation and Scoring Design Choices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#h26-equal-weight-composite-difficulty-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H26 — Equal-weight composite difficulty score
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h27-highlow-resource-language-binary-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H27 — High/low resource language binary classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h28-language-family-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H28 — Language family classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h29-idiom-length-bucketing-3-4-5-6-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H29 — Idiom length bucketing (3, 4, 5, 6, 7+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#118-summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.8 Summary Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="part-11-heuristic-string-matching-catalogue-limitations-and-llm-as-a-judge-upgrades">Part 11: Heuristic String Matching — Catalogue, Limitations, and LLM-as-a-Judge Upgrades<a class="headerlink" href="#part-11-heuristic-string-matching-catalogue-limitations-and-llm-as-a-judge-upgrades" title="Permanent link">&para;</a></h1>
+<p>Every quantitative finding in this report rests on some form of string matching. This section
+catalogues every heuristic matching choice made across all analysis scripts, explains exactly
+what each heuristic does and where it breaks down, and proposes a concrete LLM-as-a-judge
+(LaJ) prompt that could replace or validate each one. The goal is to give future researchers
+a clear picture of which numbers are robust and which should be treated as lower-bound
+estimates pending a higher-quality evaluation pass.</p>
+<p>Heuristics are grouped into eight categories that recur across multiple scripts.</p>
+<hr />
+<h2 id="111-span-containment-and-localisation">11.1 Span Containment and Localisation<a class="headerlink" href="#111-span-containment-and-localisation" title="Permanent link">&para;</a></h2>
+<p>These heuristics answer the question <em>"Is the annotated span actually present in the
+translation?"</em> They are used in <code>span_errors.py</code>, <code>span_audit.py</code>, and <code>span_position.py</code>
+and underpin the span-error rates reported in Part 1.</p>
+<h3 id="h1-exact-substring-match-span-in-trans">H1 — Exact substring match (<code>span in trans</code>)<a class="headerlink" href="#h1-exact-substring-match-span-in-trans" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Python's <code>in</code> operator tests whether the span string is a contiguous
+substring of the translation string. This is the primary span-validity check.</p>
+<p><strong>Limitation.</strong> The check is case-sensitive and byte-exact. A span annotation of <code>"North
+Star"</code> will fail against a translation containing <code>"north star"</code>, and a span containing a
+trailing space will fail against one without. Both are annotation artefacts, not genuine
+mismatches. In practice, roughly 3–5% of apparently "missing" spans are recoverable by the
+softer checks below.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Prompt a judge with the translation and the span and ask:
+<em>"Does the following span appear verbatim or near-verbatim in the translation? Answer YES,
+NEAR (explain the difference), or NO."</em> Use YES/NEAR as a pass for validity purposes. This
+removes the need for any of H2–H5 below: the judge handles whitespace, capitalisation,
+punctuation, and encoding in a single pass.</p>
+<hr />
+<h3 id="h2-whitespace-stripped-match-spanstrip-in-trans">H2 — Whitespace-stripped match (<code>span.strip() in trans</code>)<a class="headerlink" href="#h2-whitespace-stripped-match-spanstrip-in-trans" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Strips leading and trailing whitespace from the span before the substring
+test. Applied as a fallback when H1 fails.</p>
+<p><strong>Limitation.</strong> Only removes outer whitespace. A span with an internal double space
+(<code>"blessing  in disguise"</code>) still fails against the single-spaced translation.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by the H1 upgrade above.</p>
+<hr />
+<h3 id="h3-case-insensitive-match-spanlower-in-translower">H3 — Case-insensitive match (<code>span.lower() in trans.lower()</code>)<a class="headerlink" href="#h3-case-insensitive-match-spanlower-in-translower" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Lowercases both strings before the substring test.</p>
+<p><strong>Limitation.</strong> Lowercasing is locale-unaware in Python's default <code>str.lower()</code>. For
+Turkish, the dotted-İ / dotless-ı distinction means <code>"İdiom".lower()</code> ≠ <code>"idiom"</code>. The
+dataset contains no Turkish target language, but future extensions should be aware of this.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by H1 upgrade.</p>
+<hr />
+<h3 id="h4-punctuation-stripped-match">H4 — Punctuation-stripped match<a class="headerlink" href="#h4-punctuation-stripped-match" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Removes all characters whose Unicode category starts with <code>"P"</code>
+(punctuation), then tests substring containment. Applied as a third fallback.</p>
+<p><strong>Limitation.</strong> Unicode category <code>P</code> classifies characters as punctuation based on their
+codepoint assignment, not their function in a particular script. Some Arabic diacritics and
+Hebrew vowel points are not in category <code>P</code> but function as punctuation-like modifiers.
+Conversely, some ideographic characters are assigned punctuation categories. For the
+Latin-script majority of this dataset the heuristic is reliable, but Arabic and Hindi spans
+may be affected.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by H1 upgrade.</p>
+<hr />
+<h3 id="h5-off-by-one-boundary-match-span1-in-trans-or-span-1-in-trans">H5 — Off-by-one boundary match (<code>span[1:] in trans or span[:-1] in trans</code>)<a class="headerlink" href="#h5-off-by-one-boundary-match-span1-in-trans-or-span-1-in-trans" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Tests whether dropping the first or last character of the span produces a
+match. Guards against spans that include or exclude a boundary character (e.g., a closing
+quote or a period that happens to be attached to the span in the annotation).</p>
+<p><strong>Limitation.</strong> Only checks one-character truncations from each end. A span missing two
+boundary characters, or differing at an internal position, is not caught. The guard on
+<code>len(span) &gt; 2</code> prevents degenerate 1–2 character spans from trivially matching.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by H1 upgrade; the judge can handle arbitrary
+boundary differences.</p>
+<hr />
+<h3 id="h6-word-overlap-check-word-set-intersection">H6 — Word-overlap check (word-set intersection)<a class="headerlink" href="#h6-word-overlap-check-word-set-intersection" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Splits both span and translation on whitespace, lowercases, and checks
+whether any word appears in both sets. Used as a last-resort signal: if zero overlap exists,
+the span is likely completely wrong.</p>
+<p><strong>Limitation.</strong> Space-based tokenisation produces incorrect tokens for German compounds
+(<code>"Lebensweisheit"</code> will not match component words), agglutinative languages (Turkish,
+Finnish), and languages without inter-word spaces (Chinese, Japanese, Thai). For
+CJK-language spans this heuristic always returns zero overlap and therefore provides no
+information.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following span was annotated as the translation of an
+idiom within the following sentence. Do any words or morphemes in the span appear in the
+sentence, even in a different inflected or compound form? Answer YES or NO with a one-line
+reason."</em></p>
+<hr />
+<h3 id="h7-span-position-zone-binning-pdcut-into-beginning-middle-end">H7 — Span position zone binning (<code>pd.cut</code> into beginning / middle / end)<a class="headerlink" href="#h7-span-position-zone-binning-pdcut-into-beginning-middle-end" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Computes the character offset of the span within the translation, divides
+by translation length, and bins the resulting value into three equal-width zones using
+<code>pd.cut([-.001, 1/3, 2/3, 1.001])</code>.</p>
+<p><strong>Limitation.</strong> Equal-width zones at 1/3 and 2/3 are arbitrary. There is no linguistic
+motivation for these boundaries. A span at position 0.32 and one at 0.36 are classified into
+different zones despite being adjacent. Meaningful zones might instead be defined
+syntactically (sentence-initial before the main verb, clause-final after the main verb, etc.)
+or pragmatically.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"In the following sentence, the idiom translation appears at
+the marked location. Is the idiom translation syntactically in: (a) a topic or fronted
+position, (b) the main predicate, (c) a clause-final or parenthetical position, or (d)
+somewhere else? Answer with (a), (b), (c), or (d) and a one-line reason."</em> This gives
+linguistically grounded position labels rather than thirds-of-a-string.</p>
+<hr />
+<h2 id="112-text-normalisation">11.2 Text Normalisation<a class="headerlink" href="#112-text-normalisation" title="Permanent link">&para;</a></h2>
+<p>These heuristics are used to make strings comparable before counting or matching. They appear
+in <code>reverse_span_analysis.py</code> and <code>cognate_comparison_extended.py</code>.</p>
+<h3 id="h8-nfc-normalisation-punctuation-stripping-for-span-deduplication">H8 — NFC normalisation + punctuation stripping for span deduplication<a class="headerlink" href="#h8-nfc-normalisation-punctuation-stripping-for-span-deduplication" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Applied in <code>reverse_span_analysis.py</code> before computing attractor counts:
+each span undergoes <code>unicodedata.normalize("NFC", x.strip()).lower().strip(".,!?;:'\"")</code>
+before being used as a grouping key.</p>
+<p><strong>Limitation.</strong> NFC (Canonical Decomposition followed by Canonical Composition) handles the
+most common multi-codepoint representations of combining characters. However, NFC does not
+handle compatibility equivalences (e.g., the full-width Latin letters used in Japanese
+contexts, <code>Ａ</code> vs <code>A</code>). NFKC would cover these but risks over-normalising Arabic ligatures
+and some Indic conjuncts that are semantically distinct. The punctuation strip list is
+hard-coded to <code>.,!?;:'"</code> and will miss other common terminators (e.g., <code>…</code>, <code>—</code>, <code>「」</code>,
+Arabic <code>؟</code>).</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Use a judge to decide whether two spans with different surface
+forms are the same rendering of the same idiom: <em>"Are these two translation spans semantically
+equivalent renderings of the same source idiom, or are they meaningfully different? Answer
+SAME or DIFFERENT with a one-line reason."</em> This replaces character-level normalisation with
+semantic equivalence, collapsing variants that differ only in typography, word order, or
+minor paraphrase.</p>
+<hr />
+<h3 id="h9-opencc-simplified-to-traditional-conversion-for-cognate-matching">H9 — OpenCC simplified-to-traditional conversion for cognate matching<a class="headerlink" href="#h9-opencc-simplified-to-traditional-conversion-for-cognate-matching" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>cognate_comparison_extended.py</code>, Chinese idioms from the simplified
+script source dictionary are converted to traditional script using OpenCC's <code>s2t</code> converter
+before comparison against Japanese kanji forms.</p>
+<p><strong>Limitation.</strong> OpenCC <code>s2t</code> is a heuristic character-by-character substitution that does
+not model character ambiguity (one simplified character can map to multiple traditional
+characters depending on context). For example, 发 can become 發 (to emit) or 髮 (hair)
+depending on the idiom, and the wrong choice would cause a false non-match with a Japanese
+form that uses 髮. OpenCC attempts disambiguation via word-level rules but is not perfect.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following simplified Chinese idiom and traditional Chinese
+/ Japanese idiom look similar. Are they the same idiom (same meaning and etymological origin),
+cognates (related but diverged in meaning), or coincidentally similar in form? Answer SAME,
+COGNATE, or COINCIDENTAL with a one-line reason."</em> This handles the ambiguity that
+character-level normalisation cannot.</p>
+<hr />
+<h3 id="h10-khangul-unihan-lookup-with-hanja-library-fallback">H10 — kHangul Unihan lookup with hanja library fallback<a class="headerlink" href="#h10-khangul-unihan-lookup-with-hanja-library-fallback" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>cognate_comparison_extended.py</code>, CJK characters in Chinese idioms are
+transliterated to their Korean Sino-Korean (Hangul) readings using the Unicode Unihan
+database <code>kHangul</code> field. Characters missing from Unihan fall back to the <code>hanja</code> Python
+library using substitution mode, with validation that the result is a single Hangul syllable.</p>
+<p><strong>Limitation.</strong> Many CJK characters have multiple Korean readings depending on context (e.g.,
+樂 is 악 <em>ak</em> in music contexts and 낙 <em>nak</em> in pleasure contexts). The heuristic always
+takes the first listed reading from Unihan without considering which reading is appropriate
+for the given idiom. This can produce incorrect Sino-Korean forms for idioms where a
+character's secondary reading applies, causing a genuine cognate to be missed or a
+non-cognate to be falsely matched.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following Chinese idiom is compared with the following
+Korean idiom. Both may be Sino-Korean in origin. Do they share the same classical Chinese
+etymology, and would a native Korean speaker likely recognise them as related? Answer YES,
+POSSIBLY, or NO with a one-line explanation citing the etymological relationship."</em></p>
+<hr />
+<h2 id="113-script-and-character-classification">11.3 Script and Character Classification<a class="headerlink" href="#113-script-and-character-classification" title="Permanent link">&para;</a></h2>
+<p>These heuristics detect what script a character or string belongs to. They appear in
+<code>unmatched_chinese.py</code>, <code>japanese_yojijukugo.py</code>, <code>cognate_comparison_extended.py</code>, and
+<code>difficulty.py</code>.</p>
+<h3 id="h11-cjk-character-detection-by-unicode-range">H11 — CJK character detection by Unicode range<a class="headerlink" href="#h11-cjk-character-detection-by-unicode-range" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Checks whether a character's codepoint falls in the CJK Unified Ideographs
+block (<code>U+4E00</code>–<code>U+9FFF</code>) or CJK Extension A (<code>U+3400</code>–<code>U+4DBF</code>). Used to identify
+Chinese/Japanese characters in spans and idioms.</p>
+<p><strong>Limitation.</strong> Unicode assigns CJK characters to eight extension blocks
+(A–H), the Compatibility Ideographs block (<code>U+F900</code>–<code>U+FAFF</code>), and several supplementary
+plane blocks (<code>U+20000</code>–<code>U+3134F</code>). The scripts only check two of these blocks. Rare
+characters in Extensions B–H (used in classical texts and personal names) would be missed.
+In practice this affects fewer than 0.1% of idioms in this dataset but could matter for
+highly classical Japanese or rare Chinese idioms.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"What writing system does the following character or string
+belong to: Simplified Chinese, Traditional Chinese, Japanese Kanji, Korean Hanja, or mixed?
+Answer with the most specific label and note if the character appears in multiple systems."</em>
+This provides a semantically meaningful label rather than a codepoint range answer.</p>
+<hr />
+<h3 id="h12-4-character-idiom-filter">H12 — 4-character idiom filter<a class="headerlink" href="#h12-4-character-idiom-filter" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Filters idioms to exactly 4 characters (by Python <code>len()</code>) to select
+Chinese chengyu and Japanese yojijukugo. Used in <code>japanese_yojijukugo.py</code>,
+<code>cognate_comparison_zhko.py</code>, <code>cognate_comparison_extended.py</code>, and <code>difficulty.py</code>.</p>
+<p><strong>Limitation.</strong> <code>len()</code> counts Unicode code points, not grapheme clusters. A 4-character
+idiom that uses a character stored as a surrogate pair (e.g., some CJK Extension B
+characters) would count as 5. Additionally, not all Classical Chinese idioms are 4
+characters: three-character idioms (三字格, e.g., 拦路虎, 莫须有) and six-character idioms
+(e.g., 醉翁之意不在酒) are culturally significant but excluded by this filter. The filter
+also excludes Japanese yojijukugo that include kana (e.g., 大和撫子 at 5 characters if the
+hiragana is retained).</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"Is the following idiom a traditional four-character Chinese
+chengyu or Japanese yojijukugo? If it is a related multi-character fixed expression that
+would conventionally be treated similarly, also say YES. Answer YES or NO with a one-line
+reason."</em> This replaces the hard length filter with a conventionality judgement.</p>
+<hr />
+<h3 id="h13-hangul-syllable-range-detection">H13 — Hangul syllable range detection<a class="headerlink" href="#h13-hangul-syllable-range-detection" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Checks whether a character falls in the Hangul Syllables block
+(<code>U+AC00</code>–<code>U+D7A3</code>) to validate Korean transliterations. Used in
+<code>cognate_comparison_extended.py</code>.</p>
+<p><strong>Limitation.</strong> The Hangul Syllables block covers the 11,172 precomposed syllables used in
+modern Korean. It does not cover Hangul Jamo (<code>U+1100</code>–<code>U+11FF</code>), the combining consonants
+and vowels used for Old Korean, or the Hangul Compatibility Jamo (<code>U+3130</code>–<code>U+318F</code>). A
+Sino-Korean reading stored as decomposed Jamo would fail this validation and be silently
+discarded, reducing cognate recall.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by H10 upgrade above.</p>
+<hr />
+<h3 id="h14-japanese-column-auto-detection-by-column-name">H14 — Japanese column auto-detection by column name<a class="headerlink" href="#h14-japanese-column-auto-detection-by-column-name" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>complementary_idiom_types.py</code>, the script tries to find the column
+containing Japanese text by checking if the column name contains <code>"japanese"</code>, <code>"kanji"</code>, or
+is one of a hard-coded list (<code>"word"</code>, <code>"phrase"</code>, <code>"kotowaza"</code>, <code>"jp"</code>). Falls back to the
+first object-dtype column.</p>
+<p><strong>Limitation.</strong> Column names in external datasets are unpredictable. A dataset that stores
+the Japanese text in a column named <code>"headword"</code> or <code>"expression"</code> would cause the fallback
+to trigger, potentially selecting the wrong column (e.g., a definition column instead of the
+idiom column). The fallback does no content validation.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Not applicable in the typical sense; this is a structural
+parsing heuristic. Instead, validate by sampling: <em>"The following 5 cell values are from a
+column named '{col}'. Is this column likely to contain Japanese idiom text (kanji/kana
+expressions), or is it some other type of content? Answer IDIOMS or OTHER."</em> Run this on the
+top 5 candidate columns and select the one scored IDIOMS with the highest confidence.</p>
+<hr />
+<h3 id="h15-yojijukugo-tag-detection-by-substring">H15 — Yojijukugo tag detection by substring<a class="headerlink" href="#h15-yojijukugo-tag-detection-by-substring" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>japanese_yojijukugo.py</code>, entries in a Wiktionary-derived dictionary
+are classified as yojijukugo by checking whether <code>"四字熟語"</code> or <code>"yojijukugo"</code> (case-
+insensitive) appears in their tag fields.</p>
+<p><strong>Limitation.</strong> Wiktionary tagging is community-maintained and inconsistent. Many genuine
+yojijukugo are tagged as simply <code>"idiom"</code> without the specific yojijukugo tag. The script
+supplements with H12 (4-character filter) but the combined recall is still incomplete:
+expressions tagged as <code>"proverb"</code> or <code>"phrase"</code> that happen to be 4-character chengyu-derived
+forms are excluded.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"Is the following Japanese expression conventionally classified
+as a yojijukugo (四字熟語) — a fixed four-character compound with a culturally established
+meaning? Answer YES, BORDERLINE (explain), or NO."</em> Apply to any 4-character entry not
+already tagged.</p>
+<hr />
+<h2 id="114-analogy-template-classification">11.4 Analogy Template Classification<a class="headerlink" href="#114-analogy-template-classification" title="Permanent link">&para;</a></h2>
+<h3 id="h16-regex-template-matching-for-8-named-slop-patterns">H16 — Regex template matching for 8 named slop patterns<a class="headerlink" href="#h16-regex-template-matching-for-8-named-slop-patterns" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>analogy_deep_analysis.py</code>, each English Analogy span is matched
+against 8 compiled regular expressions. The first matching pattern wins; unmatched spans are
+labelled <code>"original"</code>. The patterns and their intent are:</p>
+<table>
+<thead>
+<tr>
+<th>Template name</th>
+<th>Pattern (simplified)</th>
+<th>Target expressions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weaving_thread_tapestry</code></td>
+<td><code>weav\|tapestry\|unravel\|loom\|stitch\|woven</code></td>
+<td>Thread / fabric metaphors</td>
+</tr>
+<tr>
+<td><code>cosmic_star_galaxy</code></td>
+<td><code>\bstar\b\|\bgalaxy\b\|\bcosmic\b\|\bconstellation\b\|\bnorth star\b</code></td>
+<td>Astronomical metaphors</td>
+</tr>
+<tr>
+<td><code>kaleidoscope</code></td>
+<td><code>kaleidoscope</code></td>
+<td>Kaleidoscope image</td>
+</tr>
+<tr>
+<td><code>trying_to_futility</code></td>
+<td><code>^trying to</code></td>
+<td>Futility frames starting with "trying to"</td>
+</tr>
+<tr>
+<td><code>dandelion_scattered</code></td>
+<td><code>dandelion\|scattered.*gale</code></td>
+<td>Dandelion / scattered-seeds image</td>
+</tr>
+<tr>
+<td><code>labyrinth_mirror</code></td>
+<td><code>labyrinth\|hall of mirror\|forest of mirror</code></td>
+<td>Maze / reflection image</td>
+</tr>
+<tr>
+<td><code>clockmaker_precision</code></td>
+<td><code>clockmaker\|watchmaker\|precision of a master</code></td>
+<td>Precision craftsman image</td>
+</tr>
+<tr>
+<td><code>mist_smoke_castle</code></td>
+<td><code>castle.*(?:mist\|smoke\|fog)\|built of.*(?:mist\|smoke)</code></td>
+<td>Insubstantial castle image</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Limitation.</strong> The patterns were derived by manual inspection of English Analogy spans and
+are necessarily incomplete. Several known limitations:</p>
+<ul>
+<li><strong>Coverage gap.</strong> Templates were identified from English outputs only. Templates in
+  non-English languages (e.g., Russian abstract-noun patterns, Arabic dust/immortality poles)
+  are not captured. The <code>"original"</code> label absorbs all unmatched spans including other
+  recurring templates not yet named.</li>
+<li><strong>Order dependency.</strong> The first-match rule means a span matching multiple patterns is
+  assigned only to the first one. For example, a span like <code>"a north star in a tapestry of
+  stars"</code> would be classified as <code>weaving_thread_tapestry</code> (matched first) rather than
+  <code>cosmic_star_galaxy</code>.</li>
+<li><strong>Lexical brittleness.</strong> <code>kaleidoscope</code> is a single-word exact match; <code>"kaleidoscopic"</code>
+  would not match. The <code>trying_to_futility</code> pattern requires the phrase at the start of the
+  span; a span like <code>"like trying to..."</code> would not match.</li>
+<li><strong>No semantic generalisation.</strong> A span like <code>"like a needle in an infinite loom"</code> would
+  match <code>weaving_thread_tapestry</code> but so would a span that genuinely uses weaving as a
+  culturally appropriate analogy rather than cliché. The regex cannot distinguish authentic
+  use from slop.</li>
+</ul>
+<p><strong>LLM-as-a-judge upgrade.</strong> This is the highest-value LLM upgrade in the entire pipeline.
+Prompt a judge with the source idiom, its literal meaning, and the Analogy span, then ask:</p>
+<p><em>"The following span is the model's Analogy-strategy translation of a CJK idiom. Classify it
+into one of these categories:</em>
+<em>(a) Weaving / thread / tapestry image</em>
+<em>(b) Cosmic / star / galaxy / north-star image</em>
+<em>(c) Kaleidoscope image</em>
+<em>(d) Futility frame ('trying to X', 'like trying to X')</em>
+<em>(e) Dandelion / scattered-seeds image</em>
+<em>(f) Labyrinth / hall-of-mirrors image</em>
+<em>(g) Clockmaker / watchmaker precision image</em>
+<em>(h) Insubstantial castle / castle of mist image</em>
+<em>(i) Another recurring LLM cliché — name it</em>
+<em>(j) Culturally grounded or original image</em></p>
+<p><em>Answer with the letter and a one-line justification. If (i), name the template."</em></p>
+<p>Category (i) would surface new templates that the regex approach misses entirely, producing a
+data-driven template inventory rather than a manually hypothesised one.</p>
+<hr />
+<h2 id="115-similarity-and-distance-metrics">11.5 Similarity and Distance Metrics<a class="headerlink" href="#115-similarity-and-distance-metrics" title="Permanent link">&para;</a></h2>
+<p>These heuristics quantify how similar two strings or string sets are. They appear in
+<code>cognate_comparison_zhko.py</code>, <code>context_sensitivity.py</code>, <code>cross_target_overlap.py</code>, and
+<code>difficulty.py</code>.</p>
+<h3 id="h17-word-set-jaccard-similarity">H17 — Word-set Jaccard similarity<a class="headerlink" href="#h17-word-set-jaccard-similarity" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> Splits texts on whitespace, lowercases, and computes
+<code>|A ∩ B| / |A ∪ B|</code> over the resulting word sets. Used to measure:
+- Translation similarity within a group (context_sensitivity.py, Part 3)
+- Cross-language translation vocabulary overlap (cross_target_overlap.py, Part 4)
+- One component of the composite difficulty score (difficulty.py, Part 6)
+- Cognate translation similarity (cognate_comparison_zhko.py, Part 5)</p>
+<p><strong>Limitation.</strong> Word-set Jaccard has four well-known failure modes in this dataset:
+1. <strong>Inflection blindness.</strong> <code>"runs"</code> and <code>"running"</code> are treated as different words; two
+   translations that use the same verb in different tenses score lower than they should.
+2. <strong>Composition blindness.</strong> German compounds are atomic in this metric; <code>"Lebensweisheit"</code>
+   and <code>"Lebensklugheit"</code> share no tokens despite sharing a morpheme.
+3. <strong>Order insensitivity.</strong> Jaccard ignores word order entirely; a translation and its
+   reversal receive a perfect score of 1.0.
+4. <strong>CJK inapplicability.</strong> Japanese, Chinese, and Korean use no inter-word spaces; the
+   "word-set" for a CJK string is its individual characters, making the metric a character
+   overlap score rather than a word overlap score.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following two translations are for the same source idiom.
+On a scale of 0–4, how semantically similar are they? 0 = completely different meaning,
+1 = loosely related, 2 = similar theme, 3 = nearly synonymous, 4 = essentially identical
+meaning. Answer with just the number."</em> Averaged over all sentence pairs within a cell, this
+replaces word-level Jaccard with semantic similarity, handling inflection, composition,
+paraphrase, and non-space-delimited scripts simultaneously.</p>
+<hr />
+<h3 id="h18-normalised-levenshtein-edit-distance">H18 — Normalised Levenshtein edit distance<a class="headerlink" href="#h18-normalised-levenshtein-edit-distance" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>cognate_comparison_zhko.py</code>, the character-level Levenshtein distance
+between two translations is divided by the length of the longer string to produce a
+normalised dissimilarity in [0, 1].</p>
+<p><strong>Limitation.</strong> Character-level edit distance treats every character substitution as equal-
+cost regardless of semantic similarity. Substituting <code>"moon"</code> for <code>"sun"</code> costs 4 edits at
+the character level despite being semantically close; substituting <code>"moon"</code> for <code>"star"</code> also
+costs 4 edits despite being somewhat similar. The metric is sensitive to translation length:
+short translations have coarser granularity.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by H17 upgrade; semantic similarity scoring makes
+character-level edit distance redundant for the task of comparing cognate translations.</p>
+<hr />
+<h3 id="h19-codepoint-array-near-3-cognate-matching">H19 — Codepoint-array near-3 cognate matching<a class="headerlink" href="#h19-codepoint-array-near-3-cognate-matching" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>cognate_comparison_zhko.py</code> and <code>cognate_comparison_extended.py</code>,
+4-character idioms are encoded as integer tuples of Unicode codepoints and compared via
+vectorised matrix operations. "Exact" match requires all 4 codepoints to match; "near-3"
+match requires exactly 3 of 4 codepoints to match (i.e., exactly one character differs).</p>
+<p><strong>Limitation.</strong> Near-3 is a structural approximation to cognate distance. It treats
+character identity as binary (match / no match) and codepoint distance as irrelevant — a
+one-codepoint difference between characters that look nearly identical (simplified vs
+traditional variant, e.g., 为 vs 為) counts the same as a substitution of a completely
+unrelated character. More importantly, semantically equivalent idioms that share meaning but
+differ in two or more characters (e.g., 一日千秋 and 一日三秋, where 千 vs 三 is
+semantically meaningful) are excluded from the near-3 category but would be real cognates.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following two CJK idioms come from different source
+languages (e.g., Chinese and Japanese, or Chinese and Korean). Do they share the same
+classical Chinese etymological origin and core meaning, even if they differ in one or more
+characters? Answer YES (same origin), PARTIAL (related but semantically diverged), or NO
+(coincidental similarity), with a one-line reason citing the meaning of each."</em></p>
+<hr />
+<h2 id="116-numeric-thresholds-and-filters">11.6 Numeric Thresholds and Filters<a class="headerlink" href="#116-numeric-thresholds-and-filters" title="Permanent link">&para;</a></h2>
+<p>These heuristics apply hard-coded numeric cutoffs. They appear in multiple scripts and
+determine which rows are included in or excluded from aggregations.</p>
+<h3 id="h20-pathologically-long-translation-filter-500-characters">H20 — Pathologically long translation filter (&gt; 500 characters)<a class="headerlink" href="#h20-pathologically-long-translation-filter-500-characters" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>context_sensitivity.py</code>, <code>cross_target_overlap.py</code>, <code>difficulty.py</code>,
+and <code>generate_report.py</code>, translations longer than 500 characters are set to <code>NaN</code> before
+analysis. This removes rows where the model appears to have produced a refusal, an
+explanation, or a hallucinated continuation rather than a translation.</p>
+<p><strong>Limitation.</strong> The threshold of 500 characters is arbitrary. A legitimate Swahili or German
+translation with extensive compounding could plausibly exceed 500 characters. Conversely, a
+500-character English output that is mostly the model explaining its reasoning would not be
+caught if it is exactly 500 characters. There is no inspection of content — a very long but
+genuine translation is discarded alongside model failures.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following text is supposed to be a translation of a
+Chinese / Japanese / Korean idiom used in a sentence. Does it look like a genuine translation
+output, or does it look like a model refusal, an explanation, or a failure to translate?
+Answer TRANSLATION or FAILURE with a one-line reason."</em> This replaces the length threshold
+with a content-based quality gate, allowing long but genuine translations to be retained.</p>
+<hr />
+<h3 id="h21-short-translation-filter-5-or-10-characters">H21 — Short translation filter (&lt; 5 or &lt; 10 characters)<a class="headerlink" href="#h21-short-translation-filter-5-or-10-characters" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> <code>basic_stats.py</code> flags translations shorter than 5 characters;
+<code>span_audit.py</code> flags them below 10 characters as potentially degenerate.</p>
+<p><strong>Limitation.</strong> Chinese and Japanese translations can be legitimately very short (a single
+character or word). A 3-character Japanese translation of a concise idiom might be perfectly
+valid. The language-agnostic threshold conflates script density differences: a 6-character
+Japanese translation carries more information than a 6-character English one.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Subsumed by H20 upgrade; the FAILURE category handles short
+non-translations as well as long ones.</p>
+<hr />
+<h3 id="h22-expansion-ratio-outlier-filter-99th-percentile">H22 — Expansion ratio outlier filter (99th percentile)<a class="headerlink" href="#h22-expansion-ratio-outlier-filter-99th-percentile" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>translation_length.py</code>, the top 1% of expansion ratios are removed
+before visualisation to prevent the histogram from being dominated by a long tail.</p>
+<p><strong>Limitation.</strong> The 99th percentile cutoff removes the same proportion of data from every
+language regardless of that language's tail distribution. Hindi and Bengali, which have
+higher median expansion ratios than European languages, have a heavier right tail; the same
+percentile removes more substantive data from those languages.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Not required for visualisation purposes; this is a display
+choice rather than an analytical decision. A more principled alternative is to use per-
+language 99th percentiles rather than a corpus-wide one, which requires no LLM.</p>
+<hr />
+<h3 id="h23-span-to-translation-ratio-validity-filter-10">H23 — Span-to-translation ratio validity filter (≤ 1.0)<a class="headerlink" href="#h23-span-to-translation-ratio-validity-filter-10" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>span_analysis.py</code>, span/translation character-length ratios greater
+than 1.0 are removed on the grounds that a span cannot be longer than the translation
+containing it.</p>
+<p><strong>Limitation.</strong> Ratios slightly above 1.0 can occur due to encoding differences between the
+span string and the translation string (e.g., a span stored with a smart quote that was
+normalised away in the translation). Discarding these without inspection may hide systematic
+encoding bugs.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> For any span with ratio &gt; 1.0, prompt: <em>"The following span is
+annotated as appearing within this translation but appears to be longer than the translation.
+Is there an obvious encoding or character difference that would explain this, or does the span
+genuinely not appear in the translation? Answer ENCODING ARTEFACT or GENUINE MISMATCH with a
+one-line reason."</em></p>
+<hr />
+<h3 id="h24-context-sensitivity-low-cv-threshold-008">H24 — Context sensitivity low-CV threshold (&lt; 0.08)<a class="headerlink" href="#h24-context-sensitivity-low-cv-threshold-008" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>extract_examples.py</code>, idioms with a cross-sentence coefficient of
+variation below 0.08 are selected as examples of "stable" (context-insensitive) translation
+behaviour.</p>
+<p><strong>Limitation.</strong> CV &lt; 0.08 means the standard deviation of translation lengths is less than
+8% of the mean. This is a proxy for stability: if translations are all the same length, they
+are likely the same text. But an idiom could have 10 different-length translations that are
+all semantically identical, producing a high CV but no context sensitivity; conversely, all
+10 could be the same length but with different word choices.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"The following 10 translations were produced for the same idiom
+in 10 different context sentences. Do they appear to be essentially the same translation used
+repeatedly, or does the translation genuinely vary with context? Answer STABLE, MODERATE
+VARIATION, or CONTEXT-SENSITIVE with a one-line reason."</em> This measures semantic stability
+directly rather than proxying it through length variance.</p>
+<hr />
+<h3 id="h25-doubled-idiom-detection-count-20">H25 — Doubled idiom detection (count = 20)<a class="headerlink" href="#h25-doubled-idiom-detection-count-20" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>generate_report.py</code>, groups of (source language, idiom, target
+language) with exactly 20 sentences are flagged as erroneously duplicated entries (expected:
+10).</p>
+<p><strong>Limitation.</strong> The expected count of 10 and the anomalous count of 20 are hard-coded. Any
+other count anomaly (e.g., 11 or 15 sentences) would not be detected. The detection also
+does not verify whether the two blocks of 10 are independent runs vs duplicated rows.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Not applicable; this is a count-based data integrity check that
+requires no semantic judgement.</p>
+<hr />
+<h2 id="117-aggregation-and-scoring-design-choices">11.7 Aggregation and Scoring Design Choices<a class="headerlink" href="#117-aggregation-and-scoring-design-choices" title="Permanent link">&para;</a></h2>
+<h3 id="h26-equal-weight-composite-difficulty-score">H26 — Equal-weight composite difficulty score<a class="headerlink" href="#h26-equal-weight-composite-difficulty-score" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>difficulty.py</code>, four min-max-normalised components — span diversity,
+expansion ratio, cross-sentence CV, and cross-target Jaccard inverted — are averaged with
+equal weights to produce an idiom-level difficulty score.</p>
+<p><strong>Limitation.</strong> Equal weighting implies that span diversity, translation length volatility,
+context sensitivity, and cross-language vocabulary diversity contribute equally to
+translation difficulty. There is no empirical basis for this assumption. A principal
+component analysis would reveal whether these four metrics actually load on a single
+underlying dimension or represent multiple independent difficulty axes.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"How difficult do you expect the following CJK idiom to be to
+translate accurately into European and Afro-Asiatic target languages? Rate difficulty on a
+scale of 1 (straightforward: meaning is transparent, has common equivalents) to 5 (very hard:
+culturally specific, no standard equivalent, requires creative invention). Provide a one-line
+reason citing the main source of difficulty (cultural specificity, figurative opacity,
+register mismatch, etc.)."</em> This provides a human-interpretable ground-truth difficulty
+rating that can be used to validate whether the composite score is measuring the right thing.</p>
+<hr />
+<h3 id="h27-highlow-resource-language-binary-classification">H27 — High/low resource language binary classification<a class="headerlink" href="#h27-highlow-resource-language-binary-classification" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>crosslingual_consistency.py</code> and <code>cross_target_overlap.py</code>, the 10
+target languages are partitioned into high-resource (English, French, German, Spanish,
+Italian, Russian) and low-resource (Arabic, Hindi, Bengali, Swahili) based on a hard-coded
+membership list.</p>
+<p><strong>Limitation.</strong> "High-resource" and "low-resource" are relative terms that depend on the
+task and the metric. Arabic has substantial NLP resources for Modern Standard Arabic but far
+fewer for dialectal variants; Russian has excellent resources for Cyrillic text but may have
+weaker transliteration tools; Swahili is better-resourced than many African languages but
+less so than European ones. The binary split ignores within-group variation and the specific
+task (idiom translation) for which resource availability may not follow general NLP rankings.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Not a string matching heuristic; this is a categorical
+classification. A richer alternative is to treat resource level as a continuous variable
+derived from quantitative proxies (e.g., number of Wikipedia articles, size of available
+parallel corpora, mBERT representation quality) rather than a binary label.</p>
+<hr />
+<h3 id="h28-language-family-classification">H28 — Language family classification<a class="headerlink" href="#h28-language-family-classification" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>cross_target_overlap.py</code>, each target language is assigned to a
+language family (Germanic, Romance, Slavic, Semitic, Indo-Aryan, Bantu) and language pairs
+are classified as within-family or between-family for the vocabulary overlap analysis.</p>
+<p><strong>Limitation.</strong> The language family assignment uses classical linguistic taxonomy, which may
+not predict translation behaviour well. The relevant similarity for this dataset is not
+genetic but typological: French and Spanish share word order, case system, and extensive
+vocabulary, making within-Romance overlap high; but English and French (Germanic vs Romance)
+also share enormous vocabulary through the Norman Conquest, making between-family overlap
+potentially as high as within-family for some idiom types.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> Not a string matching heuristic. A more informative grouping
+would use corpus-derived vocabulary overlap between the target languages directly, rather than
+linguistic family.</p>
+<hr />
+<h3 id="h29-idiom-length-bucketing-3-4-5-6-7">H29 — Idiom length bucketing (3, 4, 5, 6, 7+)<a class="headerlink" href="#h29-idiom-length-bucketing-3-4-5-6-7" title="Permanent link">&para;</a></h3>
+<p><strong>What it does.</strong> In <code>idiom_morphology.py</code>, idioms are bucketed by character count into five
+groups (≤3, 4, 5, 6, 7+). Character count is computed by Python <code>len()</code>.</p>
+<p><strong>Limitation.</strong> Character count conflates length in distinct ways across the three source
+scripts. A 4-character Japanese idiom (yojijukugo) is a tightly lexicalised classical form
+with a specific cultural role; a 4-character Korean idiom may or may not be a chengyu-derived
+form; a 6-character Chinese idiom may be a compound proverb rather than a fixed phrase. The
+same bucket contains idioms with very different structural and cultural properties.</p>
+<p><strong>LLM-as-a-judge upgrade.</strong> <em>"How would you classify the following CJK idiom by form: (a)
+4-character classical compound (chengyu/yojijukugo/사자성어), (b) proverb or saying (with
+verb phrase), (c) compound noun or fixed collocation, (d) loan phrase or loanword, (e) other?
+Answer with (a)–(e) and a one-line reason."</em> This produces a linguistically meaningful
+categorisation independent of surface character count.</p>
+<hr />
+<h2 id="118-summary-table">11.8 Summary Table<a class="headerlink" href="#118-summary-table" title="Permanent link">&para;</a></h2>
+<p>The table below consolidates all 29 heuristics identified above, their primary scripts, the
+class of limitation they share, and whether an LLM-as-a-judge upgrade is available.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Heuristic</th>
+<th>Primary script(s)</th>
+<th>Limitation class</th>
+<th>LaJ available?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H1</td>
+<td>Exact substring match</td>
+<td>span_errors.py, span_audit.py</td>
+<td>Encoding sensitivity</td>
+<td>Yes — semantic containment judge</td>
+</tr>
+<tr>
+<td>H2</td>
+<td>Whitespace-stripped match</td>
+<td>span_errors.py</td>
+<td>Subsumed by H1</td>
+<td>Subsumed by H1</td>
+</tr>
+<tr>
+<td>H3</td>
+<td>Case-insensitive match</td>
+<td>span_errors.py</td>
+<td>Subsumed by H1</td>
+<td>Subsumed by H1</td>
+</tr>
+<tr>
+<td>H4</td>
+<td>Punctuation-stripped match</td>
+<td>span_errors.py</td>
+<td>Unicode category imprecision</td>
+<td>Subsumed by H1</td>
+</tr>
+<tr>
+<td>H5</td>
+<td>Off-by-one boundary match</td>
+<td>span_errors.py</td>
+<td>One-edit only</td>
+<td>Subsumed by H1</td>
+</tr>
+<tr>
+<td>H6</td>
+<td>Word-overlap check</td>
+<td>span_errors.py</td>
+<td>Space-tokenisation, no morphology</td>
+<td>Yes — morpheme overlap judge</td>
+</tr>
+<tr>
+<td>H7</td>
+<td>Span position zone binning</td>
+<td>span_position.py</td>
+<td>Arbitrary 1/3–2/3 boundary</td>
+<td>Yes — syntactic position judge</td>
+</tr>
+<tr>
+<td>H8</td>
+<td>NFC + punctuation stripping</td>
+<td>reverse_span_analysis.py</td>
+<td>NFKC gap, incomplete strip list</td>
+<td>Yes — semantic equivalence judge</td>
+</tr>
+<tr>
+<td>H9</td>
+<td>OpenCC s2t conversion</td>
+<td>cognate_comparison_extended.py</td>
+<td>Character ambiguity</td>
+<td>Yes — etymological cognate judge</td>
+</tr>
+<tr>
+<td>H10</td>
+<td>kHangul lookup + hanja fallback</td>
+<td>cognate_comparison_extended.py</td>
+<td>First-reading only</td>
+<td>Yes — Sino-Korean cognate judge</td>
+</tr>
+<tr>
+<td>H11</td>
+<td>CJK Unicode range check</td>
+<td>unmatched_chinese.py, difficulty.py</td>
+<td>Missing Extension B–H blocks</td>
+<td>Yes — script classification judge</td>
+</tr>
+<tr>
+<td>H12</td>
+<td>4-character length filter</td>
+<td>japanese_yojijukugo.py, cognate scripts</td>
+<td>Surrogate pairs, non-4-char forms</td>
+<td>Yes — yojijukugo/chengyu judge</td>
+</tr>
+<tr>
+<td>H13</td>
+<td>Hangul syllable range check</td>
+<td>cognate_comparison_extended.py</td>
+<td>Misses decomposed Jamo</td>
+<td>Subsumed by H10</td>
+</tr>
+<tr>
+<td>H14</td>
+<td>Japanese column name detection</td>
+<td>complementary_idiom_types.py</td>
+<td>Unpredictable column names</td>
+<td>Yes — content-sampling classifier</td>
+</tr>
+<tr>
+<td>H15</td>
+<td>Yojijukugo tag substring</td>
+<td>japanese_yojijukugo.py</td>
+<td>Incomplete Wiktionary tags</td>
+<td>Yes — yojijukugo identification judge</td>
+</tr>
+<tr>
+<td>H16</td>
+<td>8-template regex classifier</td>
+<td>analogy_deep_analysis.py</td>
+<td>English-only, first-match, lexical brittleness</td>
+<td>Yes — highest-value upgrade; multi-class + open-set judge</td>
+</tr>
+<tr>
+<td>H17</td>
+<td>Word-set Jaccard similarity</td>
+<td>context_sensitivity.py, cross_target_overlap.py, difficulty.py</td>
+<td>Inflection / composition / CJK blindness</td>
+<td>Yes — semantic similarity scorer (0–4)</td>
+</tr>
+<tr>
+<td>H18</td>
+<td>Normalised Levenshtein distance</td>
+<td>cognate_comparison_zhko.py</td>
+<td>Character ≠ semantic distance</td>
+<td>Subsumed by H17</td>
+</tr>
+<tr>
+<td>H19</td>
+<td>Codepoint near-3 cognate matching</td>
+<td>cognate scripts</td>
+<td>Binary match, misses 2-char cognates</td>
+<td>Yes — etymological origin judge</td>
+</tr>
+<tr>
+<td>H20</td>
+<td>Long translation filter (&gt; 500 chars)</td>
+<td>context_sensitivity.py, cross_target_overlap.py, difficulty.py, generate_report.py</td>
+<td>Arbitrary threshold, discards long genuine translations</td>
+<td>Yes — TRANSLATION vs FAILURE judge</td>
+</tr>
+<tr>
+<td>H21</td>
+<td>Short translation filter (&lt; 5–10 chars)</td>
+<td>basic_stats.py, span_audit.py</td>
+<td>Script-density blindness</td>
+<td>Subsumed by H20</td>
+</tr>
+<tr>
+<td>H22</td>
+<td>99th percentile expansion outlier</td>
+<td>translation_length.py</td>
+<td>Same percentile across languages</td>
+<td>No (display choice only)</td>
+</tr>
+<tr>
+<td>H23</td>
+<td>Span ratio &gt; 1.0 filter</td>
+<td>span_analysis.py</td>
+<td>Encoding artefacts disguised as errors</td>
+<td>Yes — encoding artefact vs mismatch judge</td>
+</tr>
+<tr>
+<td>H24</td>
+<td>Low-CV stability threshold (&lt; 0.08)</td>
+<td>extract_examples.py</td>
+<td>Length CV ≠ semantic stability</td>
+<td>Yes — semantic stability judge</td>
+</tr>
+<tr>
+<td>H25</td>
+<td>Doubled idiom count (= 20)</td>
+<td>generate_report.py</td>
+<td>Other count anomalies undetected</td>
+<td>No (count check only)</td>
+</tr>
+<tr>
+<td>H26</td>
+<td>Equal-weight difficulty score</td>
+<td>difficulty.py</td>
+<td>Unvalidated equal weighting</td>
+<td>Yes — intrinsic difficulty rating judge</td>
+</tr>
+<tr>
+<td>H27</td>
+<td>High/low resource binary split</td>
+<td>crosslingual_consistency.py, cross_target_overlap.py</td>
+<td>Binary over-simplification</td>
+<td>No (continuous proxies preferred)</td>
+</tr>
+<tr>
+<td>H28</td>
+<td>Language family classification</td>
+<td>cross_target_overlap.py</td>
+<td>Genetic ≠ typological similarity</td>
+<td>No (corpus overlap preferred)</td>
+</tr>
+<tr>
+<td>H29</td>
+<td>Idiom length buckets (≤3, 4, 5, 6, 7+)</td>
+<td>idiom_morphology.py</td>
+<td>Character count ≠ idiom type</td>
+<td>Yes — idiom form classifier</td>
+</tr>
+</tbody>
+</table>
+<p>The heuristics in the highest-risk tier for analytical validity are <strong>H16</strong> (template
+classification), <strong>H17</strong> (Jaccard-based semantic similarity), <strong>H19</strong> (cognate matching),
+<strong>H20</strong> (translation quality filtering), and <strong>H26</strong> (difficulty scoring). These five
+heuristics directly determine which findings are reported as the core results in Parts 3, 5,
+6, 9, and 10. An LLM-as-a-judge pass over a random 10% sample for each of these five would
+provide a calibration check sufficient to establish confidence intervals around the headline
+numbers without re-running the full pipeline.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

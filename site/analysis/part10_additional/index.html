@@ -1,0 +1,1706 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Analysis of the IdiomTranslate30 massively multilingual idiom translation dataset">
+      
+      
+        <meta name="author" content="Kenan Tang">
+      
+      
+      
+        <link rel="prev" href="../part9_analogy_slop/">
+      
+      
+        <link rel="next" href="../part11_heuristics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Part 10: Additional Analyses - IdiomTranslate30 Analysis</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#part-10-additional-analyses" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-header__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IdiomTranslate30 Analysis
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Part 10: Additional Analyses
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dataset/overview/" class="md-tabs__link">
+          
+  
+  
+  Dataset
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../part1_data_quality/" class="md-tabs__link">
+          
+  
+  
+  Analysis
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-nav__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IdiomTranslate30 Analysis
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Dataset
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/edge_cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Edge Cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part1_data_quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1: Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2_idiom_coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2: Idiom Coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part3_translation_behaviour/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3: Translation Behaviour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part4_cross_lingual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 4: Cross-Lingual Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part5_cognate_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 5: Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part6_synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6: Synthesis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part7_language_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 7: Language Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part8_reverse_span/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 8: Reverse Span Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part9_analogy_slop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 9: Analogy Slop Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 10: Additional Analyses
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 10: Additional Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#101-per-idiom-slop-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Per-Idiom Slop Score
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102-most-span-diverse-idioms-inverse-of-part-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Most Span-Diverse Idioms (Inverse of Part 8)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103-template-vs-surface-diversity-reconciliation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Template vs Surface Diversity Reconciliation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104-source-language-differential-for-slop-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Source-Language Differential for Slop Templates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#105-cultural-reference-portability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 Cultural Reference Portability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#106-bathos-prosaic-analogy-spans-for-classical-idioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6 Bathos: Prosaic Analogy Spans for Classical Idioms
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part11_heuristics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 11: Heuristics & LLM-as-a-Judge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#101-per-idiom-slop-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Per-Idiom Slop Score
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102-most-span-diverse-idioms-inverse-of-part-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Most Span-Diverse Idioms (Inverse of Part 8)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103-template-vs-surface-diversity-reconciliation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Template vs Surface Diversity Reconciliation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104-source-language-differential-for-slop-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Source-Language Differential for Slop Templates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#105-cultural-reference-portability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 Cultural Reference Portability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#106-bathos-prosaic-analogy-spans-for-classical-idioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6 Bathos: Prosaic Analogy Spans for Classical Idioms
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="part-10-additional-analyses">Part 10: Additional Analyses<a class="headerlink" href="#part-10-additional-analyses" title="Permanent link">&para;</a></h1>
+<h2 id="101-per-idiom-slop-score">10.1 Per-Idiom Slop Score<a class="headerlink" href="#101-per-idiom-slop-score" title="Permanent link">&para;</a></h2>
+<p>For each idiom, we count what fraction of its 10 English Analogy spans fall into one of
+the eight template families identified in Part 9 (weaving/thread, cosmic/star, kaleidoscope,
+"trying to X" futility, dandelion/scattered, labyrinth/mirror, clockmaker precision,
+castle/mist). Spans not matching any template are labelled "original."</p>
+<p><strong>Overall: 12.4% of the 90,641 English Analogy spans are templated.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slop score bucket</th>
+<th>Idioms</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0% (entirely original)</td>
+<td>4,125</td>
+<td>45.5%</td>
+</tr>
+<tr>
+<td>1–10%</td>
+<td>1</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td>11–30%</td>
+<td>3,324</td>
+<td>36.7%</td>
+</tr>
+<tr>
+<td>31–50%</td>
+<td>1,133</td>
+<td>12.5%</td>
+</tr>
+<tr>
+<td>&gt;50%</td>
+<td>479</td>
+<td>5.3%</td>
+</tr>
+</tbody>
+</table>
+<p>Almost half of all idioms never trigger a template at all. But 5.3% are heavily formulaic,
+with more than half of their spans falling into a stock image. Mean slop score by source
+language: Korean 0.145, Japanese 0.126, Chinese 0.111 — Korean idioms are the most
+template-prone in English Analogy.</p>
+<p><strong>100% slop idioms — and why:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Idiom</th>
+<th>Source</th>
+<th>Template</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>泰山北斗</td>
+<td>ZH/JA</td>
+<td>cosmic_star_galaxy</td>
+<td>"Mount Tai and North Star" — the idiom literally names a star; every Analogy span becomes "North Star"</td>
+</tr>
+<tr>
+<td>天字第一号</td>
+<td>ZH</td>
+<td>cosmic_star_galaxy</td>
+<td>"The number one under heaven" → model maps "supreme/first" to North Star imagery</td>
+</tr>
+<tr>
+<td>金科玉条</td>
+<td>JA</td>
+<td>cosmic_star_galaxy</td>
+<td>"Golden rules worth cherishing" → the model treats any fixed guiding standard as a North Star</td>
+</tr>
+<tr>
+<td>海底捞月</td>
+<td>ZH</td>
+<td>trying_to_futility</td>
+<td>"Fish the moon from the sea floor" — the idiom <em>is</em> a futility metaphor; the Analogy strategy simply re-states it</td>
+</tr>
+<tr>
+<td>水中捞月</td>
+<td>ZH</td>
+<td>trying_to_futility</td>
+<td>"Scoop the moon from water" — cognate of above; all 10 spans are "trying to catch X"</td>
+</tr>
+<tr>
+<td>班门弄斧</td>
+<td>ZH</td>
+<td>trying_to_futility</td>
+<td>"Show off an axe at Lu Ban's gate" → always rendered as "trying to teach X to Y" (a spider to spin, a nightingale to sing)</td>
+</tr>
+<tr>
+<td>千差万別</td>
+<td>JA</td>
+<td>kaleidoscope</td>
+<td>"A thousand differences, ten thousand distinctions" → the model defaults to "a kaleidoscope of X" for all variety idioms</td>
+</tr>
+<tr>
+<td>歌功颂德</td>
+<td>ZH</td>
+<td>weaving_thread_tapestry</td>
+<td>"Sing of merits and virtues" → always "wove a tapestry of verbal monuments" or similar</td>
+</tr>
+</tbody>
+</table>
+<p>The 100%-slop cases reveal a genuine semantic logic: the source idiom and the template
+are <em>the same image</em> — the model is not being lazy but has correctly found that one family of
+metaphors perfectly captures the idiom. The problem arises when the template is applied even
+when the idiom has a richer or more specific meaning than the template can express.</p>
+<p><strong>0% slop idioms</strong> generate genuinely varied metaphors across all 10 sentences. Examples:
+- 如鱼得水 (ZH, "like a fish in water") → "like a bird that found the updraft," "fit like a
+  master key to a secret door," "moved like a brush rediscovering its canvas"
+- 如虎添翼 (ZH, "like a tiger getting wings") → "an engine with a turbocharger," "like giving a
+  high-speed train a second engine," "took on the momentum of a wildfire fueled by a sudden gale"
+- 如胶似漆 (ZH, "like glue and lacquer") → "two echoes chasing a single sound," "bonded like two
+  drops of rain merging on a leaf," "as seamless as two pages pressed into a single leaf"</p>
+<p>These idioms have concrete, evocative surface imagery that invites genuinely fresh analogies
+each time — unlike the "guide/standard" or "futility" idioms that collapse into a template.</p>
+<hr />
+<h2 id="102-most-span-diverse-idioms-inverse-of-part-8">10.2 Most Span-Diverse Idioms (Inverse of Part 8)<a class="headerlink" href="#102-most-span-diverse-idioms-inverse-of-part-8" title="Permanent link">&para;</a></h2>
+<p>Part 8 asked which spans absorb many idioms. This section inverts the question: which
+idioms generate the most distinct span forms across all 10 target languages × 3 strategies
+(up to 300 spans per idiom)?</p>
+<p><strong>Distribution:</strong> mean 280.9 distinct spans out of 300, median 288, std 22.3. The
+distribution is tightly left-skewed — most idioms are highly span-diverse, with the
+interesting variation at the low end.</p>
+<p>The four highest-diversity idioms are 生龙活虎, 触景生情, 前仆后继, and 固执己见 — the
+four Chinese idioms that have 20 sentences each (600 total spans instead of 300). Their
+raw distinct counts (581, 563, 557, 486) exceed what is possible for standard idioms.
+Among standard 300-span idioms, diversity ratio of 1.0 (all 300 spans unique) is common.</p>
+<p><strong>Most span-locked idioms (lowest distinct count among standard idioms):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Idiom</th>
+<th>Source</th>
+<th>Distinct spans / 300</th>
+<th>Ratio</th>
+<th>Why locked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>总而言之</td>
+<td>ZH</td>
+<td>81</td>
+<td>0.27</td>
+<td>"In summary" — each language has a fixed translation: "kwa ufupi," "خلاصة القول," "kurzum," "одним словом," "alles in allem," "en somme," "en resumen"</td>
+</tr>
+<tr>
+<td>有朝一日</td>
+<td>ZH</td>
+<td>108</td>
+<td>0.36</td>
+<td>"Someday" — every language converges on its word for "one day": "eines Tages," "un giorno," "siku moja," "настанет день," "un jour," "algún día"</td>
+</tr>
+<tr>
+<td>久而久之</td>
+<td>ZH</td>
+<td>122</td>
+<td>0.41</td>
+<td>"Over time" — similar: "со временем," "au fil du temps," "mit der Zeit"</td>
+</tr>
+<tr>
+<td>무혈혁명</td>
+<td>KO</td>
+<td>123</td>
+<td>0.41</td>
+<td>"Bloodless revolution" — translates transparently across all languages</td>
+</tr>
+<tr>
+<td>질의응답</td>
+<td>KO</td>
+<td>129</td>
+<td>0.43</td>
+<td>"Question and answer" — each language has a fixed phrase: "maswali na majibu," "preguntas y respuestas," "Fragerunde," "Q&amp;A session"</td>
+</tr>
+<tr>
+<td>无名英雄</td>
+<td>ZH</td>
+<td>132</td>
+<td>0.44</td>
+<td>"Unsung hero" — English phrase is canonical, other languages use their own fixed equivalent</td>
+</tr>
+<tr>
+<td>자연도태 (JA: 自然淘汰)</td>
+<td>JA</td>
+<td>133</td>
+<td>0.44</td>
+<td>"Natural selection" — a scientific term with no figurative variation possible</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern is sharp: the most span-locked idioms are not metaphorical classical expressions
+but <strong>functional/discourse particles or modern concepts</strong> — "in summary," "someday," "over
+time," "bloodless revolution," "Q&amp;A," "natural selection." These have a single correct
+translation in every language and no room for analogical variation. The locking is not
+a model failure but a reflection of semantic concreteness: when there is only one right
+answer, all strategies and all sentences converge on it.</p>
+<p>Per-strategy breakdown confirms this: for 总而言之, Creatively, Analogy, and Author all
+produce similar counts of distinct spans (41, 39, 33) — the locking is strategy-independent,
+not a Creatively/Author alignment artifact.</p>
+<hr />
+<h2 id="103-template-vs-surface-diversity-reconciliation">10.3 Template vs Surface Diversity Reconciliation<a class="headerlink" href="#103-template-vs-surface-diversity-reconciliation" title="Permanent link">&para;</a></h2>
+<p>Part 3 reported that 92.1% of English Analogy cells (one idiom × one target language ×
+10 sentences) have all-different spans across their 10 sentences, implying genuine
+sentence-level diversity. Part 9 shows that the Analogy strategy heavily reuses templates.
+These appear contradictory. This section reconciles them.</p>
+<p><strong>Surface diversity is high.</strong> 91.5% of the 9,062 English Analogy cells have all 10 spans
+lexically unique (no two spans are identical tokens). This confirms Part 3.</p>
+<p><strong>But template diversity is much lower:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Distinct templates used in one cell of 10 spans</th>
+<th>Idioms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (only "original" or only one named template)</td>
+<td>4,131</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3,682</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1,119</td>
+</tr>
+<tr>
+<td>4</td>
+<td>120</td>
+</tr>
+<tr>
+<td>5</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p>The typical cell uses only 1–2 distinct image families across 10 sentences.</p>
+<p><strong>The key finding:</strong> of the 8,288 cells where all 10 surface spans are unique (91.5%),
+<strong>41.3% (3,425 cells) use only one named slop template</strong> — meaning the model generates 10
+lexically different spans that are all structurally the same image. Examples:</p>
+<ul>
+<li>[ZH] 一叶障目，不见泰山 → template=weaving, spans: "a single speck of dust to eclipse the
+  entire sun" / "allow a passing ripple to swallow the entire ocean" / "obsessed with a
+  single loose thread while the entire tapestry unravels unnoticed" — 10 unique surfaces,
+  all within the weaving frame</li>
+<li>[ZH] 一人得道，鸡犬升天 → template=cosmic, spans: "when one person climbs to the stars, even
+  their garden weeds are pulled up to heaven" / "a single star rising pulls its entire
+  constellation into the heavens" — 10 unique surfaces, all celestial metaphors</li>
+<li>[ZH] 千差万別 → template=kaleidoscope: "a kaleidoscope of clashing and harmonizing cultures"
+  / "a kaleidoscope of a billion shifting fragments" — 10 unique spans, all kaleidoscopes</li>
+</ul>
+<p><strong>Conclusion:</strong> The 92% all-different-surface-span rate from Part 3 substantially overstates
+actual diversity. Nearly half the idioms that appear surface-diverse are in fact template-locked
+at the structural level — the model is generating <em>parameter variations</em> within a fixed image
+(different objects for the dandelion to scatter, different things to be woven into a cable)
+rather than exploring genuinely different analogical frames.</p>
+<hr />
+<h2 id="104-source-language-differential-for-slop-templates">10.4 Source-Language Differential for Slop Templates<a class="headerlink" href="#104-source-language-differential-for-slop-templates" title="Permanent link">&para;</a></h2>
+<p>Different source languages pull the English Analogy strategy toward different template
+families at a statistically significant level (χ²=321.5, df=14, p=3.8×10⁻⁶⁰).</p>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Chinese</th>
+<th>Japanese</th>
+<th>Korean</th>
+<th>Max/min ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cosmic_star_galaxy</td>
+<td>2.05%</td>
+<td><strong>4.05%</strong></td>
+<td>3.35%</td>
+<td><strong>2.0×</strong></td>
+</tr>
+<tr>
+<td>weaving_thread_tapestry</td>
+<td>6.11%</td>
+<td>6.06%</td>
+<td><strong>8.34%</strong></td>
+<td>1.4×</td>
+</tr>
+<tr>
+<td>mist_smoke_castle</td>
+<td>0.07%</td>
+<td>0.11%</td>
+<td><strong>0.20%</strong></td>
+<td><strong>3.0×</strong></td>
+</tr>
+<tr>
+<td>trying_to_futility</td>
+<td><strong>1.11%</strong></td>
+<td>0.60%</td>
+<td>0.78%</td>
+<td>1.9×</td>
+</tr>
+<tr>
+<td>labyrinth_mirror</td>
+<td>0.30%</td>
+<td>0.37%</td>
+<td><strong>0.43%</strong></td>
+<td>1.4×</td>
+</tr>
+<tr>
+<td>kaleidoscope</td>
+<td><strong>0.63%</strong></td>
+<td>0.71%</td>
+<td>0.61%</td>
+<td>1.2×</td>
+</tr>
+<tr>
+<td>clockmaker_precision</td>
+<td>0.34%</td>
+<td>0.29%</td>
+<td><strong>0.45%</strong></td>
+<td>1.6×</td>
+</tr>
+<tr>
+<td>dandelion_scattered</td>
+<td><strong>0.46%</strong></td>
+<td>0.43%</td>
+<td>0.32%</td>
+<td>1.4×</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cosmic/star is a Japanese-specific bias (2.0×).</strong> Japanese idioms attract twice as much
+North-Star/galaxy imagery as Chinese idioms. The driver is a cluster of Japanese idioms
+about eminence and guiding standards — 泰山北斗, 金科玉条, 眼中之人, 不朽不滅 — which
+overlap with the North Star concept. Chinese has some of these (天字第一号, 金科玉律) but
+fewer that match the "supreme exemplar" frame.</p>
+<p><strong>"Trying to X" futility is a Chinese-specific bias (1.9×).</strong> Chinese idioms attract
+nearly twice as much futility-template imagery as Japanese. The driver is a cluster of
+Chinese idioms that are themselves futility metaphors: 海底捞月, 水中捞月, 缘木求鱼
+("climb a tree to catch fish"), 抱薪救火 ("carry kindling to put out a fire") — idioms
+where the source image directly invites a "trying to do the impossible" restatement.</p>
+<p><strong>Mist/smoke/castle is a Korean-specific bias (3.0×).</strong> Korean idioms are three times
+more likely than Chinese idioms to attract the ephemerality template. This likely reflects
+a Korean-idiom cluster around impermanence and hollow pretension that does not have as
+strong a representation in the Chinese or Japanese subsets.</p>
+<p><strong>Weaving/thread is highest for Korean (8.34% vs ~6% for ZH/JA)</strong>, reflecting Korea's
+larger inventory of solidarity and unity idioms that map naturally onto the "weaving
+individual threads into a single cable" frame.</p>
+<hr />
+<h2 id="105-cultural-reference-portability">10.5 Cultural Reference Portability<a class="headerlink" href="#105-cultural-reference-portability" title="Permanent link">&para;</a></h2>
+<p>Across 90,641 Analogy spans spanning all 10 target languages, 42 span strings appear
+verbatim in 3 or more target languages. These fall into two structurally distinct categories.</p>
+<p><strong>Category A: CJK terms the model refuses to translate (romanisation pass-through)</strong></p>
+<p>The most striking cross-language spans are <em>not</em> well-known cultural references but
+highly specific Japanese religious, historical, or philosophical terms that the model
+simply romanises rather than translating — identically, across all 6 Latin-script languages:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Idiom</th>
+<th>Languages</th>
+<th>Romanised form</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>尊皇攘夷 (Sonnō Jōi, "revere emperor, expel barbarians")</td>
+<td>JA</td>
+<td>6</td>
+<td>"Sonno Joi"</td>
+</tr>
+<tr>
+<td>只管打坐 (Shikantaza, "just sitting" — Zen meditation)</td>
+<td>JA</td>
+<td>6</td>
+<td>"shikantaza"</td>
+</tr>
+<tr>
+<td>廃仏毀釈 (Haibutsu kishaku, 19th-c. Buddhist suppression)</td>
+<td>JA</td>
+<td>6</td>
+<td>"haibutsu kishaku"</td>
+</tr>
+<tr>
+<td>和敬清寂 (Wa-kei-sei-jaku, tea ceremony principles)</td>
+<td>JA</td>
+<td>6</td>
+<td>"wakeiseijaku"</td>
+</tr>
+<tr>
+<td>本地垂迹 (Honji suijaku, Shinto-Buddhist doctrine)</td>
+<td>JA</td>
+<td>6</td>
+<td>"honji suijaku"</td>
+</tr>
+</tbody>
+</table>
+<p>"Shikantaza" achieves 31 uses across 6 languages — the model writes "Practicing Shikantaza"
+(EN), "le shikantaza" (FR), "Das reine Sitzen im Shikantaza" (DE), "shikantaza" (IT/SW/ES).
+The pattern reveals that when the model encounters an extremely specific classical Japanese
+term with no natural equivalent in a target language, it falls back on romanisation — and
+applies this fallback uniformly across all 6 Latin-script languages. "Shikantaza" is not
+an analogy for 只管打坐; it is 只管打坐, untranslated.</p>
+<p><strong>Category B: Western cultural references deployed cross-linguistically</strong></p>
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Languages</th>
+<th>Source idioms</th>
+<th>Typical span</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hongmen Banquet</td>
+<td>7 (all except Arabic/Bengali/Hindi)</td>
+<td>2</td>
+<td>"Banquet at Hongmen" / "Banquet de Hongmen"</td>
+</tr>
+<tr>
+<td>Natural selection</td>
+<td>5 (European only)</td>
+<td>7</td>
+<td>"natural selection" / "sélection naturelle" / "natürliche Auslese"</td>
+</tr>
+<tr>
+<td>Gordian knot</td>
+<td>3 (EN, IT, ES)</td>
+<td>25</td>
+<td>"Gordian knot tied with smoke"</td>
+</tr>
+<tr>
+<td>Prodigal son</td>
+<td>3 (EN, FR, IT)</td>
+<td>1</td>
+<td>"prodigal son" / "fils prodigue"</td>
+</tr>
+</tbody>
+</table>
+<p>The Hongmen Banquet appears in 7 languages (absent only from Arabic, Bengali, Hindi — the
+languages with non-Latin scripts where the reference would require transliteration). Natural
+selection is restricted to the 5 European languages with substantial science vocabulary in
+the model's training data. The Gordian knot spans 25 different source idioms in 3 languages —
+the model uses it generically for any "intractable tangle" idiom.</p>
+<hr />
+<h2 id="106-bathos-prosaic-analogy-spans-for-classical-idioms">10.6 Bathos: Prosaic Analogy Spans for Classical Idioms<a class="headerlink" href="#106-bathos-prosaic-analogy-spans-for-classical-idioms" title="Permanent link">&para;</a></h2>
+<p>A small but consistent fraction of Analogy spans are not analogies at all — they are simple
+labels: single abstract nouns, technical terms, or mundane two-word phrases that name the
+concept rather than create an image for it.</p>
+<p><strong>Bathos rate by target language (% of all Analogy spans):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Bathos rate</th>
+<th>Top bathos spans</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bengali</td>
+<td>0.20%</td>
+<td>অগণিত (countless), বারবার (again and again), অবিনশ্বর (imperishable)</td>
+</tr>
+<tr>
+<td>English</td>
+<td>0.18%</td>
+<td>"immortality", "self-reliance", "day and night", "Q&amp;A session"</td>
+</tr>
+<tr>
+<td>Hindi</td>
+<td>0.19%</td>
+<td>बार-बार (again and again), अमरता (immortality), अजीबोगरीब (peculiar)</td>
+</tr>
+<tr>
+<td>German</td>
+<td>0.14%</td>
+<td>"beispiellos" (unprecedented), "Fragerunde" (Q&amp;A), "Unermüdlich" (tireless)</td>
+</tr>
+<tr>
+<td>Russian</td>
+<td>0.12%</td>
+<td>"нерешительность" (indecision), "высокомерие" (arrogance), "бесстыдство" (shamelessness)</td>
+</tr>
+<tr>
+<td>Spanish</td>
+<td>0.11%</td>
+<td>"una y otra vez" (again and again), "la inmortalidad"</td>
+</tr>
+<tr>
+<td>French</td>
+<td>0.11%</td>
+<td>"l'immortalité", "métabolisme", "séance de questions-réponses"</td>
+</tr>
+<tr>
+<td>Swahili</td>
+<td>0.10%</td>
+<td>"maswali na majibu" (Q&amp;A), "mchana na usiku" (day and night)</td>
+</tr>
+<tr>
+<td>Italian</td>
+<td>0.10%</td>
+<td>"l'immortalità", "metabolismo", "botta e risposta" (Q&amp;A)</td>
+</tr>
+<tr>
+<td>Arabic</td>
+<td>0.11%</td>
+<td>"الخلود" (immortality), "مراراً وتكراراً" (again and again), "التردد" (indecision)</td>
+</tr>
+</tbody>
+</table>
+<p>Bathos rates are low (~0.1–0.2%) but consistent across all languages. Three semantic
+clusters produce bathos across the most languages:</p>
+<p><strong>1. Immortality / eternal life</strong> — the idiom cluster 不老不死 / 長生不死 / 불로장생 /
+영생불멸 (eternal youth, eternal life) produces "immortality" / "l'immortalité" /
+"l'immortalità" / "الخلود" / "अमरता" in 7 languages simultaneously. These are the most
+cross-linguistically bathetic idioms in the dataset: the concept is so concrete that
+the Analogy strategy simply names it rather than inventing a metaphor for it.</p>
+<p><strong>2. Q&amp;A terminology</strong> — 질의응답 (KO) and 質疑応答 (JA) both produce "Q&amp;A session" /
+"Fragerunde" / "séance de questions-réponses" / "maswali na majibu" / "domande e risposte"
+in 7 languages. These idioms literally mean "question and answer," so every strategy in
+every language defaults to that phrase.</p>
+<p><strong>3. Repetition and persistence</strong> — 屡次三番, 再三再四, 夜以继日 (ZH) and their cognates
+produce "again and again" / "day and night" / "बार-बार" / "বারবার" / "une et encore une"
+across up to 7 languages. Idioms meaning "repeatedly" or "without rest" have so clear a
+gloss that no analogy improves on it.</p>
+<p><strong>Russian is structurally different</strong> from the other languages in this analysis. While all
+languages produce some bathos, Russian's top bathos spans (нерешительность, высокомерие,
+бесстыдство, бездействие) are not conventional labels for the source idiom's meaning —
+they are Russian <em>character concepts</em> applied to CJK idioms about hesitation and arrogance.
+This confirms the finding from Part 9: Russian Analogy deliberately names the psychological
+concept rather than creating an image, which makes it look like "bathos" by the labelling
+criterion but is actually a distinct translation philosophy specific to Russian.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

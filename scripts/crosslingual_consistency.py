@@ -1,4 +1,14 @@
-"""Cross-Lingual Consistency Analysis."""
+"""
+Cross-Lingual Consistency Analysis.
+
+Outputs
+-------
+data/processed/crosslingual_consistency.csv  – per-(source_language, idiom) CV of
+                                               translation length across 10 target
+                                               languages, plus high/low resource means.
+figures/cv_by_resource_level.png
+figures/span_heatmap.png
+"""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -14,8 +24,10 @@ import seaborn as sns
 from scipy.stats import mannwhitneyu
 
 ROOT = Path(__file__).parent.parent
-df = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
-FIG = ROOT / "figures"
+df   = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
+FIG  = ROOT / "figures"
+PROC = ROOT / "data" / "processed"
+PROC.mkdir(parents=True, exist_ok=True)
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS  = ["translate_creatively", "translate_analogy", "translate_author"]
@@ -113,3 +125,8 @@ fig.tight_layout()
 fig.savefig(FIG / "span_heatmap.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 print("Saved → figures/span_heatmap.png")
+
+# ── Save processed output ──────────────────────────────────────────────────────
+out_path = PROC / "crosslingual_consistency.csv"
+cv_df.to_csv(out_path, index=False)
+print(f"Saved → {out_path}")

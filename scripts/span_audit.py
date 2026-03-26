@@ -1,4 +1,13 @@
-"""Data Quality Audit."""
+"""
+Data Quality Audit.
+
+Outputs
+-------
+data/audit/anomalies.csv              – every flagged row with flag columns
+data/processed/span_audit_summary.csv – per-check × per-strategy flag rates
+figures/fig7_missing_spans.png
+figures/flag_rates.png
+"""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -14,11 +23,13 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-ROOT = Path(__file__).parent.parent
+ROOT      = Path(__file__).parent.parent
 DATA_PATH = ROOT / "data" / "raw" / "IdiomTranslate30.parquet"
 AUDIT_DIR = ROOT / "data" / "audit"
-FIG_DIR = ROOT / "figures"
+FIG_DIR   = ROOT / "figures"
+PROC      = ROOT / "data" / "processed"
 AUDIT_DIR.mkdir(parents=True, exist_ok=True)
+PROC.mkdir(parents=True, exist_ok=True)
 
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
@@ -126,3 +137,26 @@ fig.tight_layout()
 fig.savefig(FIG_DIR / "flag_rates.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 print("Saved → figures/flag_rates.png")
+
+# ── Fig 7: missing spans heatmap (from generate_report) ───────────────────────
+SPAN_COLS   = ["span_creatively", "span_analogy", "span_author"]
+missing_by_lang = df.groupby("source_language")[SPAN_COLS].apply(
+    lambda g: g.isnull().sum()
+)
+missing_by_lang.columns = LABELS
+
+fig, ax = plt.subplots(figsize=(7, 3))
+sns.heatmap(missing_by_lang, annot=True, fmt="d", cmap="YlOrRd",
+            linewidths=0.5, cbar_kws={"label": "Missing count"}, ax=ax)
+ax.set_title("Missing Span Annotations by Source Language & Strategy",
+             fontsize=13, fontweight="bold")
+ax.set_ylabel("")
+fig.tight_layout()
+fig.savefig(FIG_DIR / "fig7_missing_spans.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+print("Saved → figures/fig7_missing_spans.png")
+
+# ── Save processed summary ─────────────────────────────────────────────────────
+summary_path = PROC / "span_audit_summary.csv"
+summary.to_csv(summary_path, index=False)
+print(f"Saved → {summary_path}")

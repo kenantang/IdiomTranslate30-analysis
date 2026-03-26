@@ -1,4 +1,15 @@
-"""Idiom Morphology & Structural Analysis."""
+"""
+Idiom Morphology & Structural Analysis.
+
+Outputs
+-------
+data/processed/idiom_morphology_stats.csv  – per-length-bucket expansion ratios and
+                                              span-to-translation ratios per strategy,
+                                              plus per-(source_language, strategy)
+                                              Spearman ρ for sentence vs translation length.
+figures/idiom_length_distribution.png
+figures/quintile_analysis.png
+"""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -14,8 +25,10 @@ import seaborn as sns
 from scipy.stats import spearmanr
 
 ROOT = Path(__file__).parent.parent
-df = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
-FIG = ROOT / "figures"
+df   = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
+FIG  = ROOT / "figures"
+PROC = ROOT / "data" / "processed"
+PROC.mkdir(parents=True, exist_ok=True)
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS  = ["translate_creatively", "translate_analogy", "translate_author"]
@@ -113,3 +126,14 @@ fig.tight_layout()
 fig.savefig(FIG / "quintile_analysis.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 print("Saved → figures/quintile_analysis.png")
+
+# ── Save processed output ──────────────────────────────────────────────────────
+# Bucket stats
+bucket_out = qdf.copy()
+bucket_out.to_csv(PROC / "idiom_morphology_bucket_stats.csv", index=False)
+print("Saved → data/processed/idiom_morphology_bucket_stats.csv")
+
+# Spearman results
+spearman_out = pd.DataFrame(sp_data)
+spearman_out.to_csv(PROC / "idiom_morphology_spearman.csv", index=False)
+print("Saved → data/processed/idiom_morphology_spearman.csv")

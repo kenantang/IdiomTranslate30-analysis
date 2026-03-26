@@ -1,4 +1,16 @@
-"""Translation Length & Expansion Ratio."""
+"""
+Translation Length & Expansion Ratio.
+
+Outputs
+-------
+data/processed/translation_length_stats.csv  – per-strategy median length by target
+                                                language; expansion ratio macrostats;
+                                                Wilcoxon effect sizes.
+figures/fig3_translation_length_violin.png
+figures/fig4_length_by_target_language.png
+figures/expansion_ratio.png
+figures/wilcoxon_effects.png
+"""
 import matplotlib
 matplotlib.use("Agg")
 import warnings
@@ -15,8 +27,10 @@ import seaborn as sns
 from scipy.stats import wilcoxon
 
 ROOT = Path(__file__).parent.parent
-df = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
-FIG = ROOT / "figures"
+df   = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
+FIG  = ROOT / "figures"
+PROC = ROOT / "data" / "processed"
+PROC.mkdir(parents=True, exist_ok=True)
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS = ["translate_creatively", "translate_analogy", "translate_author"]
@@ -111,3 +125,83 @@ fig.tight_layout()
 fig.savefig(FIG / "wilcoxon_effects.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 print("Saved → figures/wilcoxon_effects.png")
+
+# ── Fig 3: translation length violin (all three strategies) ──────────────────
+sample = df.sample(min(50_000, len(df)), random_state=42)
+length_df = pd.DataFrame({
+    label: sample[col].str.len()
+    for col, label in zip(TRANS, LABELS)
+})
+melted_v = length_df.melt(var_name="Strategy", value_name="Length (chars)")
+
+fig, ax = plt.subplots(figsize=(10, 5))
+sns.violinplot(data=melted_v, x="Strategy", y="Length (chars)",
+               palette=COLORS, cut=0, inner="quartile", ax=ax)
+ax.set_title("Translation Length Distribution by Strategy",
+             fontsize=13, fontweight="bold")
+ax.set_ylabel("Character count")
+for i, label in enumerate(LABELS):
+    med = length_df[label].median()
+    ax.text(i, med + 20, f"med={med:.0f}", ha="center", va="bottom",
+            fontsize=9, color="black")
+fig.tight_layout()
+fig.savefig(FIG / "fig3_translation_length_violin.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+print("Saved → figures/fig3_translation_length_violin.png")
+
+# ── Fig 4: median translation length by target language × strategy ────────────
+med_by_lang = (
+    df.groupby("target_language")[TRANS]
+    .apply(lambda g: g.apply(lambda s: s.str.len().median()))
+    .rename(columns=dict(zip(TRANS, LABELS)))
+)
+med_by_lang = med_by_lang.sort_values("Creatively")
+
+fig, ax = plt.subplots(figsize=(11, 5))
+x = np.arange(len(med_by_lang))
+width = 0.26
+for i, (label, color) in enumerate(zip(LABELS, COLORS)):
+    ax.bar(x + i * width, med_by_lang[label], width, label=label, color=color)
+ax.set_xticks(x + width)
+ax.set_xticklabels(med_by_lang.index, rotation=30, ha="right")
+ax.set_title("Median Translation Length by Target Language & Strategy",
+             fontsize=13, fontweight="bold")
+ax.set_ylabel("Median character count")
+ax.legend(title="Strategy")
+fig.tight_layout()
+fig.savefig(FIG / "fig4_length_by_target_language.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+print("Saved → figures/fig4_length_by_target_language.png")
+
+# ── Save processed output ──────────────────────────────────────────────────────
+# Per-strategy expansion macro-stats
+macro_rows = []
+sent_len_for_stats = df["sentence"].str.len().replace(0, np.nan)
+for col, lbl in zip(TRANS, LABELS):
+    exp = df[col].str.len() / sent_len_for_stats
+    vals = exp.dropna()
+    macro_rows.append({
+        "strategy": lbl,
+        "expansion_median": float(vals.median()),
+        "expansion_mean": float(vals.mean()),
+        "expansion_macro_mean": float(vals.groupby(df.loc[vals.index, "idiom"]).mean().mean()),
+    })
+macro_df = pd.DataFrame(macro_rows)
+
+# Median length by target language × strategy
+med_long = med_by_lang.reset_index().melt(
+    id_vars="target_language", var_name="strategy", value_name="median_chars"
+)
+
+# Wilcoxon effect sizes (already computed in wdf above)
+wilcoxon_df = wdf.reset_index().rename(columns={"lang": "target_language"})
+
+# Merge into one output
+stats_out = med_long.merge(wilcoxon_df, on="target_language", how="left")
+stats_out = stats_out.merge(
+    macro_df[["strategy", "expansion_median", "expansion_mean", "expansion_macro_mean"]],
+    on="strategy", how="left"
+)
+out_path = PROC / "translation_length_stats.csv"
+stats_out.to_csv(out_path, index=False)
+print(f"Saved → {out_path}")

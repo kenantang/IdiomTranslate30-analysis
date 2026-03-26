@@ -1,0 +1,65 @@
+site_name: IdiomTranslate30 Analysis
+site_description: Analysis of the IdiomTranslate30 massively multilingual idiom translation dataset
+site_author: Kenan Tang
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Dataset:
+      - Overview & Statistics: dataset/overview.md
+      - Data Edge Cases: dataset/edge_cases.md
+      - Pre-processing: dataset/preprocessing.md
+      - Figures: dataset/figures.md
+  - Analysis:
+      - "Part 1: Data Quality": analysis/part1_data_quality.md
+      - "Part 2: Idiom Coverage": analysis/part2_idiom_coverage.md
+      - "Part 3: Translation Behaviour": analysis/part3_translation_behaviour.md
+      - "Part 4: Cross-Lingual Patterns": analysis/part4_cross_lingual.md
+      - "Part 5: Cognate Analysis": analysis/part5_cognate_analysis.md
+      - "Part 6: Synthesis": analysis/part6_synthesis.md
+      - "Part 7: Language Profiles": analysis/part7_language_profiles.md
+      - "Part 8: Reverse Span Analysis": analysis/part8_reverse_span.md
+      - "Part 9: Analogy Slop Patterns": analysis/part9_analogy_slop.md
+      - "Part 10: Additional Analyses": analysis/part10_additional.md
+      - "Part 11: Heuristics & LLM-as-a-Judge": analysis/part11_heuristics.md
