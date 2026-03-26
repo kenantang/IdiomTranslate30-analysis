@@ -24,6 +24,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 
+from utils import span_position_zone, compute_relative_start, LONG_THRESH
+
 ROOT = Path(__file__).parent.parent
 PROC = ROOT / "data/processed"
 FIG  = ROOT / "figures"
@@ -32,7 +34,6 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 TCOLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 SCOLS  = ["span_creatively",      "span_analogy",      "span_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-LONG_THRESH = 500
 
 print("Loading data…")
 df = pd.read_parquet(ROOT / "data/raw/IdiomTranslate30.parquet")
@@ -45,21 +46,19 @@ for tc, sc, lbl in zip(TCOLS, SCOLS, LABELS):
     mask = (df[tc].str.len() <= LONG_THRESH) & df[sc].notna() & df[tc].notna()
     sub  = df[mask].copy()
 
-    # Vectorised str.find
+    # Compute relative start and filter to rows where span is found
     sub["_tlen"] = sub[tc].str.len()
     sub["_slen"] = sub[sc].str.len()
-    sub["_start"] = [t.find(s) if isinstance(s, str) and isinstance(t, str) else -1
-                     for t, s in zip(sub[tc], sub[sc])]
+    sub["rel_start"] = [
+        compute_relative_start(s, t)
+        for s, t in zip(sub[sc], sub[tc])
+    ]
 
-    # Keep only rows where span is found
-    found = sub[sub["_start"] >= 0].copy()
-    denom = found["_tlen"] - found["_slen"]
-    # relative_start: 0 = at very beginning, 1 = as late as possible
-    found["rel_start"] = np.where(denom > 0, found["_start"] / denom, 0.0)
-    # Thirds: beginning / middle / end
-    found["position_zone"] = pd.cut(found["rel_start"],
-                                    bins=[-.001, 1/3, 2/3, 1.001],
-                                    labels=["beginning", "middle", "end"])
+    # Keep only rows where span is found (rel_start is not NaN)
+    found = sub[sub["rel_start"].notna()].copy()
+    found["_start"] = [t.find(s) if isinstance(s, str) and isinstance(t, str) else -1
+                       for t, s in zip(found[tc], found[sc])]
+    found["position_zone"] = found["rel_start"].map(span_position_zone)
     found["strategy"] = lbl
     pos_rows.append(found[["source_language","target_language","idiom","strategy",
                             "_tlen","_slen","_start","rel_start","position_zone"]]

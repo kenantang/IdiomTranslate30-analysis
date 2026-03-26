@@ -25,7 +25,7 @@ EXT.mkdir(parents=True, exist_ok=True)
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
+from utils import STRATEGY_COLORS as COLORS
 TRANS  = ["translate_creatively", "translate_analogy", "translate_author"]
 sent_len = df["sentence"].str.len().replace(0, np.nan)
 for col, lbl in zip(TRANS, LABELS):
@@ -206,7 +206,7 @@ for_bar = pd.DataFrame({
     "Matched (xinhua)":   in_lens.value_counts().sort_index(),
     "Not in xinhua":      out_lens.value_counts().sort_index(),
 }).fillna(0)
-for_bar.iloc[:10].plot(kind="bar", ax=ax, color=["#4C72B0","#E74C3C"], width=0.7)
+for_bar.iloc[:10].plot(kind="bar", ax=ax, color=["#4C72B0","#C44E52"], width=0.7)
 ax.set_title("Chinese Idiom Coverage\nvs chinese-xinhua by Character Length", fontweight="bold")
 ax.set_xlabel("Idiom character length")
 ax.set_ylabel("Count of unique idioms")

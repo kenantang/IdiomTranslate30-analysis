@@ -21,7 +21,7 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 TRANS_COLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 SPAN_COLS   = ["span_creatively",      "span_analogy",      "span_author"]
 LABELS      = ["Creatively", "Analogy", "Author"]
-COLORS      = ["#4C72B0", "#DD8452", "#55A868"]
+from utils import STRATEGY_COLORS as COLORS
 
 # ── TTR (word-level) ──────────────────────────────────────────────────────────
 def ttr(text):

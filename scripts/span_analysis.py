@@ -25,6 +25,8 @@ import pandas as pd
 import seaborn as sns
 from scipy.stats import pearsonr
 
+from utils import OUTLIER_PERCENTILE, STRATEGY_COLORS as COLORS
+
 ROOT = Path(__file__).parent.parent
 df   = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
 FIG  = ROOT / "figures"
@@ -36,7 +38,6 @@ PAIRS  = [("translate_creatively","span_creatively"),
           ("translate_analogy",   "span_analogy"),
           ("translate_author",    "span_author")]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 
 idiom_len = df["idiom"].str.len()
 
@@ -143,7 +144,7 @@ span_df = pd.DataFrame({
 span_melted = span_df.melt(var_name="Strategy", value_name="Span Length (chars)")
 span_melted = span_melted[
     span_melted["Span Length (chars)"] <
-    span_melted["Span Length (chars)"].quantile(0.995)
+    span_melted["Span Length (chars)"].quantile(OUTLIER_PERCENTILE)  # H22
 ]
 fig, ax = plt.subplots(figsize=(10, 5))
 sns.boxplot(data=span_melted, x="Strategy", y="Span Length (chars)",

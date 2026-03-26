@@ -23,10 +23,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import opencc
 from pathlib import Path
 from scipy.stats import wilcoxon, spearmanr
-from rapidfuzz.distance import Levenshtein
+from utils import (build_kHangul_map, build_s2t_converter, char_to_hangul,
+                   idiom_to_hangul_tuple, word_jaccard, normalized_levenshtein,
+                   HIGH_RESOURCE_LANGS, STRATEGY_COLORS as COLORS)
 
 ROOT  = Path(__file__).parent.parent
 FIG   = ROOT / "figures"
@@ -37,15 +38,15 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 TCOLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 SCOLS  = ["span_creatively",      "span_analogy",      "span_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
-HIGH_RES = {"English","French","German","Spanish","Italian","Russian"}
+HIGH_RES = HIGH_RESOURCE_LANGS   # H27: imported from utils
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 0. Load shared resources
 # ══════════════════════════════════════════════════════════════════════════════
 print("Loading data and resources…")
 df = pd.read_parquet(ROOT / "data/raw/IdiomTranslate30.parquet")
-s2t = opencc.OpenCC("s2t")
+s2t    = build_s2t_converter()   # H9: OpenCC s2t converter
+kh_map = build_kHangul_map(EXT / "Unihan_Readings.txt")  # H10: Unihan kHangul map
 
 zh_idioms = df[df["source_language"]=="Chinese"]["idiom"].unique()
 ko_idioms = df[df["source_language"]=="Korean"]["idiom"].unique()
@@ -53,28 +54,6 @@ ja_idioms = df[df["source_language"]=="Japanese"]["idiom"].unique()
 ko_set    = set(ko_idioms)
 zh_set    = set(zh_idioms)
 ja_set    = set(ja_idioms)
-
-# Unihan kHangul map (char → first Hangul syllable)
-kh_map = {}
-for line in (EXT / "Unihan_Readings.txt").read_text(encoding="utf-8").splitlines():
-    if "\tkHangul\t" not in line: continue
-    parts = line.split("\t")
-    kh_map[chr(int(parts[0][2:], 16))] = parts[2].split()[0].split(":")[0]
-
-import hanja as hanja_lib
-
-def char_to_hangul(ch):
-    if ch in kh_map:         return kh_map[ch]
-    trad = s2t.convert(ch)
-    if trad != ch and trad in kh_map: return kh_map[trad]
-    try:
-        r = hanja_lib.translate(ch, "substitution")
-        if r and len(r)==1 and "\uac00"<=r<="\ud7a3": return r
-    except Exception: pass
-    return None
-
-def idiom_to_hangul(idiom):
-    return tuple(char_to_hangul(c) for c in idiom)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 1. ZH–JA COGNATES (character-level CJK comparison)
@@ -148,7 +127,7 @@ print("\n── KO–JA cognates ──")
 print("Transliterating JA idioms to Sino-Korean…")
 ja_hangul = {}
 for idiom in ja_idioms:
-    tup = idiom_to_hangul(idiom)
+    tup = idiom_to_hangul_tuple(idiom, kh_map, s2t)
     ja_hangul[idiom] = tup
 
 fully_res = sum(1 for t in ja_hangul.values() if all(h is not None for h in t))
@@ -245,11 +224,8 @@ def build_pair_table(cog_df, langA, colA, langB, colB):
                 for _, rA in sA.iterrows():
                     for _, rB in sB.iterrows():
                         a, b = str(rA[tc]), str(rB[tc])
-                        ml = max(len(a), len(b))
-                        edits.append(Levenshtein.distance(a, b)/ml if ml else 0.0)
-                        wA = set(a.lower().split())
-                        wB = set(b.lower().split())
-                        jaccards.append(len(wA&wB)/len(wA|wB) if wA|wB else 0.0)
+                        edits.append(normalized_levenshtein(a, b))   # H18
+                        jaccards.append(word_jaccard(a, b))           # H17
                 rec[f"edit_{lbl}"]    = float(np.mean(edits))
                 rec[f"jaccard_{lbl}"] = float(np.mean(jaccards))
             records.append(rec)

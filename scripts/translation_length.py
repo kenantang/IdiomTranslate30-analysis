@@ -26,6 +26,8 @@ import pandas as pd
 import seaborn as sns
 from scipy.stats import wilcoxon
 
+from utils import OUTLIER_PERCENTILE, STRATEGY_COLORS as COLORS
+
 ROOT = Path(__file__).parent.parent
 df   = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
 FIG  = ROOT / "figures"
@@ -35,7 +37,6 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS = ["translate_creatively", "translate_analogy", "translate_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 
 # ── Expansion ratio ───────────────────────────────────────────────────────────
 sent_len = df["sentence"].str.len().replace(0, np.nan)
@@ -58,7 +59,7 @@ melted = pd.melt(
     sample[[f"exp_{l}" for l in LABELS]].rename(columns={f"exp_{l}": l for l in LABELS}),
     var_name="Strategy", value_name="Expansion ratio"
 ).dropna()
-melted = melted[melted["Expansion ratio"] < melted["Expansion ratio"].quantile(0.99)]
+melted = melted[melted["Expansion ratio"] < melted["Expansion ratio"].quantile(OUTLIER_PERCENTILE)]  # H22
 
 fig, axes = plt.subplots(1, 2, figsize=(13, 5))
 sns.violinplot(data=melted, x="Strategy", y="Expansion ratio",

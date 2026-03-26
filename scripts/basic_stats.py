@@ -23,6 +23,8 @@ import pandas as pd
 import seaborn as sns
 from pathlib import Path
 
+from utils import LONG_THRESH, STRATEGY_COLORS
+
 ROOT      = Path(__file__).parent.parent
 DATA_PATH = ROOT / "data" / "raw" / "IdiomTranslate30.parquet"
 PROC      = ROOT / "data" / "processed"
@@ -31,10 +33,9 @@ PROC.mkdir(parents=True, exist_ok=True)
 FIG.mkdir(parents=True, exist_ok=True)
 
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
-STRATEGY_COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 TRANS_COLS      = ["translate_creatively", "translate_analogy", "translate_author"]
 TRANS_LABELS    = ["Creatively", "Analogy", "Author"]
-LONG_THRESH     = 500
+# LONG_THRESH imported from utils (H20)
 
 
 def main():

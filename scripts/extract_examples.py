@@ -10,6 +10,8 @@ import warnings
 warnings.filterwarnings("ignore")
 from pathlib import Path
 
+from utils import STABILITY_CV_THRESH
+
 ROOT = Path(__file__).parent.parent
 DATA_PATH  = ROOT / "data" / "raw" / "IdiomTranslate30.parquet"
 OUT_PATH   = ROOT / "data" / "examples" / "english_examples.md"
@@ -127,7 +129,7 @@ cs_en = cs[cs["target_language"] == "English"]
 pairs = []
 for src in SRCS:
     sub = cs_en[cs_en["source_language"] == src].sort_values("cv_Creatively")
-    low_cands = sub[(sub["n_sentences"] >= 10) & (sub["cv_Creatively"] < 0.08)]
+    low_cands = sub[(sub["n_sentences"] >= 10) & (sub["cv_Creatively"] < STABILITY_CV_THRESH)]  # H24
     low_row   = low_cands.iloc[len(low_cands) // 2] if len(low_cands) else sub.iloc[0]
     high_row  = sub.iloc[-1]
     pairs.append((src, low_row["idiom"], f"{low_row['cv_Creatively']:.3f}",

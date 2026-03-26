@@ -7,10 +7,11 @@ Output: data/processed/span_attractor_counts.parquet
 """
 import pandas as pd
 import numpy as np
-import unicodedata
 import warnings
 warnings.filterwarnings("ignore")
 from pathlib import Path
+
+from utils import normalize_span
 
 ROOT = Path(__file__).parent.parent
 DATA_PATH = ROOT / "data" / "raw" / "IdiomTranslate30.parquet"
@@ -32,10 +33,8 @@ long = pd.concat(rows, ignore_index=True)
 long = long.dropna(subset=["span"])
 long = long[long["span"].str.strip() != ""]
 
-# NFC-normalize then lowercase for matching
-long["span_norm"] = long["span"].apply(
-    lambda x: unicodedata.normalize("NFC", x.strip())
-).str.lower().str.strip(".,!?;:'\"")
+# NFC-normalize then lowercase for matching (H8)
+long["span_norm"] = long["span"].apply(normalize_span)
 
 # Per (target_language, span_norm): count distinct idioms and raw occurrences
 agg = (long.groupby(["target_language", "span_norm"])

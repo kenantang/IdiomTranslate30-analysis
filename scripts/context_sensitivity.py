@@ -22,8 +22,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from itertools import combinations
 from pathlib import Path
+
+from utils import mean_pairwise_jaccard, LONG_THRESH
 
 ROOT = Path(__file__).parent.parent
 PROC = ROOT / "data/processed"
@@ -33,7 +34,7 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 TCOLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 SCOLS  = ["span_creatively",      "span_analogy",      "span_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-LONG_THRESH = 500   # preprocessing: exclude pathologically long translations
+# LONG_THRESH imported from utils (H20)
 
 print("Loading data…")
 df = pd.read_parquet(ROOT / "data/raw/IdiomTranslate30.parquet")
@@ -44,16 +45,7 @@ for tc in TCOLS:
     df.loc[mask, tc] = np.nan
 
 # ── Compute per-group metrics ──────────────────────────────────────────────
-def mean_pairwise_jaccard(texts):
-    """Mean Jaccard over all C(n,2) pairs of word sets."""
-    word_sets = [set(str(t).lower().split()) for t in texts if pd.notna(t)]
-    if len(word_sets) < 2:
-        return np.nan
-    scores = []
-    for a, b in combinations(word_sets, 2):
-        u = a | b
-        scores.append(len(a & b) / len(u) if u else 0.0)
-    return float(np.mean(scores))
+# mean_pairwise_jaccard imported from utils (H17)
 
 def span_unique_frac(spans):
     """Fraction of unique span values (1 = all same, high = all different)."""

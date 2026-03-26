@@ -23,6 +23,8 @@ import pandas as pd
 import seaborn as sns
 from scipy.stats import mannwhitneyu
 
+from utils import HIGH_RESOURCE_LANGS, LOW_RESOURCE_LANGS, resource_level, STRATEGY_COLORS as COLORS
+
 ROOT = Path(__file__).parent.parent
 df   = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
 FIG  = ROOT / "figures"
@@ -32,10 +34,9 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS  = ["translate_creatively", "translate_analogy", "translate_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 
-HIGH_RES = {"English","French","German","Spanish","Italian","Russian"}
-LOW_RES  = {"Arabic","Bengali","Hindi","Swahili"}
+HIGH_RES = HIGH_RESOURCE_LANGS   # H27: imported from utils
+LOW_RES  = LOW_RESOURCE_LANGS    # H27: imported from utils
 
 for col, lbl in zip(TRANS, LABELS):
     df[f"tlen_{lbl}"] = df[col].str.len()
@@ -95,7 +96,7 @@ tlen_melt = pd.melt(
     id_vars=["resource"], var_name="Strategy", value_name="Length"
 ).dropna()
 sns.boxplot(data=tlen_melt, x="Strategy", y="Length", hue="resource",
-            palette={"high":"#5B9BD5","low":"#ED7D31"},
+            palette={"high":"#4C72B0","low":"#DD8452"},
             flierprops=dict(marker=".", alpha=0.15), ax=axes[1])
 axes[1].set_title("Translation Length:\nHigh vs Low Resource Target Languages", fontweight="bold")
 axes[1].set_ylabel("Character count")

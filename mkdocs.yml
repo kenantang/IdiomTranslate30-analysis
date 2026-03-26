@@ -51,6 +51,7 @@ nav:
       - Data Edge Cases: dataset/edge_cases.md
       - Pre-processing: dataset/preprocessing.md
       - Figures: dataset/figures.md
+      - Data Dependencies: dataset/data_dependencies.md
   - Analysis:
       - "Part 1: Data Quality": analysis/part1_data_quality.md
       - "Part 2: Idiom Coverage": analysis/part2_idiom_coverage.md

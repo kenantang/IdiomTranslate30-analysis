@@ -26,16 +26,14 @@ import seaborn as sns
 from scipy import stats
 from pathlib import Path
 
+from utils import RESOURCE_LEVEL, HIGH_RESOURCE_LANGS, LOW_RESOURCE_LANGS
+
 ROOT = Path(__file__).parent.parent
 sns.set_theme(style="whitegrid", palette="muted", font_scale=1.05)
 
-RESOURCE = {
-    "English": "high", "French": "high", "German": "high",
-    "Spanish": "high", "Italian": "high", "Russian": "high",
-    "Arabic": "low", "Bengali": "low", "Hindi": "low", "Swahili": "low",
-}
-HIGH = [l for l, r in RESOURCE.items() if r == "high"]
-LOW  = [l for l, r in RESOURCE.items() if r == "low"]
+RESOURCE  = RESOURCE_LEVEL                    # H27: imported from utils
+HIGH      = sorted(HIGH_RESOURCE_LANGS)
+LOW       = sorted(LOW_RESOURCE_LANGS)
 ALL_LANGS = HIGH + LOW
 
 STRATS = ["Creatively", "Analogy", "Author"]

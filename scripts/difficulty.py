@@ -31,6 +31,8 @@ import seaborn as sns
 from scipy.stats import spearmanr, mannwhitneyu
 from pathlib import Path
 
+from utils import LONG_THRESH
+
 ROOT = Path(__file__).parent.parent
 PROC = ROOT / "data/processed"
 FIG  = ROOT / "figures"
@@ -38,7 +40,7 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TCOLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-LONG_THRESH = 500
+# LONG_THRESH imported from utils (H20)
 
 print("Loading data…")
 df = pd.read_parquet(ROOT / "data/raw/IdiomTranslate30.parquet")

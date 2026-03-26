@@ -21,9 +21,10 @@ Outputs:
 import pandas as pd
 import numpy as np
 import re
-import unicodedata
 from pathlib import Path
 from scipy.stats import chi2_contingency
+
+from utils import normalize_span, classify_analogy_template
 
 ROOT     = Path(__file__).parent.parent
 DATA     = ROOT / "data" / "raw" / "IdiomTranslate30.parquet"
@@ -32,29 +33,8 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 df = pd.read_parquet(DATA)
 
-# ── helpers ──────────────────────────────────────────────────────────────────
-
-def nfc_lower(s):
-    return unicodedata.normalize("NFC", s.strip()).lower().strip(".,!?;:'\"")
-
-
-TEMPLATES = {
-    "weaving_thread_tapestry": r"weav|tapestry|unravel|single.*cable|loom|stitch|woven",
-    "cosmic_star_galaxy":      r"\bstar\b|\bgalaxy\b|\bcosmic\b|\bconstellation\b|\bnorth star\b|\bcelestial\b",
-    "kaleidoscope":            r"kaleidoscope",
-    "trying_to_futility":      r"^trying to ",
-    "dandelion_scattered":     r"dandelion|scattered.*gale|gale.*scatter",
-    "labyrinth_mirror":        r"labyrinth|hall of mirror|forest of mirror",
-    "clockmaker_precision":    r"clockmaker|watchmaker|precision of a master",
-    "mist_smoke_castle":       r"castle.*(?:mist|smoke|fog)|palace.*(?:mist|smoke|fog)|built of.*(?:mist|smoke)|carved.*(?:mist|smoke)",
-}
-
-
-def classify_template(span: str) -> str:
-    for name, pattern in TEMPLATES.items():
-        if re.search(pattern, span, re.IGNORECASE):
-            return name
-    return "original"
+# ── helpers (H8, H16) ─────────────────────────────────────────────────────────
+# normalize_span, ANALOGY_TEMPLATES, and classify_analogy_template imported from utils
 
 
 # ── build long table (all strategies) ────────────────────────────────────────
@@ -70,7 +50,7 @@ for strat, scol in [("Creatively", "span_creatively"),
 long = pd.concat(rows, ignore_index=True)
 long = long.dropna(subset=["span"])
 long = long[long["span"].str.strip() != ""]
-long["span_norm"] = long["span"].apply(nfc_lower)
+long["span_norm"] = long["span"].apply(normalize_span)  # H8
 
 # English Analogy only
 en_ana = df[df["target_language"] == "English"][
@@ -79,7 +59,7 @@ en_ana = df[df["target_language"] == "English"][
 en_ana = en_ana.dropna(subset=["span_analogy"])
 en_ana = en_ana[en_ana["span_analogy"].str.strip() != ""]
 en_ana["span"] = en_ana["span_analogy"].str.strip().str.lower()
-en_ana["template"] = en_ana["span"].apply(classify_template)
+en_ana["template"] = en_ana["span"].apply(classify_analogy_template)  # H16
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -231,7 +211,7 @@ reference_keywords = {
 }
 ana_full = df[["source_language", "target_language", "idiom", "span_analogy"]].copy()
 ana_full = ana_full.dropna(subset=["span_analogy"])
-ana_full["span_norm"] = ana_full["span_analogy"].apply(nfc_lower)
+ana_full["span_norm"] = ana_full["span_analogy"].apply(normalize_span)  # H8
 
 for ref, pattern in reference_keywords.items():
     hits = ana_full[ana_full["span_norm"].str.contains(pattern, case=False, na=False, regex=True)]

@@ -14,6 +14,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from utils import is_4char_cjk_idiom, is_yojijukugo_tagged
+
 ROOT = Path(__file__).parent.parent
 FIG  = ROOT / "figures"
 EXT  = ROOT / "data/external"
@@ -45,17 +47,10 @@ if not KAIKKI_PATH.exists():
                 except json.JSONDecodeError:
                     continue
                 word = entry.get("word", "")
-                if len(word) != 4:
+                if not is_4char_cjk_idiom(word):   # H12: 4-char CJK filter
                     continue
-                if not all("\u4e00" <= c <= "\u9fff" or "\u3400" <= c <= "\u4dbf" for c in word):
-                    continue
-                # Check for yojijukugo tag
-                tags_flat = str(entry.get("categories", "")) + str(entry.get("tags", ""))
-                senses = entry.get("senses", [])
-                sense_tags = " ".join(str(s.get("tags","")) + str(s.get("categories",""))
-                                      for s in senses)
-                is_yoji = ("四字熟語" in tags_flat or "四字熟語" in sense_tags or
-                           "yojijukugo" in tags_flat.lower() or "idiom" in sense_tags.lower())
+                # Check for yojijukugo tag  (H15)
+                is_yoji = is_yojijukugo_tagged(entry)
                 gloss = "; ".join(
                     g for s in senses for g in s.get("glosses", []) if g
                 )

@@ -24,7 +24,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import wilcoxon, mannwhitneyu, spearmanr
-from rapidfuzz.distance import Levenshtein
+
+from utils import word_jaccard, normalized_levenshtein, HIGH_RESOURCE_LANGS, STRATEGY_COLORS as COLORS
 
 ROOT = Path(__file__).parent.parent
 FIG  = ROOT / "figures"
@@ -34,8 +35,7 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 TCOLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 SCOLS  = ["span_creatively",      "span_analogy",      "span_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
-HIGH_RES = {"English","French","German","Spanish","Italian","Russian"}
+HIGH_RES = HIGH_RESOURCE_LANGS   # H27: imported from utils
 
 # ── Load data ─────────────────────────────────────────────────────────────────
 print("Loading data…")
@@ -142,12 +142,8 @@ for (zh_id, ko_id, mt), grp_cog in cog.groupby(["zh_idiom","ko_idiom","match_typ
             for _, zh_r in zh_sub.iterrows():
                 for _, ko_r in ko_sub.iterrows():
                     a, b = str(zh_r[tc]), str(ko_r[tc])
-                    max_len = max(len(a), len(b))
-                    edits.append(Levenshtein.distance(a, b)/max_len if max_len else 0.0)
-                    a_words = set(a.lower().split())
-                    b_words = set(b.lower().split())
-                    jaccards.append(len(a_words & b_words)/len(a_words | b_words)
-                                    if a_words | b_words else 0.0)
+                    edits.append(normalized_levenshtein(a, b))    # H18
+                    jaccards.append(word_jaccard(a, b))           # H17
             rec[f"edit_{lbl}"]    = float(np.mean(edits))
             rec[f"jaccard_{lbl}"] = float(np.mean(jaccards))
         sample_records.append(rec)

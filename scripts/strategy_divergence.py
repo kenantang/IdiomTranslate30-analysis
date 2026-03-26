@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from rapidfuzz.distance import Levenshtein
+
+from utils import normalized_levenshtein, STRATEGY_COLORS as COLORS
 
 ROOT = Path(__file__).parent.parent
 df = pd.read_parquet(ROOT / "data" / "raw" / "IdiomTranslate30.parquet")
@@ -22,7 +23,6 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS  = ["translate_creatively", "translate_analogy", "translate_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 
 sample = df.sample(50_000, random_state=3).dropna(subset=TRANS).reset_index(drop=True)
 
@@ -47,19 +47,13 @@ for n in [1, 2]:
     sample[f"div_AAu_{tag}"] = [ngram_div(a, b, n) for a, b in
                                  zip(sample["translate_analogy"],    sample["translate_author"])]
 
-# ── Normalised edit distance ──────────────────────────────────────────────────
+# ── Normalised edit distance  (H18) ───────────────────────────────────────────
 print("Computing edit distances…")
-def norm_edit(a, b):
-    max_len = max(len(a), len(b))
-    if max_len == 0:
-        return 0.0
-    return Levenshtein.distance(a, b) / max_len
-
-sample["edit_CA"]  = [norm_edit(a, b) for a, b in
+sample["edit_CA"]  = [normalized_levenshtein(a, b) for a, b in
                       zip(sample["translate_creatively"], sample["translate_analogy"])]
-sample["edit_CAu"] = [norm_edit(a, b) for a, b in
+sample["edit_CAu"] = [normalized_levenshtein(a, b) for a, b in
                       zip(sample["translate_creatively"], sample["translate_author"])]
-sample["edit_AAu"] = [norm_edit(a, b) for a, b in
+sample["edit_AAu"] = [normalized_levenshtein(a, b) for a, b in
                       zip(sample["translate_analogy"],    sample["translate_author"])]
 
 # ── Print summary ─────────────────────────────────────────────────────────────

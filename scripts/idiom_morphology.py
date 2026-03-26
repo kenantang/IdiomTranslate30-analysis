@@ -19,6 +19,8 @@ warnings.filterwarnings("ignore")
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+
+from utils import idiom_length_bucket, BUCKET_ORDER, STRATEGY_COLORS as COLORS
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -33,7 +35,6 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TRANS  = ["translate_creatively", "translate_analogy", "translate_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 
 sent_len = df["sentence"].str.len().replace(0, np.nan)
 for col, lbl in zip(TRANS, LABELS):
@@ -65,17 +66,10 @@ for lang, grp in df.groupby("source_language"):
     pct4 = (grp.drop_duplicates("idiom")["idiom_len"] == 4).mean() * 100
     print(f"  {lang}: {pct4:.1f}% of unique idioms are 4 characters")
 
-# ── Quintile analysis ─────────────────────────────────────────────────────────
-# Use all rows; bucket by idiom_len quintile
-# Bucket by actual length: 3, 4, 5, 6, 7+
-def len_bucket(n):
-    if n <= 3: return "≤3"
-    if n == 4: return "4"
-    if n == 5: return "5"
-    if n == 6: return "6"
-    return "7+"
-df["idiom_len_bucket"] = df["idiom_len"].map(len_bucket)
-bucket_order = ["≤3","4","5","6","7+"]
+# ── Quintile analysis (H29) ───────────────────────────────────────────────────
+# Bucket by actual length: 3, 4, 5, 6, 7+  (idiom_length_bucket from utils)
+df["idiom_len_bucket"] = df["idiom"].apply(idiom_length_bucket)
+bucket_order = BUCKET_ORDER
 
 quintile_stats = []
 for q in bucket_order:

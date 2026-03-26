@@ -36,6 +36,8 @@ import seaborn as sns
 from itertools import combinations
 from pathlib import Path
 
+from utils import LONG_THRESH, LANGUAGE_FAMILIES
+
 ROOT = Path(__file__).parent.parent
 PROC = ROOT / "data/processed"
 FIG  = ROOT / "figures"
@@ -43,21 +45,10 @@ sns.set_theme(style="whitegrid", palette="muted", font_scale=1.1)
 
 TCOLS  = ["translate_creatively", "translate_analogy", "translate_author"]
 LABELS = ["Creatively", "Analogy", "Author"]
-LONG_THRESH = 500
+# LONG_THRESH imported from utils (H20)
 
-FAMILIES = {
-    "English":  "Germanic",
-    "German":   "Germanic",
-    "French":   "Romance",
-    "Spanish":  "Romance",
-    "Italian":  "Romance",
-    "Bengali":  "South Asian",
-    "Hindi":    "South Asian",
-    "Arabic":   "Semitic",
-    "Russian":  "Slavic",
-    "Swahili":  "Bantu",
-}
-TARGETS = list(FAMILIES.keys())
+FAMILIES = LANGUAGE_FAMILIES   # H28: imported from utils
+TARGETS  = list(FAMILIES.keys())
 
 print("Loading data…")
 df = pd.read_parquet(ROOT / "data/raw/IdiomTranslate30.parquet")

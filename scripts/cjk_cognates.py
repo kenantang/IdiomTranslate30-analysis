@@ -25,6 +25,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import spearmanr
 
+from utils import build_kHangul_map, build_s2t_converter, char_to_hangul, idiom_to_hangul_tuple, STRATEGY_COLORS
+
 ROOT = Path(__file__).parent.parent
 FIG  = ROOT / "figures"
 EXT  = ROOT / "data/external"
@@ -38,62 +40,26 @@ ja_idioms = df[df["source_language"]=="Japanese"]["idiom"].unique()
 ko_set    = set(ko_idioms)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 1. Build Unihan kHangul char → first Hangul syllable map
+# 1. Build Unihan kHangul char → first Hangul syllable map  (H10)
 # ══════════════════════════════════════════════════════════════════════════════
 print("Building Unihan kHangul map…")
 unihan_path = EXT / "Unihan_Readings.txt"
-kh_map = {}   # CJK char → first Hangul syllable
-for line in unihan_path.read_text(encoding="utf-8").splitlines():
-    if "\tkHangul\t" not in line:
-        continue
-    parts = line.split("\t")
-    ch = chr(int(parts[0][2:], 16))
-    first = parts[2].split()[0].split(":")[0]   # e.g. "애:N 애:T" → "애"
-    kh_map[ch] = first
+kh_map = build_kHangul_map(unihan_path)
 print(f"  {len(kh_map):,} codepoints with kHangul readings")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 2. OpenCC simplified → traditional converter
+# 2. OpenCC simplified → traditional converter  (H9)
 # ══════════════════════════════════════════════════════════════════════════════
-import opencc
-s2t = opencc.OpenCC("s2t")
+s2t = build_s2t_converter()
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 3. hanja library fallback
+# 3. Three-layer per-character transliteration  (H10)
 # ══════════════════════════════════════════════════════════════════════════════
-import hanja as hanja_lib
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 4. Three-layer per-character transliteration
-# ══════════════════════════════════════════════════════════════════════════════
-def char_to_hangul(ch):
-    """Return Hangul syllable for a CJK character using a 3-layer fallback."""
-    # Layer 1: direct Unihan lookup (handles both simplified and traditional)
-    if ch in kh_map:
-        return kh_map[ch]
-    # Layer 2: convert simplified → traditional, then Unihan
-    trad = s2t.convert(ch)
-    if trad != ch and trad in kh_map:
-        return kh_map[trad]
-    # Layer 3: hanja library
-    try:
-        result = hanja_lib.translate(ch, "substitution")
-        if result and len(result) == 1 and "\uac00" <= result <= "\ud7a3":
-            return result
-    except Exception:
-        pass
-    return None   # unresolvable
-
-def idiom_to_hangul(idiom):
-    """Translate a 4-char Chinese idiom to a 4-char Hangul string, char by char."""
-    syllables = [char_to_hangul(c) for c in idiom]
-    return tuple(syllables)   # None entries where unresolvable
-
 print("\nTransliterating Chinese idioms (3-layer)…")
 zh_hangul = {}   # idiom → tuple of 4 Hangul syllables (or None)
 unresolved_chars = set()
 for idiom in zh_idioms:
-    tup = idiom_to_hangul(idiom)
+    tup = idiom_to_hangul_tuple(idiom, kh_map, s2t)
     zh_hangul[idiom] = tup
     unresolved_chars.update(c for c, h in zip(idiom, tup) if h is None)
 
@@ -179,6 +145,7 @@ for zh, ko in list(exact_cognates.items())[:15]:
 # ══════════════════════════════════════════════════════════════════════════════
 # Reconstruct old method result for comparison
 print("\nReconstructing old hanja-only results for comparison…")
+import hanja as hanja_lib  # needed only for the old-method comparison below
 old_cognates = {}
 for zh in zh_idioms:
     try:
@@ -203,7 +170,7 @@ if old_only:
 # ══════════════════════════════════════════════════════════════════════════════
 SPAN_COLS  = ["span_creatively","span_analogy","span_author"]
 LABELS     = ["Creatively","Analogy","Author"]
-COLORS     = ["#4C72B0","#DD8452","#55A868"]
+COLORS     = STRATEGY_COLORS
 
 def mean_span_len(idiom_list, lang):
     sub = df[df["source_language"]==lang]

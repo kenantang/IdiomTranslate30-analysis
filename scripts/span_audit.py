@@ -23,6 +23,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from utils import span_is_contained, STRATEGY_COLORS as COLORS
+
 ROOT      = Path(__file__).parent.parent
 DATA_PATH = ROOT / "data" / "raw" / "IdiomTranslate30.parquet"
 AUDIT_DIR = ROOT / "data" / "audit"
@@ -42,7 +44,6 @@ PAIRS = [
     ("translate_author",     "span_author"),
 ]
 LABELS = ["Creatively", "Analogy", "Author"]
-COLORS = ["#4C72B0", "#DD8452", "#55A868"]
 
 flags = pd.DataFrame(index=df.index)
 
@@ -65,7 +66,7 @@ for (tcol, scol), label in zip(PAIRS, LABELS):
     mask_valid = df[scol].notna() & (df[scol].str.strip().str.len() > 0)
     contained  = pd.Series(False, index=df.index)
     contained[mask_valid] = [
-        span in trans
+        span_is_contained(span, trans)
         for span, trans in zip(df.loc[mask_valid, scol], df.loc[mask_valid, tcol])
     ]
     flags[f"span_not_in_trans_{label}"] = mask_valid & ~contained

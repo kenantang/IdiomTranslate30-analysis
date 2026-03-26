@@ -10,6 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from utils import char_script_type, is_cjk_char
+
 ROOT = Path(__file__).parent.parent
 FIG  = ROOT / "figures"
 EXT  = ROOT / "data/external"
@@ -33,26 +35,15 @@ print(um.value_counts().sort_index().to_string())
 print("\nMatched length distribution (% of each length):")
 print(m.value_counts().sort_index().to_string())
 
-# ── Script composition — are they traditional/simplified/mixed? ───────────────
-import unicodedata
-def char_type(c):
-    name = unicodedata.name(c, "")
-    if "CJK" in name:
-        return "CJK"
-    if "\u0041" <= c <= "\u007a":
-        return "Latin"
-    if "\uac00" <= c <= "\ud7a3":
-        return "Hangul"
-    return "other"
-
+# ── Script composition — are they traditional/simplified/mixed? (H11-H13) ─────
 def idiom_profile(idiom):
-    types = [char_type(c) for c in idiom]
+    types = [char_script_type(c) for c in idiom]
     return pd.Series(types).value_counts().to_dict()
 
 unmatched_df = pd.DataFrame({"idiom": unmatched})
 unmatched_df["length"]      = unmatched_df["idiom"].str.len()
 unmatched_df["all_CJK"]     = unmatched_df["idiom"].apply(
-    lambda i: all(char_type(c) == "CJK" for c in i))
+    lambda i: all(is_cjk_char(c) for c in i))
 unmatched_df["has_non_CJK"] = ~unmatched_df["all_CJK"]
 
 print(f"\nUnmatched — all-CJK chars: {unmatched_df['all_CJK'].sum()} / {len(unmatched_df)}")
@@ -100,7 +91,7 @@ len_df = pd.DataFrame({
     "Matched":   pd.Series([len(i) for i in matched]).value_counts().sort_index(),
     "Unmatched": um.value_counts().sort_index(),
 }).fillna(0)
-len_df.iloc[:12].plot(kind="bar", ax=axes[0], color=["#4C72B0","#E74C3C"], width=0.7)
+len_df.iloc[:12].plot(kind="bar", ax=axes[0], color=["#4C72B0","#C44E52"], width=0.7)
 axes[0].set_title("Character Length: Matched vs\nUnmatched in chinese-xinhua", fontweight="bold")
 axes[0].set_xlabel("Idiom length (chars)")
 axes[0].set_ylabel("Count of unique idioms")
@@ -115,7 +106,7 @@ tlen_melt["Length"] = tlen_melt["Length"].apply(
     lambda x: len(str(x)) if pd.notna(x) else None)
 tlen_melt = tlen_melt.dropna()
 sns.boxplot(data=tlen_melt, x="Strategy", y="Length", hue="group",
-            palette={"matched":"#4C72B0","unmatched":"#E74C3C"},
+            palette={"matched":"#4C72B0","unmatched":"#C44E52"},
             flierprops=dict(marker=".", alpha=0.2), ax=axes[1])
 axes[1].set_title("Translation Length: Matched vs\nUnmatched Chinese Idioms", fontweight="bold")
 axes[1].set_ylabel("Character count")
