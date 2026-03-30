@@ -64,3 +64,15 @@ nav:
       - "Part 9: Analogy Slop Patterns": analysis/part9_analogy_slop.md
       - "Part 10: Additional Analyses": analysis/part10_additional.md
       - "Part 11: Heuristics & LLM-as-a-Judge": analysis/part11_heuristics.md
+      - "Part 12: Pairwise & Stratified Analysis": analysis/part12_pairwise_stratified.md
+      - "Part 13: Extended Cognate Analysis": analysis/part13_extended_cognates.md
+      - "Part 14: Anomaly & Divergence Baseline": analysis/part14_anomaly_divergence.md
+      - "Part 15: Context, Difficulty & Typology": analysis/part15_context_difficulty.md
+      - "Part 16: Multilingual Templates": analysis/part16_multilingual_templates.md
+      - "Part 17: Strategy Length Correlations": analysis/part17_strategy_correlations.md
+      - "Part 18: Strategy by Idiom Category": analysis/part18_strategy_by_category.md
+      - "Part 19: Semantic Consistency Audit": analysis/part19_semantic_consistency.md
+      - "Part 20: English Pretraining Bias": analysis/part20_english_pretraining_bias.md
+  - Reference:
+      - Definitions: reference/definitions.md
+      - Correlation Map: reference/correlation_map.md

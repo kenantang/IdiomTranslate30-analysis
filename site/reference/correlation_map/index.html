@@ -1,0 +1,2444 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Analysis of the IdiomTranslate30 massively multilingual idiom translation dataset">
+      
+      
+        <meta name="author" content="Kenan Tang">
+      
+      
+      
+        <link rel="prev" href="../definitions/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Correlation Map - IdiomTranslate30 Analysis</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#correlation-map" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-header__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IdiomTranslate30 Analysis
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Correlation Map
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dataset/overview/" class="md-tabs__link">
+          
+  
+  
+  Dataset
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../analysis/part1_data_quality/" class="md-tabs__link">
+          
+  
+  
+  Analysis
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../definitions/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-nav__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IdiomTranslate30 Analysis
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Dataset
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/edge_cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Edge Cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/data_dependencies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part1_data_quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1: Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part2_idiom_coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2: Idiom Coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part3_translation_behaviour/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3: Translation Behaviour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part4_cross_lingual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 4: Cross-Lingual Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part5_cognate_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 5: Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part6_synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6: Synthesis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part7_language_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 7: Language Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part8_reverse_span/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 8: Reverse Span Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part9_analogy_slop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 9: Analogy Slop Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part10_additional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 10: Additional Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part11_heuristics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 11: Heuristics & LLM-as-a-Judge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part12_pairwise_stratified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 12: Pairwise & Stratified Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part13_extended_cognates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 13: Extended Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part14_anomaly_divergence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 14: Anomaly & Divergence Baseline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part15_context_difficulty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 15: Context, Difficulty & Typology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part16_multilingual_templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 16: Multilingual Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part17_strategy_correlations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 17: Strategy Length Correlations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part18_strategy_by_category/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 18: Strategy by Idiom Category
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part19_semantic_consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 19: Semantic Consistency Audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part20_english_pretraining_bias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 20: English Pretraining Bias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../definitions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Definitions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Correlation Map
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Correlation Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-idiom-difficulty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Idiom Difficulty
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-semantic-stability-cross-strategy-agreement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Semantic Stability (Cross-Strategy Agreement)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-within-cell-cv-context-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Within-Cell CV (Context Sensitivity)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-translation-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Translation Length
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cross-strategy-length-coupling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Cross-Strategy Length Coupling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Cross-Strategy Length Coupling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-across-all-languages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global (across all languages)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-target-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per Target Language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-span-length-cross-strategy-span-correlations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per Span Length (cross-strategy span correlations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-span-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Span Position
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-cognate-span-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Cognate Span Similarity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-span-annotation-quality-error-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Span Annotation Quality (Error Rate)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-dictionary-coverage-translation-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Dictionary Coverage &amp; Translation Behaviour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-source-language-template-bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Source Language Template Bias
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-cross-target-vocabulary-overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Cross-Target Vocabulary Overlap
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-idiom-difficulty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Idiom Difficulty
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-semantic-stability-cross-strategy-agreement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Semantic Stability (Cross-Strategy Agreement)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-within-cell-cv-context-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Within-Cell CV (Context Sensitivity)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-translation-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Translation Length
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cross-strategy-length-coupling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Cross-Strategy Length Coupling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Cross-Strategy Length Coupling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-across-all-languages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global (across all languages)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-target-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per Target Language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-span-length-cross-strategy-span-correlations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per Span Length (cross-strategy span correlations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-span-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Span Position
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-cognate-span-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Cognate Span Similarity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-span-annotation-quality-error-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Span Annotation Quality (Error Rate)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-dictionary-coverage-translation-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Dictionary Coverage &amp; Translation Behaviour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-source-language-template-bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Source Language Template Bias
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-cross-target-vocabulary-overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Cross-Target Vocabulary Overlap
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="correlation-map">Correlation Map<a class="headerlink" href="#correlation-map" title="Permanent link">&para;</a></h1>
+<p>All pairwise correlation and association analyses performed across the project,
+organized by outcome variable.  Entries marked <strong>—</strong> had p-values reported only
+as significant/non-significant in the source part without an exact figure.</p>
+<hr />
+<h2 id="1-idiom-difficulty">1. Idiom Difficulty<a class="headerlink" href="#1-idiom-difficulty" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: composite difficulty score (Part 6).</em>  All Spearman unless noted.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mean expansion ratio</td>
+<td>+0.649</td>
+<td>≈ 0</td>
+<td>Higher expansion → harder</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Mean within-cell CV</td>
+<td>+0.529</td>
+<td>≈ 0</td>
+<td>More context-sensitive → harder</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Source: Japanese (vs Korean ref.)</td>
+<td>+0.386</td>
+<td>≈ 0</td>
+<td>Japanese idioms harder</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Xinhua definition length</td>
+<td>−0.159</td>
+<td>≈ 0</td>
+<td>Longer definition → easier</td>
+<td>15</td>
+</tr>
+<tr>
+<td>In xinhua dictionary</td>
+<td>−0.149</td>
+<td>≈ 0</td>
+<td>Covered idioms easier</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Is 4-character</td>
+<td>+0.130</td>
+<td>≈ 0</td>
+<td>Strict 4-char idioms harder</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Character length of idiom</td>
+<td>−0.127</td>
+<td>≈ 0</td>
+<td>Longer idioms easier</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Source: Chinese (vs Korean ref.)</td>
+<td>−0.172</td>
+<td>≈ 0</td>
+<td>Chinese idioms easier</td>
+<td>15</td>
+</tr>
+<tr>
+<td>In THUOCL corpus</td>
+<td>−0.096</td>
+<td>≈ 0</td>
+<td>Corpus-attested → easier</td>
+<td>15</td>
+</tr>
+<tr>
+<td>THUOCL frequency</td>
+<td>−0.080</td>
+<td>&lt; 0.001</td>
+<td>More frequent → easier</td>
+<td>6, 15</td>
+</tr>
+<tr>
+<td>Xinhua definition length</td>
+<td>−0.088</td>
+<td>&lt; 0.001</td>
+<td>(Part 6 estimate)</td>
+<td>6</td>
+</tr>
+<tr>
+<td>ZH–KO cognate membership</td>
+<td>—</td>
+<td>0.44 (NS)</td>
+<td>No effect</td>
+<td>6</td>
+</tr>
+<tr>
+<td>ZH–JA cognate membership</td>
+<td>—</td>
+<td>0.61 (NS)</td>
+<td>No effect</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>OLS regression on exogenous features only: <strong>R² = 0.161</strong> (Part 15).</p>
+<hr />
+<h2 id="2-semantic-stability-cross-strategy-agreement">2. Semantic Stability (Cross-Strategy Agreement)<a class="headerlink" href="#2-semantic-stability-cross-strategy-agreement" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: semantic stability = 1 − mean edit distance across strategies (Part 19).</em>
+All Spearman.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Composite difficulty</td>
+<td>−0.526</td>
+<td>≈ 0</td>
+<td>Harder idioms less stable</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Xinhua definition length</td>
+<td>+0.126</td>
+<td>≈ 0</td>
+<td>Longer definition → more stable</td>
+<td>19</td>
+</tr>
+<tr>
+<td>In xinhua dictionary</td>
+<td>+0.108</td>
+<td>≈ 0</td>
+<td>Covered → more stable</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Character length of idiom</td>
+<td>+0.071</td>
+<td>&lt; 0.001</td>
+<td>Longer idioms slightly more stable</td>
+<td>19</td>
+</tr>
+<tr>
+<td>In THUOCL corpus</td>
+<td>+0.070</td>
+<td>&lt; 0.001</td>
+<td>Corpus-attested → slightly more stable</td>
+<td>19</td>
+</tr>
+<tr>
+<td>THUOCL frequency</td>
+<td>+0.049</td>
+<td>&lt; 0.001</td>
+<td>More frequent → slightly more stable</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-within-cell-cv-context-sensitivity">3. Within-Cell CV (Context Sensitivity)<a class="headerlink" href="#3-within-cell-cv-context-sensitivity" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: coefficient of variation of translation length across 10 context sentences (Parts 3, 15).</em></p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>Method</th>
+<th>Value</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source sentence character length → CV (Creatively)</td>
+<td>Spearman ρ</td>
+<td>−0.173</td>
+<td>&lt; 0.05 (all 90 source×target cells)</td>
+<td>Longer sentence → lower CV</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Source sentence character length → CV (Author)</td>
+<td>Spearman ρ</td>
+<td>−0.202</td>
+<td>&lt; 0.05 (all 90 cells)</td>
+<td>Longer sentence → lower CV</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Source sentence character length → CV (Analogy)</td>
+<td>Spearman ρ</td>
+<td>−0.144</td>
+<td>&lt; 0.05 (all 90 cells)</td>
+<td>Longer sentence → lower CV</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Source sentence word count → CV (Creatively)</td>
+<td>Spearman ρ</td>
+<td>−0.050</td>
+<td>&lt; 0.05</td>
+<td>Weaker than char length</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Source sentence word count → CV (Analogy)</td>
+<td>Spearman ρ</td>
+<td>−0.054</td>
+<td>&lt; 0.05</td>
+<td>Weaker than char length</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Source sentence word count → CV (Author)</td>
+<td>Spearman ρ</td>
+<td>−0.059</td>
+<td>&lt; 0.05</td>
+<td>Weaker than char length</td>
+<td>15</td>
+</tr>
+<tr>
+<td>English CV vs Arabic CV distribution</td>
+<td>KS statistic</td>
+<td>0.209</td>
+<td>8.6 × 10⁻¹⁷⁴</td>
+<td>Arabic more variable</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-translation-length">4. Translation Length<a class="headerlink" href="#4-translation-length" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: translation character length (Parts 2, 3).</em></p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>Method</th>
+<th>Value</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source sentence length → translation length</td>
+<td>Spearman ρ</td>
+<td>0.47–0.67</td>
+<td>—</td>
+<td>Longer sentence → longer translation</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Xinhua definition length → translation length</td>
+<td>Spearman ρ</td>
+<td>0.06–0.13</td>
+<td>—</td>
+<td>Richer definition → slightly longer</td>
+<td>2</td>
+</tr>
+<tr>
+<td>THUOCL frequency quintile → expansion ratio</td>
+<td>Spearman ρ</td>
+<td>−0.04 to +0.07</td>
+<td>—</td>
+<td>Negligible effect</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Source language effect on length (Creatively)</td>
+<td>One-way ANOVA</td>
+<td>F = 369</td>
+<td>4.9 × 10⁻¹⁵⁹</td>
+<td>Chinese &lt; Japanese ≈ Korean</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Source language effect on length (Analogy)</td>
+<td>One-way ANOVA</td>
+<td>F = 480</td>
+<td>1.1 × 10⁻²⁰⁵</td>
+<td>Chinese &lt; Japanese ≈ Korean</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Source language effect on length (Author)</td>
+<td>One-way ANOVA</td>
+<td>F = 461</td>
+<td>1.0 × 10⁻¹⁹⁷</td>
+<td>Chinese &lt; Japanese ≈ Korean</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-cross-strategy-length-coupling">5. Cross-Strategy Length Coupling<a class="headerlink" href="#5-cross-strategy-length-coupling" title="Permanent link">&para;</a></h2>
+<p><em>All Pearson r.  Outcome: are two strategies' translation lengths correlated?</em></p>
+<h3 id="global-across-all-languages">Global (across all languages)<a class="headerlink" href="#global-across-all-languages" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>r (50k sample)</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively ↔ Author</td>
+<td>0.675</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Creatively ↔ Analogy</td>
+<td>0.659</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Analogy ↔ Author</td>
+<td>0.580</td>
+<td>17</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-target-language">Per Target Language<a class="headerlink" href="#per-target-language" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Resource</th>
+<th>r(C↔A)</th>
+<th>r(C↔Au)</th>
+<th>r(A↔Au)</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Swahili</td>
+<td>low</td>
+<td>0.631</td>
+<td>0.690</td>
+<td>0.547</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Italian</td>
+<td>high</td>
+<td>0.624</td>
+<td>0.638</td>
+<td>0.523</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Spanish</td>
+<td>high</td>
+<td>0.621</td>
+<td>0.623</td>
+<td>0.523</td>
+<td>17</td>
+</tr>
+<tr>
+<td>French</td>
+<td>high</td>
+<td>0.615</td>
+<td>0.632</td>
+<td>0.536</td>
+<td>17</td>
+</tr>
+<tr>
+<td>English</td>
+<td>high</td>
+<td>0.596</td>
+<td>0.668</td>
+<td>0.566</td>
+<td>17</td>
+</tr>
+<tr>
+<td>German</td>
+<td>high</td>
+<td>0.592</td>
+<td>0.675</td>
+<td>0.539</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Hindi</td>
+<td>low</td>
+<td>0.576</td>
+<td>0.700</td>
+<td>0.516</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Bengali</td>
+<td>low</td>
+<td>0.568</td>
+<td>0.620</td>
+<td>0.482</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Russian</td>
+<td>high</td>
+<td>0.564</td>
+<td>0.599</td>
+<td>0.468</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Arabic</td>
+<td>low</td>
+<td>0.531</td>
+<td>0.574</td>
+<td>0.443</td>
+<td>17</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-span-length-cross-strategy-span-correlations">Per Span Length (cross-strategy span correlations)<a class="headerlink" href="#per-span-length-cross-strategy-span-correlations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>r range (across target languages)</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creatively span ↔ Analogy span</td>
+<td>0.22–0.29</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-span-position">6. Span Position<a class="headerlink" href="#6-span-position" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: relative span position <code>rel_start</code> (Parts 3, 15).</em></p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>Method</th>
+<th>Value</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morphological complexity (low/med/high) → rel_start</td>
+<td>Spearman ρ</td>
+<td>−0.038</td>
+<td>≈ 0 (sig., negligible effect)</td>
+<td>Medium morphology → earlier position</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p>Typological groupings (median rel_start, see Part 15 tables for full breakdown):</p>
+<table>
+<thead>
+<tr>
+<th>Word order</th>
+<th>Analogy rel_start</th>
+<th>Author rel_start</th>
+<th>Creatively rel_start</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVO</td>
+<td>0.598</td>
+<td>0.542</td>
+<td>0.567</td>
+</tr>
+<tr>
+<td>VSO</td>
+<td>0.576</td>
+<td>0.562</td>
+<td>0.560</td>
+</tr>
+<tr>
+<td>SOV</td>
+<td>0.472</td>
+<td>0.474</td>
+<td>0.456</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-cognate-span-similarity">7. Cognate Span Similarity<a class="headerlink" href="#7-cognate-span-similarity" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: span length or edit distance for cognate pairs.</em></p>
+<table>
+<thead>
+<tr>
+<th>Variable pair</th>
+<th>Method</th>
+<th>Value</th>
+<th>p</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZH span length ↔ KO span length (exact 4/4 pairs)</td>
+<td>Spearman ρ</td>
+<td>0.48–0.55</td>
+<td>—</td>
+<td>5, 13</td>
+</tr>
+<tr>
+<td>ZH span length ↔ KO span length (near 3/4 pairs)</td>
+<td>Spearman ρ</td>
+<td>0.38–0.53</td>
+<td>—</td>
+<td>5, 13</td>
+</tr>
+<tr>
+<td>ZH edit distance ↔ KO edit distance (all ZH–KO pairs)</td>
+<td>Spearman ρ</td>
+<td>0.38–0.55</td>
+<td>—</td>
+<td>13</td>
+</tr>
+<tr>
+<td>Mean edit: three-way triples vs all ZH–KO pairs</td>
+<td>—</td>
+<td>0.605 vs 0.605</td>
+<td>—</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-span-annotation-quality-error-rate">8. Span Annotation Quality (Error Rate)<a class="headerlink" href="#8-span-annotation-quality-error-rate" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: span containment error rate (Parts 1, 12, 18).</em>  Statistical tests.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>Method</th>
+<th>Key result</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Difficulty quartile → error rate (Analogy)</td>
+<td>Kruskal–Wallis</td>
+<td>H = 2.9, p = 0.41 (NS)</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Difficulty quartile → error rate (Author)</td>
+<td>Kruskal–Wallis</td>
+<td>H = 3.5, p = 0.32 (NS)</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Difficulty quartile → error rate (Creatively)</td>
+<td>Kruskal–Wallis</td>
+<td>H = 14.2, p = 0.003 (sig., negligible effect)</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Zero-sentence vs normal rows (Creatively length)</td>
+<td>Mann–Whitney U</td>
+<td>p = 1.3 × 10⁻⁴⁰</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Zero-sentence vs normal rows (Analogy length)</td>
+<td>Mann–Whitney U</td>
+<td>p = 3.5 × 10⁻¹⁹</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Zero-sentence vs normal rows (Author length)</td>
+<td>Mann–Whitney U</td>
+<td>p = 4.3 × 10⁻²²</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-dictionary-coverage-translation-behaviour">9. Dictionary Coverage &amp; Translation Behaviour<a class="headerlink" href="#9-dictionary-coverage-translation-behaviour" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: translation or span properties as a function of dictionary coverage (Part 2).</em></p>
+<table>
+<thead>
+<tr>
+<th>Variables</th>
+<th>Method</th>
+<th>Value</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Matched vs unmatched THUOCL idioms → translation length</td>
+<td>t-test</td>
+<td>p ≈ 0</td>
+<td>Rarer idioms produce longer translations (THUOCL matched: 102.6 vs unmatched: 113.7 chars, Creatively)</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-source-language-template-bias">10. Source Language Template Bias<a class="headerlink" href="#10-source-language-template-bias" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: template family distribution in English Analogy spans (Part 10).</em></p>
+<table>
+<thead>
+<tr>
+<th>Variables</th>
+<th>Method</th>
+<th>Value</th>
+<th>p</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source language → template family distribution</td>
+<td>χ²</td>
+<td>321.5 (df = 14)</td>
+<td>3.8 × 10⁻⁶⁰</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p>Directional biases: Japanese → cosmic/star (2×), Chinese → futility (1.9×), Korean → mist/castle (3×).</p>
+<hr />
+<h2 id="11-cross-target-vocabulary-overlap">11. Cross-Target Vocabulary Overlap<a class="headerlink" href="#11-cross-target-vocabulary-overlap" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: vocabulary sharing across target languages for the same idiom (Part 4).</em></p>
+<table>
+<thead>
+<tr>
+<th>Variable pair</th>
+<th>Method</th>
+<th>Key result</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Same language family pairs vs cross-family</td>
+<td>Jaccard comparison</td>
+<td>Within-family (e.g. FR–ES–IT) higher Jaccard than cross-family</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Span Jaccard C↔A ↔ dominant span fraction</td>
+<td>Spearman ρ</td>
+<td>0.903</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
