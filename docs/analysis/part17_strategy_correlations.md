@@ -1,11 +1,11 @@
 # Part 17: Strategy Length Correlations per Target Language
 
-Part 3 reports global Pearson r between translation lengths of the three strategies —
-Creatively↔Analogy r = 0.462, Creatively↔Author r = 0.546, Analogy↔Author r = 0.436 —
-but treats all 10 target languages as a single population.  If strategies are genuinely
-language-agnostic, these correlations should be consistent across targets.  If some
-languages "decouple" the strategies, it indicates that the translation mode varies more
-strongly than the idiom content in those languages.
+Cross-strategy translation length correlations are moderately strong at the global level —
+r(C↔A) = 0.659, r(C↔Au) = 0.675, r(A↔Au) = 0.580 (50k-row sample) — but these pool all
+10 target languages as a single population.  If strategies are genuinely language-agnostic,
+these correlations should be consistent across targets.  If some languages "decouple" the
+strategies, it indicates that the translation mode varies more strongly than the idiom
+content in those languages.
 
 ---
 
@@ -32,10 +32,9 @@ length in Arabic than in any other language.  VSO word order and rich templatic
 morphology give the model more degrees of freedom in how it structures each strategy's
 output.
 
-**Global baseline** (50k-row sample across all languages): r(C↔A) = 0.659, r(C↔Au) = 0.675,
-r(A↔Au) = 0.580.  The per-target values are uniformly *below* the global baseline because
-pooling languages introduces between-language variance that inflates the apparent
-within-strategy coupling.
+**Global baseline** (50k-row sample): r(C↔A) = 0.659, r(C↔Au) = 0.675, r(A↔Au) = 0.580.
+The per-target values are uniformly *below* the global baseline because pooling languages
+introduces between-language variance that inflates the apparent within-strategy coupling.
 
 ---
 

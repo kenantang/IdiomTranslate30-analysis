@@ -141,4 +141,4 @@ across all (idiom, source, strategy) triples.
 | Attractor coverage | Number of distinct source idioms that produce the same span in a given target language | `reverse_span_analysis.py` |
 | Template family | One of 8 named metaphor frames in English Analogy spans: weaving/thread, cosmic/star, kaleidoscope, futility ("trying to…"), dandelion/scattered, labyrinth/mirror, clockmaker precision, mist/castle | `utils.py` H16 |
 | Bathos span | Analogy span that is a single word or simple noun phrase rather than an extended metaphor | `analogy_deep_analysis.py` |
-| Over-represented bigram | A word or character bigram whose Analogy frequency is ≥ 2.5× its Creatively frequency (with Laplace smoothing) | `multilingual_slop.py` |
+| Over-represented bigram | A bigram whose Analogy frequency is ≥ 2.5× its Creatively frequency (with Laplace smoothing, min count 30); word bigrams for Latin-script languages, character bigrams for Arabic, Indic, and Cyrillic scripts | `multilingual_slop.py` |

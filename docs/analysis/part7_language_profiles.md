@@ -13,10 +13,12 @@ This is a coarse classification but a defensible one — the four low-resource l
 underrepresented in standard large-scale pretraining corpora relative to the six European languages.
 
 > **Note on span_ratio:** The target-language profile matrix includes a per-language span
-> ratio (span character length / translation character length). English returns an anomalous
-> value of 1.14 (vs ~0.28–0.31 for all other languages), which exceeds 1.0 and is therefore
-> impossible. This is a computation artefact in the profile aggregation step and is excluded
-> from the discussion below; all other metrics are reliable.
+> ratio. English returns a value of 1.14 (vs ~0.28–0.31 for all other languages). The column
+> stores a *word-level* expansion ratio (translation word count / source idiom character count)
+> rather than a character-length span ratio, making the value arithmetically consistent but not
+> directly comparable across languages on a character basis. This metric is excluded from the
+> character-level comparisons below; see [Part 20](part20_english_pretraining_bias.md) for a
+> full interpretation of the English span-ratio anomaly.
 
 ## Context Sensitivity and Lexical Diversity by Target Language
 

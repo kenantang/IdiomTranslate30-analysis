@@ -49,6 +49,17 @@ Then open <http://127.0.0.1:8000>.
 | [Part 9 — Analogy Slop Patterns](docs/analysis/part9_analogy_slop.md) | Recurring LLM clichés in the Analogy strategy |
 | [Part 10 — Additional Analyses](docs/analysis/part10_additional.md) | Slop scores, template vs surface diversity, bathos |
 | [Part 11 — Heuristics & LLM-as-a-Judge](docs/analysis/part11_heuristics.md) | All 29 heuristic matching choices; upgrade proposals |
+| [Part 12 — Pairwise & Stratified Analysis](docs/analysis/part12_pairwise_stratified.md) | Error rates per (source × target) cell; script-family groupings |
+| [Part 13 — Extended Cognate Analysis](docs/analysis/part13_extended_cognates.md) | Three-way ZH–JA–KO triples; divergence ranking |
+| [Part 14 — Anomaly & Divergence Baseline](docs/analysis/part14_anomaly_divergence.md) | Zero-sentence rows; within- vs between-idiom CV ratio |
+| [Part 15 — Context, Difficulty & Typology](docs/analysis/part15_context_difficulty.md) | Sentence length → CV; OLS difficulty regression; typology effects |
+| [Part 16 — Multilingual Templates](docs/analysis/part16_multilingual_templates.md) | Data-driven bigram over-representation across all 10 target languages |
+| [Part 17 — Strategy Length Correlations](docs/analysis/part17_strategy_correlations.md) | Pearson r(C↔A/Au) per target language; resource-level effect |
+| [Part 18 — Strategy by Idiom Category](docs/analysis/part18_strategy_by_category.md) | Error rates and CV across difficulty quartile, source language, 4-char flag |
+| [Part 19 — Semantic Consistency Audit](docs/analysis/part19_semantic_consistency.md) | Stability = 1 − mean edit distance; most/least stable idioms |
+| [Part 20 — English Pretraining Bias](docs/analysis/part20_english_pretraining_bias.md) | English z-scores vs high-resource group; span-ratio anomaly; anomaly ranking |
+| [Reference: Definitions](docs/reference/definitions.md) | All metrics, scores, and derived variables |
+| [Reference: Correlation Map](docs/reference/correlation_map.md) | All pairwise correlations organized by outcome variable |
 
 ## Repository Structure
 
