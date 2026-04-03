@@ -1166,6 +1166,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part21_correlation_gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 21: Correlation Gap Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1484,6 +1512,50 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#12-attractor-coverage-per-idiom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Attractor Coverage (Per-Idiom)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-slop-score-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Slop Score (Outcome)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-expansion-ratio-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Expansion Ratio (Outcome)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-consistency-metric-intercorrelations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Consistency Metric Intercorrelations
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1686,6 +1758,50 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#12-attractor-coverage-per-idiom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Attractor Coverage (Per-Idiom)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-slop-score-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Slop Score (Outcome)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-expansion-ratio-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Expansion Ratio (Outcome)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-consistency-metric-intercorrelations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Consistency Metric Intercorrelations
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1872,6 +1988,20 @@ All Spearman.</p>
 <td>More frequent → slightly more stable</td>
 <td>19</td>
 </tr>
+<tr>
+<td>Cross-target overlap</td>
+<td>+0.032</td>
+<td>0.002</td>
+<td>Practical null (r² &lt; 0.001)</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Slop score</td>
+<td>−0.016</td>
+<td>0.119 (NS)</td>
+<td>Null</td>
+<td>21</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -1944,6 +2074,38 @@ All Spearman.</p>
 <td>8.6 × 10⁻¹⁷⁴</td>
 <td>Arabic more variable</td>
 <td>14</td>
+</tr>
+<tr>
+<td>jaccard_div (per strategy, cell level)</td>
+<td>Spearman ρ</td>
+<td>−0.19 to −0.30</td>
+<td>≈ 0</td>
+<td>Higher length variation → lower Jaccard similarity (more vocabulary diversity)</td>
+<td>21</td>
+</tr>
+<tr>
+<td>span_uniq (per strategy, cell level)</td>
+<td>Spearman ρ</td>
+<td>−0.01 to −0.04</td>
+<td>≈ 0</td>
+<td>Near-independent</td>
+<td>21</td>
+</tr>
+<tr>
+<td>dom_frac (language level, n=10)</td>
+<td>Spearman ρ</td>
+<td>−0.697</td>
+<td>0.025</td>
+<td>Higher length variation → lower dominant-span reuse (both reflect context-sensitivity)</td>
+<td>21</td>
+</tr>
+<tr>
+<td>template_rate (language level, n=10)</td>
+<td>Spearman ρ</td>
+<td>+0.709</td>
+<td>0.022</td>
+<td>More templates → more length variation</td>
+<td>21</td>
 </tr>
 </tbody>
 </table>
@@ -2252,11 +2414,25 @@ All Spearman.</p>
 <td>—</td>
 <td>13</td>
 </tr>
+<tr>
+<td>match_type (exact 4/4 vs near 3/4) → edit_pair_mean</td>
+<td>Mann–Whitney U</td>
+<td>p = 0.838 (NS)</td>
+<td>Null: character overlap does not predict translation divergence</td>
+<td>21</td>
+</tr>
+<tr>
+<td>all-exact triple (3×exact) vs mixed → edit_pair_mean</td>
+<td>Mann–Whitney U</td>
+<td>p = 0.955 (NS)</td>
+<td>Null; replicates pairwise finding at triple level</td>
+<td>21</td>
+</tr>
 </tbody>
 </table>
 <hr />
 <h2 id="8-span-annotation-quality-error-rate">8. Span Annotation Quality (Error Rate)<a class="headerlink" href="#8-span-annotation-quality-error-rate" title="Permanent link">&para;</a></h2>
-<p><em>Outcome: span containment error rate (Parts 1, 12, 18).</em>  Statistical tests.</p>
+<p><em>Outcome: span containment error rate (Parts 1, 12, 18, 21).</em>  Statistical tests.</p>
 <table>
 <thead>
 <tr>
@@ -2302,6 +2478,30 @@ All Spearman.</p>
 <td>Mann–Whitney U</td>
 <td>p = 4.3 × 10⁻²²</td>
 <td>14</td>
+</tr>
+<tr>
+<td>cv (cell level, n=30 src×tgt pairs)</td>
+<td>Spearman ρ</td>
+<td>+0.342, p = 0.064</td>
+<td>Marginal: high-CV cells → more errors</td>
+</tr>
+<tr>
+<td>translation_length (cell level, n=30)</td>
+<td>Spearman ρ</td>
+<td>−0.467, p = 0.009</td>
+<td>Shorter translations → more errors</td>
+</tr>
+<tr>
+<td>template_rate (language level, n=10)</td>
+<td>Spearman ρ</td>
+<td>+0.224, p = 0.533 (NS)</td>
+<td>Null</td>
+</tr>
+<tr>
+<td>expansion_ratio (per-idiom)</td>
+<td>Spearman ρ</td>
+<td>−0.005, p = 0.614 (NS)</td>
+<td>Null: annotation failure is a language-level, not idiom-level property</td>
 </tr>
 </tbody>
 </table>
@@ -2354,7 +2554,7 @@ All Spearman.</p>
 <p>Directional biases: Japanese → cosmic/star (2×), Chinese → futility (1.9×), Korean → mist/castle (3×).</p>
 <hr />
 <h2 id="11-cross-target-vocabulary-overlap">11. Cross-Target Vocabulary Overlap<a class="headerlink" href="#11-cross-target-vocabulary-overlap" title="Permanent link">&para;</a></h2>
-<p><em>Outcome: vocabulary sharing across target languages for the same idiom (Part 4).</em></p>
+<p><em>Outcome: vocabulary sharing across target languages for the same idiom (Parts 4, 21).</em></p>
 <table>
 <thead>
 <tr>
@@ -2377,8 +2577,266 @@ All Spearman.</p>
 <td>0.903</td>
 <td>7</td>
 </tr>
+<tr>
+<td>Stability (cross-strategy agreement)</td>
+<td>Spearman ρ</td>
+<td>+0.032, p = 0.002</td>
+<td>Practical null (r² &lt; 0.001)</td>
+</tr>
+<tr>
+<td>Slop score</td>
+<td>Spearman ρ</td>
+<td>+0.028, p = 0.009</td>
+<td>Practical null (r² &lt; 0.001)</td>
+</tr>
+<tr>
+<td>Attractor coverage (per-idiom)</td>
+<td>Spearman ρ</td>
+<td>+0.127, p &lt; 0.001</td>
+<td>Conventional idioms → more shared span phrases</td>
+</tr>
 </tbody>
 </table>
+<hr />
+<h2 id="12-attractor-coverage-per-idiom">12. Attractor Coverage (Per-Idiom)<a class="headerlink" href="#12-attractor-coverage-per-idiom" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: mean n_idioms per span phrase used by an idiom (Parts 8, 21).</em>  All Spearman, n ≈ 9,062.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cross-target overlap</td>
+<td>+0.127</td>
+<td>&lt; 0.001</td>
+<td>Conventional idioms → more shared attractors</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Difficulty</td>
+<td>−0.138</td>
+<td>&lt; 0.001</td>
+<td>Easier idioms → more shared attractors</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Slop score</td>
+<td>+0.094</td>
+<td>&lt; 0.001</td>
+<td>Template-prone idioms → more shared spans</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p>All effects are small in magnitude (r² ≤ 0.02); attractor coverage is largely independent of other metrics.</p>
+<hr />
+<h2 id="13-slop-score-outcome">13. Slop Score (Outcome)<a class="headerlink" href="#13-slop-score-outcome" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: fraction of Analogy spans matching a cliché template (Parts 9, 10, 21).</em>  All Spearman.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Expansion ratio</td>
+<td>−0.109</td>
+<td>&lt; 0.001</td>
+<td>Template use → shorter output</td>
+<td>21</td>
+</tr>
+<tr>
+<td>In xinhua dictionary</td>
+<td>+0.030</td>
+<td>0.050</td>
+<td>Standardised idioms → slightly more template-prone</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Difficulty</td>
+<td>−0.015</td>
+<td>0.166 (NS)</td>
+<td>Null</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>−0.016</td>
+<td>0.119 (NS)</td>
+<td>Null</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Xinhua definition length</td>
+<td>+0.017</td>
+<td>0.282 (NS)</td>
+<td>Null</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="14-expansion-ratio-outcome">14. Expansion Ratio (Outcome)<a class="headerlink" href="#14-expansion-ratio-outcome" title="Permanent link">&para;</a></h2>
+<p><em>Outcome: mean word-count expansion ratio per idiom (Parts 3, 6, 21).</em>  All Spearman.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>Direction</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Composite difficulty</td>
+<td>+0.649</td>
+<td>≈ 0</td>
+<td>High expansion → harder</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Idiom character length</td>
+<td>+0.149</td>
+<td>&lt; 0.001</td>
+<td>Longer idioms expand more</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Slop score</td>
+<td>−0.109</td>
+<td>&lt; 0.001</td>
+<td>Template use compresses output</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>+0.023</td>
+<td>0.027</td>
+<td>Marginal positive</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="15-consistency-metric-intercorrelations">15. Consistency Metric Intercorrelations<a class="headerlink" href="#15-consistency-metric-intercorrelations" title="Permanent link">&para;</a></h2>
+<p><em>All Spearman.  Cell level: n ≈ 90,620; language level: n = 10.</em></p>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>Level</th>
+<th>Strategy</th>
+<th>ρ range</th>
+<th>p</th>
+<th>Part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cv ↔ jaccard_div</td>
+<td>cell</td>
+<td>Creatively</td>
+<td>−0.194</td>
+<td>≈ 0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>cv ↔ jaccard_div</td>
+<td>cell</td>
+<td>Analogy</td>
+<td>−0.181</td>
+<td>≈ 0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>cv ↔ jaccard_div</td>
+<td>cell</td>
+<td>Author</td>
+<td>−0.296</td>
+<td>≈ 0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>cv ↔ span_uniq</td>
+<td>cell</td>
+<td>Creatively</td>
+<td>−0.014</td>
+<td>&lt; 0.001</td>
+<td>21</td>
+</tr>
+<tr>
+<td>cv ↔ span_uniq</td>
+<td>cell</td>
+<td>Analogy</td>
+<td>−0.018</td>
+<td>&lt; 0.001</td>
+<td>21</td>
+</tr>
+<tr>
+<td>cv ↔ span_uniq</td>
+<td>cell</td>
+<td>Author</td>
+<td>−0.038</td>
+<td>&lt; 0.001</td>
+<td>21</td>
+</tr>
+<tr>
+<td>jaccard_div ↔ span_uniq</td>
+<td>cell</td>
+<td>Creatively</td>
+<td>−0.262</td>
+<td>≈ 0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>jaccard_div ↔ span_uniq</td>
+<td>cell</td>
+<td>Analogy</td>
+<td>−0.081</td>
+<td>≈ 0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>jaccard_div ↔ span_uniq</td>
+<td>cell</td>
+<td>Author</td>
+<td>−0.141</td>
+<td>≈ 0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>cv ↔ dom_frac</td>
+<td>language</td>
+<td>—</td>
+<td>−0.697</td>
+<td>0.025</td>
+<td>21</td>
+</tr>
+<tr>
+<td>dom_frac ↔ span_uniq</td>
+<td>language</td>
+<td>—</td>
+<td>−0.539</td>
+<td>0.107 (NS)</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p>All three cell-level metrics share &lt; 9% of variance (ρ² ≤ 0.09) — they are non-redundant
+and should continue to be reported separately.</p>
 
 
 

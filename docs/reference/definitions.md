@@ -39,7 +39,7 @@ domain.  The "Computed in" column points to the script that produces the value.
 | Name | Notation | Definition | Computed in |
 |---|---|---|---|
 | Within-cell CV | `cv` | Coefficient of variation of translation length across the 10 context sentences for one (idiom, target, strategy) cell | `context_sensitivity.py` |
-| Jaccard diversity | `jaccard_div` | Mean pairwise word-set Jaccard similarity across all C(10, 2) sentence pairs in a cell; higher = more lexically diverse | `context_sensitivity.py` |
+| Jaccard similarity | `jaccard_div` | Mean pairwise word-set Jaccard similarity across all C(10, 2) sentence pairs in a cell: `|A∩B| / |A∪B|`. **Higher = more vocabulary overlap = less within-cell diversity.** Named `jaccard_div` historically but measures similarity, not distance. Note: inflection-blind and inapplicable to CJK (no inter-word spaces), so Arabic and Indic-script values are systematically lower than Latin-script values for structural rather than purely behavioural reasons. | `context_sensitivity.py` |
 | Span uniqueness | `span_uniq` | Fraction of the 10 sentence-level spans that are distinct strings in a cell | `context_sensitivity.py` |
 | Dominant span fraction | `dom_frac` | Fraction of the 10 sentences that share the single most-common span phrase | `english_and_resource_profile.py` |
 | Type–token ratio (TTR) | — | Unique word types / total word tokens in a translation or span | `lexical_diversity.py` |
@@ -62,7 +62,7 @@ domain.  The "Computed in" column points to the script that produces the value.
 
 | Name | Notation | Definition | Computed in |
 |---|---|---|---|
-| Composite difficulty score | `difficulty` | Normalised average of four components: (1) mean cross-strategy unigram divergence, (2) mean expansion ratio, (3) mean within-cell CV, (4) mean cross-target Jaccard dissimilarity. Each component is ranked 0–1 before averaging. | `difficulty.py` |
+| Composite difficulty score | `difficulty` | Average of four percentile-ranked components (each mapped 0–1 via `rank / max_rank`): (1) mean cross-strategy unigram divergence `div_mean_edit`, (2) mean expansion ratio `exp_mean`, (3) mean within-cell CV `mean_cv`, (4) mean cross-target Jaccard dissimilarity `wf_jaccard`. Higher score = harder to translate consistently. | `difficulty.py` |
 | Slop score | `slop_score` | Fraction of the 10 English Analogy spans for an idiom that match one of the 8 named template families | `analogy_deep_analysis.py` |
 | Template rate (multilingual) | — | Fraction of Analogy spans containing ≥ 1 over-represented bigram (2.5× Creatively rate) for a given target language | `multilingual_slop.py` |
 
@@ -116,6 +116,19 @@ across all (idiom, source, strategy) triples.
 
 ---
 
+## Script Family Grouping (Part 12)
+
+Target languages grouped by writing system for the pairwise error analysis.
+
+| Script family | Languages |
+|---|---|
+| Latin | English, French, German, Spanish, Italian, Swahili |
+| Cyrillic | Russian |
+| Arabic | Arabic |
+| Indic | Bengali, Hindi |
+
+---
+
 ## Linguistic Typology (Part 15)
 
 | Property | Values | Languages |
@@ -138,7 +151,8 @@ across all (idiom, source, strategy) triples.
 | Name | Definition | Computed in |
 |---|---|---|
 | Translation attractor | A span phrase that is reused across multiple source idioms mapping to the same target concept | `reverse_span_analysis.py` |
-| Attractor coverage | Number of distinct source idioms that produce the same span in a given target language | `reverse_span_analysis.py` |
+| Attractor coverage (per span) | Number of distinct source idioms (`n_idioms`) that produce the same normalized span phrase in a given target language | `reverse_span_analysis.py` |
+| Attractor coverage (per idiom) | Mean `n_idioms` across all span phrases produced by an idiom across strategies and target languages; measures how "attractor-shared" an idiom's translations are | `deferred_correlations.py` |
 | Template family | One of 8 named metaphor frames in English Analogy spans: weaving/thread, cosmic/star, kaleidoscope, futility ("trying to…"), dandelion/scattered, labyrinth/mirror, clockmaker precision, mist/castle | `utils.py` H16 |
 | Bathos span | Analogy span that is a single word or simple noun phrase rather than an extended metaphor | `analogy_deep_analysis.py` |
 | Over-represented bigram | A bigram whose Analogy frequency is ≥ 2.5× its Creatively frequency (with Laplace smoothing, min count 30); word bigrams for Latin-script languages, character bigrams for Arabic, Indic, and Cyrillic scripts | `multilingual_slop.py` |

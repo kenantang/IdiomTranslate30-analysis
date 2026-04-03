@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../../analysis/part20_english_pretraining_bias/">
+        <link rel="prev" href="../../analysis/part21_correlation_gaps/">
       
       
         <link rel="next" href="../correlation_map/">
@@ -1168,6 +1168,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analysis/part21_correlation_gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 21: Correlation Gap Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1387,6 +1415,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#script-family-grouping-part-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script Family Grouping (Part 12)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#linguistic-typology-part-15" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1560,6 +1599,17 @@
     <span class="md-ellipsis">
       
         Target Language Profile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#script-family-grouping-part-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script Family Grouping (Part 12)
       
     </span>
   </a>
@@ -1745,9 +1795,9 @@ domain.  The "Computed in" column points to the script that produces the value.<
 <td><code>context_sensitivity.py</code></td>
 </tr>
 <tr>
-<td>Jaccard diversity</td>
+<td>Jaccard similarity</td>
 <td><code>jaccard_div</code></td>
-<td>Mean pairwise word-set Jaccard similarity across all C(10, 2) sentence pairs in a cell; higher = more lexically diverse</td>
+<td>Mean pairwise word-set Jaccard similarity across all C(10, 2) sentence pairs in a cell: <code>|A∩B| / |A∪B|</code>. <strong>Higher = more vocabulary overlap = less within-cell diversity.</strong> Named <code>jaccard_div</code> historically but measures similarity, not distance. Note: inflection-blind and inapplicable to CJK (no inter-word spaces), so Arabic and Indic-script values are systematically lower than Latin-script values for structural rather than purely behavioural reasons.</td>
 <td><code>context_sensitivity.py</code></td>
 </tr>
 <tr>
@@ -1829,7 +1879,7 @@ domain.  The "Computed in" column points to the script that produces the value.<
 <tr>
 <td>Composite difficulty score</td>
 <td><code>difficulty</code></td>
-<td>Normalised average of four components: (1) mean cross-strategy unigram divergence, (2) mean expansion ratio, (3) mean within-cell CV, (4) mean cross-target Jaccard dissimilarity. Each component is ranked 0–1 before averaging.</td>
+<td>Average of four percentile-ranked components (each mapped 0–1 via <code>rank / max_rank</code>): (1) mean cross-strategy unigram divergence <code>div_mean_edit</code>, (2) mean expansion ratio <code>exp_mean</code>, (3) mean within-cell CV <code>mean_cv</code>, (4) mean cross-target Jaccard dissimilarity <code>wf_jaccard</code>. Higher score = harder to translate consistently.</td>
 <td><code>difficulty.py</code></td>
 </tr>
 <tr>
@@ -2009,6 +2059,35 @@ across all (idiom, source, strategy) triples.</p>
 </tbody>
 </table>
 <hr />
+<h2 id="script-family-grouping-part-12">Script Family Grouping (Part 12)<a class="headerlink" href="#script-family-grouping-part-12" title="Permanent link">&para;</a></h2>
+<p>Target languages grouped by writing system for the pairwise error analysis.</p>
+<table>
+<thead>
+<tr>
+<th>Script family</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latin</td>
+<td>English, French, German, Spanish, Italian, Swahili</td>
+</tr>
+<tr>
+<td>Cyrillic</td>
+<td>Russian</td>
+</tr>
+<tr>
+<td>Arabic</td>
+<td>Arabic</td>
+</tr>
+<tr>
+<td>Indic</td>
+<td>Bengali, Hindi</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="linguistic-typology-part-15">Linguistic Typology (Part 15)<a class="headerlink" href="#linguistic-typology-part-15" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2088,9 +2167,14 @@ across all (idiom, source, strategy) triples.</p>
 <td><code>reverse_span_analysis.py</code></td>
 </tr>
 <tr>
-<td>Attractor coverage</td>
-<td>Number of distinct source idioms that produce the same span in a given target language</td>
+<td>Attractor coverage (per span)</td>
+<td>Number of distinct source idioms (<code>n_idioms</code>) that produce the same normalized span phrase in a given target language</td>
 <td><code>reverse_span_analysis.py</code></td>
+</tr>
+<tr>
+<td>Attractor coverage (per idiom)</td>
+<td>Mean <code>n_idioms</code> across all span phrases produced by an idiom across strategies and target languages; measures how "attractor-shared" an idiom's translations are</td>
+<td><code>deferred_correlations.py</code></td>
 </tr>
 <tr>
 <td>Template family</td>
@@ -2104,7 +2188,7 @@ across all (idiom, source, strategy) triples.</p>
 </tr>
 <tr>
 <td>Over-represented bigram</td>
-<td>A word or character bigram whose Analogy frequency is ≥ 2.5× its Creatively frequency (with Laplace smoothing)</td>
+<td>A bigram whose Analogy frequency is ≥ 2.5× its Creatively frequency (with Laplace smoothing, min count 30); word bigrams for Latin-script languages, character bigrams for Arabic, Indic, and Cyrillic scripts</td>
 <td><code>multilingual_slop.py</code></td>
 </tr>
 </tbody>

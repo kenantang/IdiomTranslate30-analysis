@@ -73,6 +73,7 @@ nav:
       - "Part 18: Strategy by Idiom Category": analysis/part18_strategy_by_category.md
       - "Part 19: Semantic Consistency Audit": analysis/part19_semantic_consistency.md
       - "Part 20: English Pretraining Bias": analysis/part20_english_pretraining_bias.md
+      - "Part 21: Correlation Gap Analyses": analysis/part21_correlation_gaps.md
   - Reference:
       - Definitions: reference/definitions.md
       - Correlation Map: reference/correlation_map.md

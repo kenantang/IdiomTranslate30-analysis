@@ -1,117 +1,80 @@
 # TODO
 
-## Pending: Correlation Gap Analyses
-
-Identified by systematic audit of `docs/reference/correlation_map.md` against `docs/reference/definitions.md`.
-All items below have the necessary data already available in `data/processed/`.
+All correlation gap analyses from the first audit round are complete.
+See `docs/analysis/part21_correlation_gaps.md` and `docs/reference/correlation_map.md`.
 
 ---
 
-### 1. Consistency metric intercorrelations
+## Remaining Analysis Gaps
 
-`cv`, `jaccard_div`, `span_uniq`, and `dom_frac` are all used as consistency measures
-throughout the analysis but their pairwise correlations have never been computed.
-If they are near-redundant, reporting them separately is misleading.
+Identified in the second consistency audit (2026-04-03).
 
-- [ ] `cv` ↔ `jaccard_div` (Spearman ρ, per strategy)
-- [ ] `cv` ↔ `span_uniq` (Spearman ρ, per strategy)
-- [ ] `cv` ↔ `dom_frac` (Spearman ρ)
-- [ ] `dom_frac` ↔ `span_uniq` (Spearman ρ)
-- [ ] `jaccard_div` ↔ `span_uniq` (Spearman ρ)
+### A. Source-Language Effects (medium effort)
 
-Data: `data/processed/context_sensitivity.parquet`, `data/processed/target_language_profile.parquet`
+The analysis frequently conditions on target language but treats source language
+as a covariate.  Dedicated source-language analyses are sparse.
 
----
+- [ ] **Slop score by source language** — are Chinese, Japanese, or Korean idioms
+  more template-prone in English Analogy spans?
+  Data: `data/processed/idiom_slop_scores.csv` (has `source_language`)
 
-### 2. Slop score as outcome
+- [ ] **Stability by source language** — do Chinese, Japanese, or Korean idioms
+  show different cross-strategy semantic stability?
+  Data: `data/processed/semantic_consistency.csv` (has `source_language`)
 
-`slop_score` is defined and used in Parts 9–10 but never treated as a dependent variable.
+- [ ] **Expansion ratio by source language** — Part 15 OLS regression includes
+  source language dummies, but per-source expansion ratio distribution has not been
+  plotted or formally tested.
+  Data: `data/processed/idiom_difficulty.parquet` (`exp_mean` + `source_language`)
 
-- [ ] `slop_score` ↔ `difficulty` — do templated Analogy outputs cluster on easier or harder idioms?
-- [ ] `slop_score` ↔ `stability` (semantic stability, Part 19)
-- [ ] `slop_score` ↔ `expansion_ratio` — does the model use longer output when it can't find a template?
-- [ ] `slop_score` ↔ `in_xinhua` / `def_len` — does better documentation suppress template use?
+### B. Strategy × Target Interaction Effects (medium effort)
 
-Data: `data/processed/idiom_slop_scores.csv`, `data/processed/idiom_difficulty.parquet`,
-`data/processed/semantic_consistency.csv`, `data/processed/idiom_metadata.parquet`
+Parts 12–18 analyse strategies and target languages separately, but the
+*interaction* (does Analogy behave differently in Arabic vs English relative to
+Creatively?) has not been formally tested.
 
----
+- [ ] **Error rate: strategy × target interaction** — 3×10 ANOVA interaction term.
+  Data: `data/processed/pairwise_error_rates.csv`
 
-### 3. Cross-target vocabulary overlap as outcome
+- [ ] **CV: strategy × target** — does the Author strategy show more CV variation
+  across target languages than Creatively?
+  Data: `data/processed/context_sensitivity.parquet`
 
-`cross_target_overlap` (mean cross-language Jaccard per idiom) is a component of the
-difficulty score but has never been analyzed as a standalone outcome.
+### C. Span Position × Source Language (low effort)
 
-- [ ] `cross_target_overlap` ↔ `stability` — is cross-language consistency correlated with cross-strategy consistency?
-- [ ] `cross_target_overlap` ↔ `slop_score` — do templated idioms show higher cross-language overlap?
-- [ ] `cross_target_overlap` ↔ `attractor_coverage` — do high-attractor idioms also cluster cross-linguistically?
+Part 3 notes that Chinese and Korean sources place spans later (~0.59) than
+Japanese (~0.54), but no formal test was reported.
 
-Data: `data/processed/cross_target_overlap.parquet`, `data/processed/semantic_consistency.csv`,
-`data/processed/idiom_slop_scores.csv`, `data/processed/span_attractor_counts.parquet`
+- [ ] Kruskal–Wallis or one-way ANOVA: source language → relative span position,
+  controlling for target language.
+  Data: `data/processed/span_positions.parquet`
 
----
+### D. JA–KO Cognate Divergence (medium effort)
 
-### 4. Attractor coverage as outcome
+The cognate divergence analysis (Parts 5, 13, 21) focuses on ZH–KO and ZH–JA
+pairs.  JA–KO has 802 pairs (`koja_cognate_pairs.csv`) but no edit-distance
+divergence ranking equivalent to `cognate_divergence_ranking.csv`.
 
-`attractor_coverage` (n_idioms per span phrase) is reported qualitatively in Part 8
-but never correlated with other metrics.
-
-- [ ] `attractor_coverage` ↔ `difficulty` — do semantically clear idioms (low difficulty) produce high-coverage attractors?
-- [ ] `attractor_coverage` ↔ `slop_score` — do high-attractor spans coincide with template-prone idioms?
-- [ ] `attractor_coverage` ↔ `cross_target_overlap`
-
-Data: `data/processed/span_attractor_counts.parquet`, `data/processed/idiom_difficulty.parquet`,
-`data/processed/idiom_slop_scores.csv`, `data/processed/cross_target_overlap.parquet`
+- [ ] Compute per-pair edit_pair_mean for JA–KO cognate pairs and compare
+  exact_4/4 vs near_3/4 (Mann–Whitney), completing the three-way analysis.
+  Data: raw parquet + `data/processed/koja_cognate_pairs.csv`
 
 ---
 
-### 5. Error rate ↔ consistency and length metrics
+## Definition Formalisation Gaps
 
-Section 8 of the correlation map only tests difficulty quartile and zero-sentence as
-predictors of error rate. Missing direct correlations:
+### E. `jaccard_div` naming (low effort — documentation only)
 
-- [ ] `error_rate` ↔ `cv` — do spans from high-CV cells also fail containment more often?
-- [ ] `error_rate` ↔ `translation_length` — do longer translations produce more span mismatches?
-- [ ] `error_rate` ↔ `expansion_ratio` — does a high expansion ratio predict span annotation failure?
+The metric is named `jaccard_div` but stores Jaccard **similarity** (not
+distance/diversity).  The definition has been corrected in `definitions.md`, but
+the column name in all parquet files still says `jaccard_div`.  If the dataset is
+ever published, consider renaming to `jaccard_sim` with a deprecation note.
+(No script changes needed for the current analysis.)
 
-Data: `data/processed/pairwise_error_rates.csv`, `data/processed/context_sensitivity.parquet`,
-raw data (`data/raw/IdiomTranslate30.parquet`)
+### F. Semantic stability averaging (low effort — documentation only)
 
----
-
-### 6. Cognate match type → translation divergence
-
-The cognate section (Part 7, correlation map section 7) reports ρ separately for
-exact and near-3 pairs but never tests whether match type *predicts* divergence.
-
-- [ ] `match_type` (exact_4/4 vs near_3/4) → `edit_pair_mean` — Mann–Whitney U test
-- [ ] Within three-way triples: does all-exact vs mixed match type predict lower divergence?
-
-Data: `data/processed/cognate_divergence_ranking.csv`, `data/processed/triple_cognates.csv`
-
----
-
-### 7. Expansion ratio as outcome
-
-`expansion_ratio` is only used as a predictor of difficulty (ρ = +0.649). As an outcome
-it is never quantified:
-
-- [ ] `expansion_ratio` ↔ `char_len` — Part 2 states non-4-char idioms expand more, but ρ not reported
-- [ ] `expansion_ratio` ↔ `stability` — do idioms with more expansive translations show more cross-strategy disagreement?
-- [ ] `expansion_ratio` ↔ `slop_score` — does template use compress or expand output length?
-
-Data: `data/raw/IdiomTranslate30.parquet`, `data/processed/semantic_consistency.csv`,
-`data/processed/idiom_slop_scores.csv`
-
----
-
-### 8. Multilingual template rate ↔ target language metrics
-
-`template_rate` per target language (Part 16) is only reported as a percentage. Never
-formally correlated with other per-language profile metrics.
-
-- [ ] `template_rate` ↔ `error_rate` (per target language, n=10, Spearman ρ)
-- [ ] `template_rate` ↔ `cv` (per target language, n=10)
-- [ ] `template_rate` ↔ `resource` — the 3× difference (27.9% low vs 9.1% high) should be formally tested (Mann–Whitney, n=4 vs n=6)
-
-Data: `data/processed/multilingual_template_scores.csv`, `data/processed/target_language_profile.parquet`
+The `stability` definition says "averaged across available target languages per
+idiom" but does not specify: are errored rows (span not in translation) included
+or excluded?  The `semantic_consistency_audit.py` script should be checked and
+the definition updated accordingly.
+Data: `scripts/semantic_consistency_audit.py` lines ~40–70

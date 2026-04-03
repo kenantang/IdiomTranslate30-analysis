@@ -1,0 +1,2572 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Analysis of the IdiomTranslate30 massively multilingual idiom translation dataset">
+      
+      
+        <meta name="author" content="Kenan Tang">
+      
+      
+      
+        <link rel="prev" href="../part20_english_pretraining_bias/">
+      
+      
+        <link rel="next" href="../../reference/definitions/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Part 21: Correlation Gap Analyses - IdiomTranslate30 Analysis</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#part-21-correlation-gap-analyses" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-header__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IdiomTranslate30 Analysis
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Part 21: Correlation Gap Analyses
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dataset/overview/" class="md-tabs__link">
+          
+  
+  
+  Dataset
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../part1_data_quality/" class="md-tabs__link">
+          
+  
+  
+  Analysis
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/definitions/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IdiomTranslate30 Analysis" class="md-nav__button md-logo" aria-label="IdiomTranslate30 Analysis" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IdiomTranslate30 Analysis
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Dataset
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/edge_cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Edge Cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dataset/data_dependencies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part1_data_quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1: Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2_idiom_coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2: Idiom Coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part3_translation_behaviour/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3: Translation Behaviour
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part4_cross_lingual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 4: Cross-Lingual Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part5_cognate_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 5: Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part6_synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6: Synthesis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part7_language_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 7: Language Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part8_reverse_span/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 8: Reverse Span Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part9_analogy_slop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 9: Analogy Slop Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part10_additional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 10: Additional Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part11_heuristics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 11: Heuristics & LLM-as-a-Judge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part12_pairwise_stratified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 12: Pairwise & Stratified Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part13_extended_cognates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 13: Extended Cognate Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part14_anomaly_divergence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 14: Anomaly & Divergence Baseline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part15_context_difficulty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 15: Context, Difficulty & Typology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part16_multilingual_templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 16: Multilingual Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part17_strategy_correlations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 17: Strategy Length Correlations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part18_strategy_by_category/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 18: Strategy by Idiom Category
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part19_semantic_consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 19: Semantic Consistency Audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part20_english_pretraining_bias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 20: English Pretraining Bias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 21: Correlation Gap Analyses
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 21: Correlation Gap Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#211-consistency-metric-intercorrelations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 Consistency Metric Intercorrelations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.1 Consistency Metric Intercorrelations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cell-level-results-n-90620" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cell-level results (n ≈ 90,620)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-level-results-n-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language-level results (n = 10)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-slop-score-as-outcome-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 Slop Score as Outcome Variable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#213-cross-target-vocabulary-overlap-as-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 Cross-Target Vocabulary Overlap as Outcome
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#214-attractor-coverage-as-outcome-language-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 Attractor Coverage as Outcome (Language Level)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#215-error-rate-consistency-and-length-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5 Error Rate ↔ Consistency and Length Metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#216-cognate-match-type-translation-divergence-mann-whitney-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.6 Cognate Match Type → Translation Divergence (Mann-Whitney U)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#217-expansion-ratio-as-outcome-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.7 Expansion Ratio as Outcome Variable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#218-multilingual-template-rate-per-language-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.8 Multilingual Template Rate ↔ Per-Language Metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.8 Multilingual Template Rate ↔ Per-Language Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resource-level-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resource-level comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#219-attractor-coverage-cross-target-overlap-per-idiom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.9 Attractor Coverage ↔ Cross-Target Overlap (Per-Idiom)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2110-error-rate-expansion-ratio-per-idiom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.10 Error Rate ↔ Expansion Ratio (Per-Idiom)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2111-three-way-cognate-triples-all-exact-vs-mixed-match-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.11 Three-Way Cognate Triples: All-Exact vs Mixed Match → Divergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/definitions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Definitions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/correlation_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Correlation Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#211-consistency-metric-intercorrelations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 Consistency Metric Intercorrelations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.1 Consistency Metric Intercorrelations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cell-level-results-n-90620" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cell-level results (n ≈ 90,620)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-level-results-n-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language-level results (n = 10)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-slop-score-as-outcome-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 Slop Score as Outcome Variable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#213-cross-target-vocabulary-overlap-as-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 Cross-Target Vocabulary Overlap as Outcome
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#214-attractor-coverage-as-outcome-language-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 Attractor Coverage as Outcome (Language Level)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#215-error-rate-consistency-and-length-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5 Error Rate ↔ Consistency and Length Metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#216-cognate-match-type-translation-divergence-mann-whitney-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.6 Cognate Match Type → Translation Divergence (Mann-Whitney U)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#217-expansion-ratio-as-outcome-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.7 Expansion Ratio as Outcome Variable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#218-multilingual-template-rate-per-language-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.8 Multilingual Template Rate ↔ Per-Language Metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.8 Multilingual Template Rate ↔ Per-Language Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resource-level-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resource-level comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#219-attractor-coverage-cross-target-overlap-per-idiom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.9 Attractor Coverage ↔ Cross-Target Overlap (Per-Idiom)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2110-error-rate-expansion-ratio-per-idiom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.10 Error Rate ↔ Expansion Ratio (Per-Idiom)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2111-three-way-cognate-triples-all-exact-vs-mixed-match-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.11 Three-Way Cognate Triples: All-Exact vs Mixed Match → Divergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="part-21-correlation-gap-analyses">Part 21: Correlation Gap Analyses<a class="headerlink" href="#part-21-correlation-gap-analyses" title="Permanent link">&para;</a></h1>
+<p>This part addresses the 22 pairwise correlations identified in the systematic
+audit of <code>docs/reference/correlation_map.md</code> and recorded in <code>TODO.md</code>.  All
+analyses use data already available in <code>data/processed/</code>; no new scripts that
+read the raw 2.7M-row parquet were required.  The script is
+<code>scripts/correlation_gaps.py</code>.</p>
+<p>Throughout, statistical significance is noted as: * p &lt; 0.05, ** p &lt; 0.01,
+*** p &lt; 0.001.</p>
+<hr />
+<h2 id="211-consistency-metric-intercorrelations">21.1 Consistency Metric Intercorrelations<a class="headerlink" href="#211-consistency-metric-intercorrelations" title="Permanent link">&para;</a></h2>
+<p><code>cv</code>, <code>jaccard_div</code>, <code>span_uniq</code>, and <code>dom_frac</code> all measure within-cell
+consistency but from different angles (length variation, vocabulary turnover,
+span uniqueness, dominant-span reuse).  Before treating them as independent
+evidence, their pairwise Spearman ρ must be established.</p>
+<h3 id="cell-level-results-n-90620">Cell-level results (n ≈ 90,620)<a class="headerlink" href="#cell-level-results-n-90620" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>Creatively ρ</th>
+<th>Analogy ρ</th>
+<th>Author ρ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cv ↔ jaccard_div</td>
+<td>−0.194***</td>
+<td>−0.181***</td>
+<td>−0.296***</td>
+</tr>
+<tr>
+<td>cv ↔ span_uniq</td>
+<td>−0.014***</td>
+<td>−0.018***</td>
+<td>−0.038***</td>
+</tr>
+<tr>
+<td>jaccard_div ↔ span_uniq</td>
+<td>−0.262***</td>
+<td>−0.081***</td>
+<td>−0.141***</td>
+</tr>
+</tbody>
+</table>
+<p>The signs are negative throughout: cells with higher <strong>length</strong> variation (cv)
+tend to have <em>lower</em> Jaccard similarity (jaccard_div) and <em>fewer</em> unique spans
+(span_uniq).  Since <code>jaccard_div</code> measures vocabulary <em>similarity</em> (lower = more
+diverse), the negative correlation means: <strong>more length variation accompanies more
+vocabulary diversity</strong> — both signals reflect a model that is genuinely adapting to
+context rather than falling back on a fixed translation.  The pattern is most
+pronounced for the Author strategy (cv ↔ jaccard_div ρ = −0.296).</p>
+<p>Crucially, the correlations are <strong>small in absolute magnitude</strong> (ρ ≤ 0.30) despite
+being highly significant at n ≈ 90k.  The three metrics share only 1–9% of
+variance (ρ² = 0.00–0.09), confirming they measure largely independent dimensions
+of consistency.  <strong>They are not redundant and should continue to be reported
+separately.</strong></p>
+<h3 id="language-level-results-n-10">Language-level results (n = 10)<a class="headerlink" href="#language-level-results-n-10" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>ρ</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cv ↔ dom_frac</td>
+<td>−0.697</td>
+<td>0.025*</td>
+</tr>
+<tr>
+<td>dom_frac ↔ span_uniq</td>
+<td>−0.539</td>
+<td>0.107</td>
+</tr>
+</tbody>
+</table>
+<p>At the language level, <code>cv</code> and <code>dom_frac</code> are substantially anti-correlated
+(ρ = −0.697, p = 0.025): languages with more within-cell length variation have
+lower dominant-span reuse.  Arabic exemplifies this — it has the highest cv
+(0.230) and the lowest dom_frac (0.122).  The dom_frac ↔ span_uniq link is in
+the same direction but not significant at n = 10.</p>
+<p><img alt="consistency_intercorr_heatmap" src="../../figures/consistency_intercorr_heatmap.png" /></p>
+<hr />
+<h2 id="212-slop-score-as-outcome-variable">21.2 Slop Score as Outcome Variable<a class="headerlink" href="#212-slop-score-as-outcome-variable" title="Permanent link">&para;</a></h2>
+<p>Slop score (fraction of Analogy spans matching a cliché template) has previously
+been used only as a predictor in Parts 9–10.  Here it is treated as the dependent
+variable.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>difficulty</td>
+<td>−0.015</td>
+<td>0.166</td>
+<td>9,062</td>
+</tr>
+<tr>
+<td>stability</td>
+<td>−0.016</td>
+<td>0.119</td>
+<td>9,028</td>
+</tr>
+<tr>
+<td>expansion_ratio</td>
+<td>−0.109</td>
+<td>&lt; 0.001***</td>
+<td>9,059</td>
+</tr>
+<tr>
+<td>in_xinhua</td>
+<td>+0.030</td>
+<td>0.050*</td>
+<td>4,419</td>
+</tr>
+<tr>
+<td>def_len</td>
+<td>+0.017</td>
+<td>0.282</td>
+<td>4,230</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Null results for difficulty and stability</strong> — slop scores are essentially
+independent of how hard an idiom is to translate and how consistently it is
+rendered across strategies (ρ ≤ 0.016, both p &gt; 0.10).  Template use in Analogy
+is not triggered by difficulty; it appears to be a property of the idiom's
+<em>semantic type</em> (abstract vs concrete imagery) rather than its translation
+complexity.</p>
+<p><strong>Expansion ratio is the only significant predictor</strong> (ρ = −0.109, p &lt; 0.001):
+idioms where Analogy uses template phrases tend to produce <em>shorter</em> outputs.
+Template phrases ("a tapestry of", "a lighthouse in") are compact; when the model
+can't find one it generates a longer free-form metaphor.  The effect is modest but
+robust across all three source languages.</p>
+<p><strong>In-xinhua</strong> shows a marginal positive relationship (ρ = +0.030, p = 0.050):
+standardised idioms with Xinhua dictionary entries are <em>slightly more</em> likely to
+attract Analogy templates, possibly because widely-documented idioms have
+conventional metaphor mappings that the model has absorbed as template associations.
+<code>def_len</code> shows no independent effect after the in_xinhua signal is present.</p>
+<p><img alt="slop_outcome_scatter" src="../../figures/slop_outcome_scatter.png" /></p>
+<hr />
+<h2 id="213-cross-target-vocabulary-overlap-as-outcome">21.3 Cross-Target Vocabulary Overlap as Outcome<a class="headerlink" href="#213-cross-target-vocabulary-overlap-as-outcome" title="Permanent link">&para;</a></h2>
+<p><code>cross_target_overlap</code> (mean pairwise Jaccard across all 10 target languages per
+idiom) measures how similar an idiom's translations are across languages.  The
+question is whether cross-language consistency tracks cross-strategy consistency
+(stability) or template use (slop_score).</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stability</td>
+<td>+0.032</td>
+<td>0.002**</td>
+<td>9,028</td>
+</tr>
+<tr>
+<td>slop_score</td>
+<td>+0.028</td>
+<td>0.009**</td>
+<td>9,028</td>
+</tr>
+</tbody>
+</table>
+<p>Both correlations are statistically significant but <strong>essentially null in practical
+terms</strong> (ρ ≤ 0.032, shared variance &lt; 0.1%).  Cross-target vocabulary overlap is
+nearly orthogonal to both cross-strategy consistency and template prevalence.</p>
+<p>This is a meaningful null result: <strong>what makes an idiom's Creatively, Analogy, and
+Author translations agree with each other has almost nothing to do with what makes
+its translations agree across Chinese, Japanese, Hindi, and Spanish targets.</strong>  The
+two consistency axes are structurally independent — cross-strategy consistency
+reflects idiom ambiguity within a single language context, while cross-language
+consistency reflects cultural translatability across typologically diverse targets.</p>
+<hr />
+<h2 id="214-attractor-coverage-as-outcome-language-level">21.4 Attractor Coverage as Outcome (Language Level)<a class="headerlink" href="#214-attractor-coverage-as-outcome-language-level" title="Permanent link">&para;</a></h2>
+<p><code>attractor_coverage</code> is operationalised here as the mean <code>n_idioms</code> per
+high-coverage span (spans covering ≥ 2 idioms) per target language.  Because
+linking individual idioms to their attractors requires re-joining the raw parquet,
+this analysis is conducted at the <strong>language level</strong> (n = 10).</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>error_rate</td>
+<td>+0.152</td>
+<td>0.676</td>
+</tr>
+<tr>
+<td>cv</td>
+<td>−0.030</td>
+<td>0.934</td>
+</tr>
+<tr>
+<td>jaccard_div</td>
+<td>+0.079</td>
+<td>0.829</td>
+</tr>
+<tr>
+<td>template_rate</td>
+<td>+0.321</td>
+<td>0.366</td>
+</tr>
+</tbody>
+</table>
+<p>No significant relationships are found at n = 10.  With only 4 low-resource and 6
+high-resource languages, statistical power is insufficient to detect effects smaller
+than |ρ| ≈ 0.6.  The directional trend for template_rate (ρ = +0.321) is consistent
+with the hypothesis that languages with more attractor consolidation also produce
+more formulaic Analogy spans, but this cannot be confirmed without a per-idiom join.</p>
+<hr />
+<h2 id="215-error-rate-consistency-and-length-metrics">21.5 Error Rate ↔ Consistency and Length Metrics<a class="headerlink" href="#215-error-rate-consistency-and-length-metrics" title="Permanent link">&para;</a></h2>
+<p>Error rate (span-not-in-translation) is correlated with aggregated consistency and
+length metrics at the per-(source, target) cell level (n = 30).</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cv (mean)</td>
+<td>+0.342</td>
+<td>0.064</td>
+<td>30</td>
+</tr>
+<tr>
+<td>translation_length</td>
+<td>−0.467</td>
+<td>0.009**</td>
+<td>30</td>
+</tr>
+<tr>
+<td>expansion_ratio</td>
+<td>—</td>
+<td>—</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Translation length is the strongest predictor</strong> (ρ = −0.467, p = 0.009): cells
+with shorter translations (in characters) have higher span annotation error rates.
+Languages that produce more compact outputs — Arabic, Bengali — also fail the
+span-containment check more often, probably because the model compresses both the
+translation and the span annotation in ways that create substring mismatches.</p>
+<p><strong>cv is marginally associated</strong> (ρ = +0.342, p = 0.064): cells with more length
+variation tend to have slightly higher error rates, consistent with the idea that
+high context-sensitivity also introduces more surface-form variation in the span
+annotation.</p>
+<p><strong>Expansion ratio</strong> could not be evaluated — after aggregating per-target, variance
+across the 30 cells was insufficient to compute a valid Spearman ρ.  A per-idiom
+analysis joining the raw data would be needed to test this relationship properly.</p>
+<hr />
+<h2 id="216-cognate-match-type-translation-divergence-mann-whitney-u">21.6 Cognate Match Type → Translation Divergence (Mann-Whitney U)<a class="headerlink" href="#216-cognate-match-type-translation-divergence-mann-whitney-u" title="Permanent link">&para;</a></h2>
+<p>The cognate section (Part 13) reports that ZH–KO exact matches (4/4 shared
+characters) and near matches (3/4) have different edit_pair_mean distributions.
+The question here is whether <strong>match type predicts divergence level</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>n</th>
+<th>Mean edit_pair_mean</th>
+<th>Median</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exact_4/4</td>
+<td>290</td>
+<td>0.606</td>
+<td>0.644</td>
+</tr>
+<tr>
+<td>near_3/4</td>
+<td>247</td>
+<td>0.604</td>
+<td>0.643</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mann-Whitney U (one-sided, exact &lt; near): p = 0.838 — not significant.</strong></p>
+<p>Exact cognate pairs (four shared characters) show <em>no</em> lower translation divergence
+than near-exact pairs (three shared characters).  This is a clean null result: the
+degree of character-level cognate overlap between the ZH and KO idiom forms does
+not predict how similarly the model translates them.  The shared characters are a
+superficial orthographic coincidence — they do not reliably signal shared meaning,
+and the model appears to derive its translation independently for each source
+language rather than leveraging visual similarity.</p>
+<p>For three-way triples, 95 of 231 (41%) are all-exact matches across ZH–JA–KO.
+The <code>triple_cognates.csv</code> file does not contain edit scores, so a direct divergence
+comparison for triples requires a re-join with pairwise files and is left for future
+work.</p>
+<hr />
+<h2 id="217-expansion-ratio-as-outcome-variable">21.7 Expansion Ratio as Outcome Variable<a class="headerlink" href="#217-expansion-ratio-as-outcome-variable" title="Permanent link">&para;</a></h2>
+<p><code>exp_mean</code> (mean word-count expansion ratio per idiom) has been used as a
+predictor of difficulty (ρ = +0.649, Part 6).  Here it is the dependent variable.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idiom_char_len</td>
+<td>+0.149</td>
+<td>&lt; 0.001***</td>
+<td>9,025</td>
+</tr>
+<tr>
+<td>stability</td>
+<td>+0.023</td>
+<td>0.027*</td>
+<td>9,025</td>
+</tr>
+<tr>
+<td>slop_score</td>
+<td>−0.109</td>
+<td>&lt; 0.001***</td>
+<td>9,059</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Idiom character length is the strongest predictor</strong> (ρ = +0.149, p &lt; 0.001):
+longer idioms produce more expansive translations.  This confirms the qualitative
+observation in Part 2 that non-4-character idioms expand more, now with a formal
+correlation.  4-character idioms (the modal form at char_len = 4) are the most
+compact, while longer idiomatic phrases require more elaboration to unpack.</p>
+<p><strong>Slop score suppresses expansion</strong> (ρ = −0.109, p &lt; 0.001): the same effect found
+in Section 21.2 is symmetric — template use both predicts and is predicted by
+shorter output.</p>
+<p><strong>Stability has a marginal positive link</strong> (ρ = +0.023, p = 0.027): idioms with
+more expansive translations are <em>slightly</em> more consistent across strategies, which
+is counterintuitive.  One explanation: idioms that require more unpacking have more
+content for the model to consistently render, while very compact idioms leave more
+room for strategy-specific stylistic choices.</p>
+<p><img alt="expansion_outcome_scatter" src="../../figures/expansion_outcome_scatter.png" /></p>
+<hr />
+<h2 id="218-multilingual-template-rate-per-language-metrics">21.8 Multilingual Template Rate ↔ Per-Language Metrics<a class="headerlink" href="#218-multilingual-template-rate-per-language-metrics" title="Permanent link">&para;</a></h2>
+<p><code>template_rate</code> per target language (Part 16) has not been formally correlated with
+other per-language profile metrics (n = 10 languages).</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cv</td>
+<td>+0.709</td>
+<td>0.022*</td>
+</tr>
+<tr>
+<td>error_rate</td>
+<td>+0.224</td>
+<td>0.533</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Template rate correlates significantly with cv</strong> (ρ = +0.709, p = 0.022): target
+languages where the model more often falls back on formulaic bigrams also show more
+within-cell translation length variation.  This connects two seemingly unrelated
+phenomena — Arabic's 42.4% template rate and its highest cv (0.230) are not
+coincidental.  When the model has a narrow vocabulary for a target language, it
+reuses template phrases (boosting template_rate) and scales those phrases up or down
+to fit each sentence's context (boosting cv), rather than generating fresh
+vocabulary at a stable length.</p>
+<p><strong>Error rate is not significantly related</strong> (ρ = +0.224, p = 0.533).  Template use
+and annotation failure are driven by different underlying factors: template rate
+reflects vocabulary constraints, while error rate reflects morphological complexity
+in span extraction.</p>
+<h3 id="resource-level-comparison">Resource-level comparison<a class="headerlink" href="#resource-level-comparison" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Languages</th>
+<th>Mean template rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low-resource</td>
+<td>Arabic, Bengali, Hindi, Swahili</td>
+<td>27.8%</td>
+</tr>
+<tr>
+<td>High-resource</td>
+<td>English, French, German, Spanish, Italian, Russian</td>
+<td>9.4%</td>
+</tr>
+</tbody>
+</table>
+<p>Mann-Whitney U (one-sided, low &gt; high): <strong>p = 0.057</strong> — marginal.  The 3× gap in
+mean template rates does not reach conventional significance at n = 4 vs n = 6,
+primarily due to low statistical power.  The direction is unambiguous and consistent
+with Section 16.3, but a larger language sample would be needed to confirm formally.</p>
+<p><img alt="template_rate_corr" src="../../figures/template_rate_corr.png" /></p>
+<hr />
+<hr />
+<h2 id="219-attractor-coverage-cross-target-overlap-per-idiom">21.9 Attractor Coverage ↔ Cross-Target Overlap (Per-Idiom)<a class="headerlink" href="#219-attractor-coverage-cross-target-overlap-per-idiom" title="Permanent link">&para;</a></h2>
+<p>Previously (Section 21.4), attractor coverage was only evaluable at the language
+level (n = 10) due to missing per-idiom attractor data.  Here, attractor coverage
+per idiom is computed by joining each idiom's actual span phrases against
+<code>span_attractor_counts</code> to find how many idioms share each span, then averaging
+across all spans and strategies for that idiom (script: <code>deferred_correlations.py</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cross_target_overlap</td>
+<td>+0.127</td>
+<td>&lt; 0.001***</td>
+<td>9,062</td>
+</tr>
+<tr>
+<td>difficulty</td>
+<td>−0.138</td>
+<td>&lt; 0.001***</td>
+<td>9,062</td>
+</tr>
+<tr>
+<td>slop_score</td>
+<td>+0.094</td>
+<td>&lt; 0.001***</td>
+<td>9,062</td>
+</tr>
+</tbody>
+</table>
+<p>All three reach significance at large n, but remain <strong>small in magnitude</strong> (ρ ≤
+0.14).  The directional pattern is interpretable:</p>
+<ul>
+<li>
+<p><strong>Cross-target overlap</strong> (ρ = +0.127): idioms whose translations are more
+  lexically similar across target languages also tend to use span phrases that
+  are shared with more other idioms.  Both signals reflect <em>semantic
+  conventionality</em> — idioms with well-known English or multilingual equivalents
+  attract both cross-language convergence and shared span phrases.</p>
+</li>
+<li>
+<p><strong>Difficulty</strong> (ρ = −0.138): easier idioms produce higher-coverage attractors.
+  Semantically transparent idioms converge on fixed phrases ("fish in a barrel",
+  "talk of the town") that many idioms share; difficult idioms generate bespoke
+  metaphors that appear in few attractor cells.</p>
+</li>
+<li>
+<p><strong>Slop score</strong> (ρ = +0.094): template-prone idioms produce spans that are more
+  attractor-shared — consistent with the idea that cliché phrases ("a lighthouse
+  in the storm") are by definition shared across many idioms.</p>
+</li>
+</ul>
+<p>The shared variance is ≤ 2% in each case (ρ² ≤ 0.019), confirming that attractor
+coverage is largely an independent dimension of idiom behaviour.</p>
+<p><img alt="attractor_vs_overlap_scatter" src="../../figures/attractor_vs_overlap_scatter.png" /></p>
+<hr />
+<h2 id="2110-error-rate-expansion-ratio-per-idiom">21.10 Error Rate ↔ Expansion Ratio (Per-Idiom)<a class="headerlink" href="#2110-error-rate-expansion-ratio-per-idiom" title="Permanent link">&para;</a></h2>
+<p>Section 21.5 found that translation_length predicts error rate at the cell level
+(ρ = −0.467).  The expansion ratio question — does a high expansion ratio predict
+annotation failure? — could not be answered there due to insufficient cell-level
+variance.  Here, both error rate and expansion ratio are computed per idiom from
+the raw parquet.</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th>ρ</th>
+<th>p</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>expansion_ratio (char-level, computed)</td>
+<td>−0.005</td>
+<td>0.614</td>
+<td>9,059</td>
+</tr>
+<tr>
+<td>expansion_ratio (word-level, from difficulty)</td>
+<td>−0.005</td>
+<td>0.612</td>
+<td>9,059</td>
+</tr>
+<tr>
+<td>difficulty</td>
+<td>−0.002</td>
+<td>0.816</td>
+<td>9,062</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Clear null result</strong>: per-idiom expansion ratio has no relationship with per-idiom
+annotation error rate (ρ ≈ 0, p &gt; 0.6 for both char- and word-level measures).
+Difficulty is equally uncorrelated.</p>
+<p>The contrast with Section 21.5 (where translation_length ρ = −0.467 at the
+cell level) is instructive.  At the cell level, target-language differences in
+translation length drive the relationship — short-translation languages like Arabic
+and Bengali also happen to have the most annotation errors.  Across idioms within
+a single language, expansion ratio does not predict which idioms are harder to
+annotate.  <strong>Annotation difficulty is a target-language structural property, not
+an idiom-level property.</strong></p>
+<p><img alt="error_rate_vs_expansion_scatter" src="../../figures/error_rate_vs_expansion_scatter.png" /></p>
+<hr />
+<h2 id="2111-three-way-cognate-triples-all-exact-vs-mixed-match-divergence">21.11 Three-Way Cognate Triples: All-Exact vs Mixed Match → Divergence<a class="headerlink" href="#2111-three-way-cognate-triples-all-exact-vs-mixed-match-divergence" title="Permanent link">&para;</a></h2>
+<p>Section 21.6 established that for ZH–KO pairwise cognates, exact character
+overlap (4/4) does not predict lower translation divergence (MWU p = 0.838).
+Here, the same question is asked at the level of three-way ZH–JA–KO triples
+(n = 231), using ZH–KO edit_pair_mean as the divergence measure (available for
+228 of 231 triples via <code>cognate_divergence_ranking.csv</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>n</th>
+<th>Mean edit_pair_mean</th>
+<th>Median</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All-exact (3× exact_4/4)</td>
+<td>93</td>
+<td>0.608</td>
+<td>0.613</td>
+</tr>
+<tr>
+<td>Mixed (≥ 1 near_3/4)</td>
+<td>135</td>
+<td>0.600</td>
+<td>0.601</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mann-Whitney U (one-sided, all-exact &lt; mixed): p = 0.955 — strongly null.</strong></p>
+<p>All-exact triples are <em>not</em> lower-divergence; if anything the point estimates
+run marginally in the opposite direction (all-exact mean = 0.608 vs mixed 0.600).
+A continuous measure of match tightness — number of exact pairwise matches (0–3)
+— also shows no Spearman correlation with divergence (ρ = +0.098, p = 0.139).</p>
+<p>This replicates and extends the pairwise finding: <strong>character-level cognate
+status across CJK is a superficial orthographic property that does not
+predict how similarly the model translates an idiom</strong>.  The model processes each
+source language idiom independently; shared Sinitic characters do not lead to
+shared translation strategies.</p>
+<p><img alt="triple_cognate_divergence_box" src="../../figures/triple_cognate_divergence_box.png" /></p>
+<hr />
+<h2 id="summary-table">Summary Table<a class="headerlink" href="#summary-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Variables</th>
+<th>ρ / result</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21.1</td>
+<td>cv ↔ jaccard_div (cell)</td>
+<td>−0.19 to −0.30***</td>
+<td>Small negative; metrics are non-redundant</td>
+</tr>
+<tr>
+<td>21.1</td>
+<td>cv ↔ span_uniq (cell)</td>
+<td>−0.01 to −0.04***</td>
+<td>Near-independent</td>
+</tr>
+<tr>
+<td>21.1</td>
+<td>jaccard_div ↔ span_uniq (cell)</td>
+<td>−0.08 to −0.26***</td>
+<td>Moderate negative</td>
+</tr>
+<tr>
+<td>21.1</td>
+<td>cv ↔ dom_frac (language)</td>
+<td>−0.70*</td>
+<td>Substantial at language level</td>
+</tr>
+<tr>
+<td>21.2</td>
+<td>slop_score ↔ difficulty</td>
+<td>−0.015 (ns)</td>
+<td>Null</td>
+</tr>
+<tr>
+<td>21.2</td>
+<td>slop_score ↔ stability</td>
+<td>−0.016 (ns)</td>
+<td>Null</td>
+</tr>
+<tr>
+<td>21.2</td>
+<td>slop_score ↔ expansion_ratio</td>
+<td>−0.109***</td>
+<td>Template use compresses output</td>
+</tr>
+<tr>
+<td>21.2</td>
+<td>slop_score ↔ in_xinhua</td>
+<td>+0.030*</td>
+<td>Marginal positive</td>
+</tr>
+<tr>
+<td>21.3</td>
+<td>cross_target_overlap ↔ stability</td>
+<td>+0.032**</td>
+<td>Practical null</td>
+</tr>
+<tr>
+<td>21.3</td>
+<td>cross_target_overlap ↔ slop_score</td>
+<td>+0.028**</td>
+<td>Practical null</td>
+</tr>
+<tr>
+<td>21.4</td>
+<td>attractor_coverage ↔ all predictors (language level)</td>
+<td>ns (n=10)</td>
+<td>Insufficient power</td>
+</tr>
+<tr>
+<td>21.5</td>
+<td>error_rate ↔ cv</td>
+<td>+0.342 (p=0.064)</td>
+<td>Marginal</td>
+</tr>
+<tr>
+<td>21.5</td>
+<td>error_rate ↔ translation_length</td>
+<td>−0.467**</td>
+<td>Shorter → more errors</td>
+</tr>
+<tr>
+<td>21.6</td>
+<td>exact vs near cognates → divergence</td>
+<td>MWU p=0.838</td>
+<td>Null</td>
+</tr>
+<tr>
+<td>21.7</td>
+<td>expansion_ratio ↔ char_len</td>
+<td>+0.149***</td>
+<td>Longer idioms expand more</td>
+</tr>
+<tr>
+<td>21.7</td>
+<td>expansion_ratio ↔ slop_score</td>
+<td>−0.109***</td>
+<td>Template use compresses</td>
+</tr>
+<tr>
+<td>21.7</td>
+<td>expansion_ratio ↔ stability</td>
+<td>+0.023*</td>
+<td>Marginal</td>
+</tr>
+<tr>
+<td>21.8</td>
+<td>template_rate ↔ cv (language)</td>
+<td>+0.709*</td>
+<td>Strong language-level link</td>
+</tr>
+<tr>
+<td>21.8</td>
+<td>template_rate ↔ resource (MWU)</td>
+<td>p=0.057</td>
+<td>Marginal (low &gt; high)</td>
+</tr>
+<tr>
+<td>21.9</td>
+<td>attractor_coverage ↔ cross_target_overlap</td>
+<td>+0.127***</td>
+<td>Small positive; shared conventionality</td>
+</tr>
+<tr>
+<td>21.9</td>
+<td>attractor_coverage ↔ difficulty</td>
+<td>−0.138***</td>
+<td>Easier idioms → more shared attractors</td>
+</tr>
+<tr>
+<td>21.9</td>
+<td>attractor_coverage ↔ slop_score</td>
+<td>+0.094***</td>
+<td>Template idioms → more shared spans</td>
+</tr>
+<tr>
+<td>21.10</td>
+<td>error_rate ↔ expansion_ratio (per-idiom)</td>
+<td>−0.005 (ns)</td>
+<td>Null; annotation failure is language-level</td>
+</tr>
+<tr>
+<td>21.11</td>
+<td>triple cognate all-exact vs mixed → divergence</td>
+<td>MWU p=0.955</td>
+<td>Strongly null</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

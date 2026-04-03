@@ -58,6 +58,7 @@ Then open <http://127.0.0.1:8000>.
 | [Part 18 — Strategy by Idiom Category](docs/analysis/part18_strategy_by_category.md) | Error rates and CV across difficulty quartile, source language, 4-char flag |
 | [Part 19 — Semantic Consistency Audit](docs/analysis/part19_semantic_consistency.md) | Stability = 1 − mean edit distance; most/least stable idioms |
 | [Part 20 — English Pretraining Bias](docs/analysis/part20_english_pretraining_bias.md) | English z-scores vs high-resource group; span-ratio anomaly; anomaly ranking |
+| [Part 21 — Correlation Gap Analyses](docs/analysis/part21_correlation_gaps.md) | 22 pairwise correlations across consistency metrics, slop, expansion, error rate, cognates, and templates |
 | [Reference: Definitions](docs/reference/definitions.md) | All metrics, scores, and derived variables |
 | [Reference: Correlation Map](docs/reference/correlation_map.md) | All pairwise correlations organized by outcome variable |
 
@@ -104,4 +105,14 @@ python scripts/difficulty.py
 python scripts/english_and_resource_profile.py
 python scripts/reverse_span_analysis.py
 python scripts/analogy_deep_analysis.py
+python scripts/pairwise_error_analysis.py
+python scripts/triple_cognate_analysis.py
+python scripts/anomaly_divergence.py
+python scripts/context_difficulty_extended.py
+python scripts/multilingual_slop.py
+python scripts/strategy_length_correlations.py
+python scripts/strategy_by_idiom_category.py
+python scripts/semantic_consistency_audit.py
+python scripts/english_pretraining_bias.py
+python scripts/correlation_gaps.py
 ```

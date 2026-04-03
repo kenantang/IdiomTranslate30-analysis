@@ -1306,6 +1306,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part21_correlation_gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 21: Correlation Gap Analyses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1575,17 +1603,21 @@ classified into two groups based on their estimated representation in the pretra
 underrepresented in standard large-scale pretraining corpora relative to the six European languages.</p>
 <blockquote>
 <p><strong>Note on span_ratio:</strong> The target-language profile matrix includes a per-language span
-ratio (span character length / translation character length). English returns an anomalous
-value of 1.14 (vs ~0.28–0.31 for all other languages), which exceeds 1.0 and is therefore
-impossible. This is a computation artefact in the profile aggregation step and is excluded
-from the discussion below; all other metrics are reliable.</p>
+ratio. English returns a value of 1.14 (vs ~0.28–0.31 for all other languages). The column
+stores a <em>word-level</em> expansion ratio (translation word count / source idiom character count)
+rather than a character-length span ratio, making the value arithmetically consistent but not
+directly comparable across languages on a character basis. This metric is excluded from the
+character-level comparisons below; see <a href="../part20_english_pretraining_bias/">Part 20</a> for a
+full interpretation of the English span-ratio anomaly.</p>
 </blockquote>
 <h2 id="context-sensitivity-and-lexical-diversity-by-target-language">Context Sensitivity and Lexical Diversity by Target Language<a class="headerlink" href="#context-sensitivity-and-lexical-diversity-by-target-language" title="Permanent link">&para;</a></h2>
 <p>The most distinctive English fingerprint is not in length or divergence but in the
 combination of <em>when</em> the model varies and <em>how</em> it varies. Within-cell coefficient of
 variation (CV) measures how much translation length fluctuates across the 10 context sentences
-for a fixed (idiom, target language); mean pairwise Jaccard diversity measures how much
-vocabulary turns over across those 10 sentences.</p>
+for a fixed (idiom, target language); mean pairwise Jaccard similarity (<code>jaccard_div</code>)
+measures how much vocabulary is shared across those 10 sentences — <strong>lower values indicate
+more lexical variation</strong> (translations use different words each time), higher values indicate
+more repetitive vocabulary.</p>
 <table>
 <thead>
 <tr>
@@ -1659,17 +1691,22 @@ vocabulary turns over across those 10 sentences.</p>
 </tbody>
 </table>
 <p>English ties with Swahili and Spanish for the lowest CV (0.198) — translations vary the
-least in <em>length</em> across sentences — while ranking among the highest in <em>vocabulary</em> turnover
-(Jaccard 0.107, second only to Spanish at 0.113). This combination is characteristic of a
-language where the model produces consistently-sized translations but chooses different words
-for each sentence: the elaboration budget stays constant while the wording changes freely.</p>
-<p>Arabic shows the opposite profile: the highest length variation (CV 0.230) but the lowest
-Jaccard diversity (0.033). Arabic translations swing widely in size across sentences but
-cycle through a narrow vocabulary, suggesting the model scales the length of elaborations
-up and down without discovering new lexical material. Russian similarly has low Jaccard
-(0.053) despite moderate CV (0.212). Both languages appear to force the model into a smaller
-effective vocabulary, which may reflect relative scarcity of diverse idiomatic register in
-their training data.</p>
+least in <em>length</em> across sentences — and also shows high <strong>vocabulary consistency</strong>: Jaccard
+similarity 0.107, second only to Spanish (0.113). This combination means the model produces
+both stable-length and vocabulary-stable English translations: the elaboration budget and
+wording choices are relatively fixed across context sentences. English is therefore not a
+high-turnover language; it is a <em>stable-register</em> language where the model settles into a
+consistent translation mode regardless of which context sentence it receives.</p>
+<p>Arabic shows a consistently high-variation profile: the highest length variation (CV 0.230)
+and the lowest Jaccard similarity (0.033). Both metrics signal that Arabic translations are
+highly variable across context sentences — in length <em>and</em> vocabulary.  The very low Jaccard
+(3.3% mean word overlap between any two translations) is partly a structural artefact:
+Arabic's rich morphology means the same semantic content surfaces through many distinct
+inflected forms, so even translations conveying similar meanings share few surface tokens.
+Russian similarly has low Jaccard similarity (0.053) despite moderate CV (0.212), likely for
+the same morphological reason.  These results do not indicate "narrow vocabulary" in the
+sense of lexical repetition — they indicate the opposite: high surface-form variety driven
+by morphological richness and genuine context-sensitivity.</p>
 <p><img alt="english_fingerprint_cv_jaccard" src="../../figures/english_fingerprint_cv_jaccard.png" /></p>
 <h2 id="conventional-locking-does-english-stabilise-on-fixed-translations">Conventional Locking: Does English Stabilise on Fixed Translations?<a class="headerlink" href="#conventional-locking-does-english-stabilise-on-fixed-translations" title="Permanent link">&para;</a></h2>
 <p>A natural hypothesis is that English — as the most resource-rich target language — would
@@ -2062,9 +2099,9 @@ serves as a proxy for annotation difficulty and model reliability for each targe
 Bengali's script complexity (Bangla script has complex ligatures and diacritics) and the
 model's comparatively limited Bangla training data. Span annotation in Bengali requires
 the model to locate a substring in its own output — a task that becomes harder when the
-model is less confident about morphological boundaries. The high error rate partly explains
-Bengali's low Jaccard diversity (see above): many of the annotations that <em>do</em> survive
-the substring check may be imprecise.</p>
+model is less confident about morphological boundaries. Bengali's low Jaccard similarity (0.049, see above) — reflecting high word-level variation
+across sentences — and its high error rate are both consequences of script complexity and
+morphological richness rather than being causally linked to each other.</p>
 <p><strong>German (4.76%)</strong> is the clear outlier among high-resource languages — more than four times
 the rate of French (1.11%) or Spanish (0.99%). German's compound-heavy morphology likely
 drives this: the model's span annotation may contain the base form of a compound while the
@@ -2156,15 +2193,18 @@ others elicit fluid, strategy-sensitive ones. Arabic is consistently at the flui
 English, Spanish, and Hindi are at the stable end.</p>
 <p><img alt="cross_strategy_span_overlap" src="../../figures/cross_strategy_span_overlap.png" /></p>
 <h2 id="synthesis-language-profiles-and-resource-level-patterns">Synthesis: Language Profiles and Resource-Level Patterns<a class="headerlink" href="#synthesis-language-profiles-and-resource-level-patterns" title="Permanent link">&para;</a></h2>
-<p>PCA on the standardised nine-variable profile matrix (CV, Jaccard diversity, span uniqueness,
+<p>PCA on the standardised nine-variable profile matrix (CV, Jaccard similarity, span uniqueness,
 divergence, edit distance, relative span start, word expansion, error rate, dominant span
 fraction) captures 63.1% of variance on PC1 and 15.2% on PC2 — most of the meaningful
 cross-language variation lies in two dimensions.</p>
-<p>PC1 is a <strong>consistency–fluidity</strong> axis: languages with high Jaccard diversity, high span
-uniqueness, and low dominant-span fraction (more varied, less fixed renderings) load on
-the positive end; languages with low diversity and high error rates load on the negative
-end. Bengali and Arabic sit at the negative extreme (high error rate, low diversity); Spanish
-and English cluster at the positive extreme (low error, high diversity).</p>
+<p>PC1 is a <strong>stability–variability</strong> axis: languages with high Jaccard similarity (consistent
+vocabulary across context sentences), high dominant-span fraction, and low CV load on the
+positive end — these are languages where the model produces stable, recurring translations.
+Languages with low Jaccard similarity, high CV, and high error rates load on the negative
+end.  Spanish and English cluster at the positive (stable) extreme; Bengali and Arabic sit
+at the negative (variable) extreme.  Note that Arabic's low Jaccard similarity is partly
+a morphological artefact (see the Context Sensitivity section above), not purely a sign
+of instability.</p>
 <p>PC2 is largely driven by the <strong>span position</strong> dimension and the <strong>word expansion</strong> dimension,
 separating Hindi and Bengali (early spans, high word expansion for Hindi) from Swahili and
 Italian (late spans).</p>
@@ -2172,9 +2212,9 @@ Italian (late spans).</p>
 and low-resource languages in PCA space. Spanish, Hindi, and Swahili occupy similar PC1
 positions despite spanning both resource classes. The clearest resource-level signal is
 negative: Arabic is the only low-resource language that is genuinely anomalous (extreme
-divergence, extreme low Jaccard, extreme low span Jaccard), while German is the only
-high-resource language that is anomalous (high error rate). The other eight languages
-form a loose cluster in which resource level does not predict much.</p>
+strategy divergence, extreme low Jaccard similarity, extreme low cross-strategy span Jaccard),
+while German is the only high-resource language that is anomalous (high error rate). The
+other eight languages form a loose cluster in which resource level does not predict much.</p>
 <p>A Mann-Whitney U test comparing the six high-resource languages against the four
 low-resource ones on each profile dimension yields no significant differences after
 Benjamini-Hochberg correction at the α = 0.05 level — a result driven partly by the
@@ -2185,15 +2225,16 @@ not define a clean high-vs-low tier in any of the translation metrics examined h
 the high-resource group, Russian and German show divergence patterns more similar to Arabic
 than to English or Spanish, and within the low-resource group, Hindi and Swahili perform
 comparably to the European languages on most metrics.</p>
-<p>The most consistent finding about English specifically is that it occupies a stable,
-central position in almost every dimension: not the longest translations, not the shortest;
-not the highest divergence, not the lowest; not the most context-sensitive, not the least.
-English is the default well-calibrated target language for this model — a reflection of its
-dominant role in the training corpus and instruction-tuning data. The distinctive English
-trait is its <em>combination</em> of moderate context-sensitivity with high lexical diversity: the
-model knows how to fill a consistent-length slot in English with genuinely varied vocabulary,
-rather than cycling through a narrow register or scaling elaboration length up and down
-without lexical renewal.</p>
+<p>The most consistent finding about English specifically is that it occupies a <strong>stable</strong>
+position: low CV (stable length), high Jaccard similarity (consistent vocabulary across
+context sentences), low error rate, and central divergence.  English is the
+default well-calibrated target language for this model — a reflection of its dominant role
+in the training corpus and instruction-tuning data.  The distinctive English trait is its
+<em>consistency</em>: the model produces similar-length, vocabulary-stable translations regardless
+of which context sentence it encounters, converging on a fixed rendering mode rather than
+adapting freely to context.  This is the opposite of Arabic and Bengali, which show high
+variation in both length and vocabulary — behaviours driven partly by morphological richness
+and partly by reduced model confidence in low-resource registers.</p>
 <p><img alt="resource_profile_synthesis" src="../../figures/resource_profile_synthesis.png" /></p>
 
 

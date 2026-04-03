@@ -19,7 +19,7 @@ DE, ES, IT, RU):
 | **Span/translation ratio** | **+2.04** | English spans are far longer relative to translation |
 | Dominant span fraction     | +1.36 | More repetition of the same span phrase |
 | Span Jaccard C↔A           | +1.10 | Strategies more similar in English |
-| Jaccard diversity          | +0.93 | Higher surface diversity |
+| Jaccard similarity         | +0.93 | Higher vocabulary consistency (more word overlap across sentences) |
 | Span uniqueness            | +0.52 | More unique span phrases |
 | C↔A edit distance          | +0.49 | Strategies moderately more divergent |
 | Relative span position     | −0.66 | Spans placed slightly earlier |
@@ -80,7 +80,8 @@ key metrics):
 | 5 | German   | high |  4.68 |
 
 **Arabic is by far the most anomalous target language** (composite z = 10.64), driven
-by its dramatically low Jaccard diversity (z = −2.40) and low dominant-span fraction
+by its dramatically low Jaccard similarity (z = −2.40, meaning Arabic translations share
+very little vocabulary across context sentences) and low dominant-span fraction
 (z = −4.06).  English is third most anomalous, but its anomaly is concentrated in a
 single metric (span ratio) rather than the broad multi-metric deviation seen in Arabic.
 

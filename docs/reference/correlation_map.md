@@ -43,6 +43,8 @@ All Spearman.
 | Character length of idiom | +0.071 | < 0.001 | Longer idioms slightly more stable | 19 |
 | In THUOCL corpus | +0.070 | < 0.001 | Corpus-attested → slightly more stable | 19 |
 | THUOCL frequency | +0.049 | < 0.001 | More frequent → slightly more stable | 19 |
+| Cross-target overlap | +0.032 | 0.002 | Practical null (r² < 0.001) | 21 |
+| Slop score | −0.016 | 0.119 (NS) | Null | 21 |
 
 ---
 
@@ -59,6 +61,10 @@ All Spearman.
 | Source sentence word count → CV (Analogy) | Spearman ρ | −0.054 | < 0.05 | Weaker than char length | 15 |
 | Source sentence word count → CV (Author) | Spearman ρ | −0.059 | < 0.05 | Weaker than char length | 15 |
 | English CV vs Arabic CV distribution | KS statistic | 0.209 | 8.6 × 10⁻¹⁷⁴ | Arabic more variable | 14 |
+| jaccard_div (per strategy, cell level) | Spearman ρ | −0.19 to −0.30 | ≈ 0 | Higher length variation → lower Jaccard similarity (more vocabulary diversity) | 21 |
+| span_uniq (per strategy, cell level) | Spearman ρ | −0.01 to −0.04 | ≈ 0 | Near-independent | 21 |
+| dom_frac (language level, n=10) | Spearman ρ | −0.697 | 0.025 | Higher length variation → lower dominant-span reuse (both reflect context-sensitivity) | 21 |
+| template_rate (language level, n=10) | Spearman ρ | +0.709 | 0.022 | More templates → more length variation | 21 |
 
 ---
 
@@ -140,12 +146,14 @@ Typological groupings (median rel_start, see Part 15 tables for full breakdown):
 | ZH span length ↔ KO span length (near 3/4 pairs) | Spearman ρ | 0.38–0.53 | — | 5, 13 |
 | ZH edit distance ↔ KO edit distance (all ZH–KO pairs) | Spearman ρ | 0.38–0.55 | — | 13 |
 | Mean edit: three-way triples vs all ZH–KO pairs | — | 0.605 vs 0.605 | — | 13 |
+| match_type (exact 4/4 vs near 3/4) → edit_pair_mean | Mann–Whitney U | p = 0.838 (NS) | Null: character overlap does not predict translation divergence | 21 |
+| all-exact triple (3×exact) vs mixed → edit_pair_mean | Mann–Whitney U | p = 0.955 (NS) | Null; replicates pairwise finding at triple level | 21 |
 
 ---
 
 ## 8. Span Annotation Quality (Error Rate)
 
-*Outcome: span containment error rate (Parts 1, 12, 18).*  Statistical tests.
+*Outcome: span containment error rate (Parts 1, 12, 18, 21).*  Statistical tests.
 
 | Predictor | Method | Key result | Part |
 |---|---|---|---|
@@ -155,6 +163,10 @@ Typological groupings (median rel_start, see Part 15 tables for full breakdown):
 | Zero-sentence vs normal rows (Creatively length) | Mann–Whitney U | p = 1.3 × 10⁻⁴⁰ | 14 |
 | Zero-sentence vs normal rows (Analogy length) | Mann–Whitney U | p = 3.5 × 10⁻¹⁹ | 14 |
 | Zero-sentence vs normal rows (Author length) | Mann–Whitney U | p = 4.3 × 10⁻²² | 14 |
+| cv (cell level, n=30 src×tgt pairs) | Spearman ρ | +0.342, p = 0.064 | Marginal: high-CV cells → more errors | 21 |
+| translation_length (cell level, n=30) | Spearman ρ | −0.467, p = 0.009 | Shorter translations → more errors | 21 |
+| template_rate (language level, n=10) | Spearman ρ | +0.224, p = 0.533 (NS) | Null | 21 |
+| expansion_ratio (per-idiom) | Spearman ρ | −0.005, p = 0.614 (NS) | Null: annotation failure is a language-level, not idiom-level property | 21 |
 
 ---
 
@@ -182,9 +194,76 @@ Directional biases: Japanese → cosmic/star (2×), Chinese → futility (1.9×)
 
 ## 11. Cross-Target Vocabulary Overlap
 
-*Outcome: vocabulary sharing across target languages for the same idiom (Part 4).*
+*Outcome: vocabulary sharing across target languages for the same idiom (Parts 4, 21).*
 
 | Variable pair | Method | Key result | Part |
 |---|---|---|---|
 | Same language family pairs vs cross-family | Jaccard comparison | Within-family (e.g. FR–ES–IT) higher Jaccard than cross-family | 4 |
 | Span Jaccard C↔A ↔ dominant span fraction | Spearman ρ | 0.903 | 7 |
+| Stability (cross-strategy agreement) | Spearman ρ | +0.032, p = 0.002 | Practical null (r² < 0.001) | 21 |
+| Slop score | Spearman ρ | +0.028, p = 0.009 | Practical null (r² < 0.001) | 21 |
+| Attractor coverage (per-idiom) | Spearman ρ | +0.127, p < 0.001 | Conventional idioms → more shared span phrases | 21 |
+
+---
+
+## 12. Attractor Coverage (Per-Idiom)
+
+*Outcome: mean n_idioms per span phrase used by an idiom (Parts 8, 21).*  All Spearman, n ≈ 9,062.
+
+| Predictor | ρ | p | Direction | Part |
+|---|---|---|---|---|
+| Cross-target overlap | +0.127 | < 0.001 | Conventional idioms → more shared attractors | 21 |
+| Difficulty | −0.138 | < 0.001 | Easier idioms → more shared attractors | 21 |
+| Slop score | +0.094 | < 0.001 | Template-prone idioms → more shared spans | 21 |
+
+All effects are small in magnitude (r² ≤ 0.02); attractor coverage is largely independent of other metrics.
+
+---
+
+## 13. Slop Score (Outcome)
+
+*Outcome: fraction of Analogy spans matching a cliché template (Parts 9, 10, 21).*  All Spearman.
+
+| Predictor | ρ | p | Direction | Part |
+|---|---|---|---|---|
+| Expansion ratio | −0.109 | < 0.001 | Template use → shorter output | 21 |
+| In xinhua dictionary | +0.030 | 0.050 | Standardised idioms → slightly more template-prone | 21 |
+| Difficulty | −0.015 | 0.166 (NS) | Null | 21 |
+| Stability | −0.016 | 0.119 (NS) | Null | 21 |
+| Xinhua definition length | +0.017 | 0.282 (NS) | Null | 21 |
+
+---
+
+## 14. Expansion Ratio (Outcome)
+
+*Outcome: mean word-count expansion ratio per idiom (Parts 3, 6, 21).*  All Spearman.
+
+| Predictor | ρ | p | Direction | Part |
+|---|---|---|---|---|
+| Composite difficulty | +0.649 | ≈ 0 | High expansion → harder | 6 |
+| Idiom character length | +0.149 | < 0.001 | Longer idioms expand more | 21 |
+| Slop score | −0.109 | < 0.001 | Template use compresses output | 21 |
+| Stability | +0.023 | 0.027 | Marginal positive | 21 |
+
+---
+
+## 15. Consistency Metric Intercorrelations
+
+*All Spearman.  Cell level: n ≈ 90,620; language level: n = 10.*
+
+| Pair | Level | Strategy | ρ range | p | Part |
+|---|---|---|---|---|---|
+| cv ↔ jaccard_div | cell | Creatively | −0.194 | ≈ 0 | 21 |
+| cv ↔ jaccard_div | cell | Analogy | −0.181 | ≈ 0 | 21 |
+| cv ↔ jaccard_div | cell | Author | −0.296 | ≈ 0 | 21 |
+| cv ↔ span_uniq | cell | Creatively | −0.014 | < 0.001 | 21 |
+| cv ↔ span_uniq | cell | Analogy | −0.018 | < 0.001 | 21 |
+| cv ↔ span_uniq | cell | Author | −0.038 | < 0.001 | 21 |
+| jaccard_div ↔ span_uniq | cell | Creatively | −0.262 | ≈ 0 | 21 |
+| jaccard_div ↔ span_uniq | cell | Analogy | −0.081 | ≈ 0 | 21 |
+| jaccard_div ↔ span_uniq | cell | Author | −0.141 | ≈ 0 | 21 |
+| cv ↔ dom_frac | language | — | −0.697 | 0.025 | 21 |
+| dom_frac ↔ span_uniq | language | — | −0.539 | 0.107 (NS) | 21 |
+
+All three cell-level metrics share < 9% of variance (ρ² ≤ 0.09) — they are non-redundant
+and should continue to be reported separately.
